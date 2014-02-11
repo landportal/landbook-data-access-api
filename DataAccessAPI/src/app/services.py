@@ -3,8 +3,8 @@ Created on 03/02/2014
 
 @author: Herminio
 '''
-import sqlite3 as dbapi
-from src.dao.daos import CountryDAO
+from app import db
+from src.app.daos import CountryDAO
 
 class CountryService(object):
     '''
@@ -54,7 +54,9 @@ class CountryService(object):
         Method that deletes all countries by calling the dao
         @attention: Take care of what you do, all countries will be destroyed
         '''
-        self.tm.execute(self.dao, self.dao.delete_all_countries)
+        countries = self.tm.execute(self.dao, self.dao.get_all_countries)
+        for country in countries:
+            self.tm.execute(self.dao, self.dao.delete_country, country)
     
     def update_countries(self, countries):
         '''
@@ -62,7 +64,6 @@ class CountryService(object):
         '''
         for country in countries:
             self.tm.execute(self.dao, self.dao.update_country, country)
-    
     
 
 class TransactionManager(object):
@@ -74,9 +75,12 @@ class TransactionManager(object):
         '''
         Abstraction for all calls to the dao methods, like command executor
         '''
-        db = dbapi.connect('../../resources/DataAccessAPIdb.sqlite')
-        getattr(dao, 'set_database')(db)
+        session = db.session
+        getattr(dao, 'set_session')(session)
         result = function(*args)
-        db.commit()
-        db.close()
+        session.commit()
+        
         return result
+
+
+
