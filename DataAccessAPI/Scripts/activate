@@ -39,7 +39,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="$(if [ "$OSTYPE" "==" "cygwin" ]; then cygpath -u 'C:\Users\Herminio\Git\DataAccessAPI'; else echo '/C/Users/Herminio/Git/DataAccessAPI'; fi;)"
+VIRTUAL_ENV="$(if [ "$OSTYPE" "==" "cygwin" ]; then cygpath -u 'C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI'; else echo '/C/Users/Herminio/Git/landportal-data-access-api/DataAccessAPI'; fi;)"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

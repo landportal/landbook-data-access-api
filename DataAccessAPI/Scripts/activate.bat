@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=C:\Users\Herminio\Git\DataAccessAPI"
+set "VIRTUAL_ENV=C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"
