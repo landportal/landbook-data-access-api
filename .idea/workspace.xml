@@ -2,121 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14a7afb3-caa2-4fb9-9b90-7c496cc804ca" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\Python-ast.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\Python.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\abstract.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\asdl.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\ast.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\bitset.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\boolobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\bufferobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\bytearrayobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\bytes_methods.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\bytesobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\cStringIO.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\cellobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\ceval.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\classobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\cobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\code.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\codecs.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\compile.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\complexobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\datetime.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\descrobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\dictobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\dtoa.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\enumobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\errcode.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\eval.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\fileobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\floatobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\frameobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\funcobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\genobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\graminit.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\grammar.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\import.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\intobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\intrcheck.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\iterobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\listobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\longintrepr.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\longobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\marshal.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\memoryobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\metagrammar.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\methodobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\modsupport.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\moduleobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\node.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\object.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\objimpl.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\opcode.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\osdefs.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\parsetok.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\patchlevel.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pgen.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pgenheaders.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\py_curses.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pyarena.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pycapsule.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pyconfig.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pyctype.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pydebug.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pyerrors.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pyexpat.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pyfpe.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pygetopt.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pymacconfig.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pymactoolbox.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pymath.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pymem.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pyport.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pystate.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pystrcmp.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pystrtod.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pythonrun.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\pythread.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\rangeobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\setobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\sliceobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\stringobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\structmember.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\structseq.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\symtable.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\sysmodule.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\timefuncs.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\token.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\traceback.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\tupleobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\ucnhash.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\unicodeobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\warnings.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Include\weakrefobject.h" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\activate" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\activate.bat" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\activate.ps1" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\activate_this.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\deactivate.bat" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\easy_install-2.7.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\easy_install.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\pip.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\pip2.7.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\pip2.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\python.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\Scripts\pythonw.exe" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\app\__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\app\daos.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\app\models.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\app\services.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\app\utils.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\app\views.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\create_db.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Herminio\Git\landportal-data-access-api\DataAccessAPI\src\run.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/requirements.txt" />
     </list>
     <ignored path="landportal-data-access-api.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -465,7 +351,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -476,7 +362,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32899022" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32899022" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -556,6 +442,13 @@
           <folding>
             <element signature="e#49#76#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="386">
+          <folding />
         </state>
       </provider>
     </entry>
