@@ -4,7 +4,7 @@ Created on 03/02/2014
 @author: Herminio
 '''
 from app import db
-from src.app.daos import CountryDAO
+from app.daos import CountryDAO
 
 class CountryService(object):
     '''

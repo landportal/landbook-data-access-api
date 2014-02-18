@@ -11,4 +11,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
 db = SQLAlchemy(app)
 
-from src.app import views
+from app import views

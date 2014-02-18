@@ -8,9 +8,9 @@ from flask.wrappers import Response
 from flask.helpers import url_for
 from flask import json
 from app import app
-from src.app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from src.app.models import Country
-from src.app.services import CountryService
+from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
+from app.models import Country
+from app.services import CountryService
 from flask import request
 
 api = Api(app)
