@@ -15,19 +15,18 @@ class User(db.Model):
     User model object
     '''
     __tablename__ = "users"
-    user_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     ip = Column(String(50))
     timestamp = Column(TIMESTAMP)
     organization_id = Column(Integer, ForeignKey('organizations.id'))
+    organization = relationship("Organization", backref="users")
 
-    organization = relationship("Organization")
 
-
-    def __init__(self, user_id = None, ip = None, timestamp = None, organization = None):
+    def __init__(self, id = None, ip = None, timestamp = None, organization = None):
         '''
         Constructor for user model object
         '''
-        self.user_id = user_id
+        self.id = id
         self.ip = ip
         self.timestamp = timestamp
         self.organization = organization
@@ -40,9 +39,8 @@ class Organization(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(128))
     url = Column(String(255))
-    is_part_of_id = Column(Integer, ForeignKey('organizations.id'))
-    is_part_of = relationship("organizations.id")
-    datasources = relationship("Datasource")
+    is_part_of_id = Column(Integer, ForeignKey("organizations.id"))
+    is_part_of = relationship("Organization", uselist=False, foreign_keys=is_part_of_id)
 
     def __init__(self, name = None, url = None, is_part_of = None):
         '''
@@ -62,18 +60,16 @@ class DataSource(db.Model):
     classdocs
     '''
     __tablename__ = "datasources"
-    source_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String(128))
     organization_id = Column(Integer, ForeignKey("organizations.id"))
-    organization = relationship("Organization")
-    datasets = relationship("Dataset")
-    observations = relationship("Observation")
+    organization = relationship("Organization", backref="sources")
 
-    def __init__(self, source_id = None, name = None, organization = None):
+    def __init__(self, id = None, name = None, organization = None):
         '''
         Constructor
         '''
-        self.source_id = source_id
+        self.id = id
         self.name = name
         self.organization = organization
         self.datasets = []
@@ -94,21 +90,18 @@ class Dataset(db.Model):
     '''
     __tablename__ = 'datasets'
     id = Column(Integer, primary_key=True)
-    dataset_id = Column(Integer)
     name = Column(String(60))
     sdmx_frequency = Column(Integer)
-    datasets = Column(Integer, ForeignKey("datasources.source_id"))
-    slices = relationship("Slice")
-    indicators = relationship("Indicator")
-    observations = relationship("Observation")
+    datasource_id = Column(Integer, ForeignKey("datasources.id"))
+    datasource = relationship("DataSource", backref="datasets")
     license_id = Column(Integer, ForeignKey("licenses.id"))
     license = relationship("License")
 
-    def __init__(self, dataset_id = None, name = None, frequency = None, source = None):
+    def __init__(self, id = None, name = None, frequency = None, source = None):
         '''
         Constructor
         '''
-        self.dataset_id = dataset_id
+        self.id = id
         self.name = name
         self.frequency = frequency
         self.source = source
@@ -123,21 +116,22 @@ class Slice(db.Model):
     classdocs
     '''
     __tablename__ = "slices"
-    slice_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     indicator_id = Column(Integer, ForeignKey("indicators.id"))
-    dimension_id = Column(Integer, ForeignKey("dimensions.id"))
-    dataset_id = Column(Integer, ForeignKey("datasets.dataset_id"))
-    dataset = relationship("DataSet")
     indicator = relationship("Indicator")
+    dimension_id = Column(Integer, ForeignKey("dimensions.id"))
     dimension = relationship("Dimension")
+    dataset_id = Column(Integer, ForeignKey("datasets.id"))
+    dataset = relationship("Dataset", backref="slices")
+    observation = relationship("Observation")
 
-    def __init__(self, slice_id = None, dimension = None, dataset = None, indicator = None):
+    def __init__(self, id = None, dimension = None, dataset = None, indicator = None):
         '''
         Constructor
         '''
         self.dataset = dataset
         self.indicator = indicator
-        self.slice_id = slice_id
+        self.id = id
         self.dimension = dimension
         self.observations = []
 
@@ -151,31 +145,30 @@ class Observation(db.Model):
     '''
     __tablename__= "observations"
     id = Column(Integer, primary_key=True)
-    observation_id = Column(Integer)
     ref_time_id = Column(Integer, ForeignKey("times.id"))
+    ref_time = relationship("Time", foreign_keys=ref_time_id, uselist=False)
     issued_id = Column(Integer, ForeignKey("instants.id"))
+    issued = relationship("Instant", foreign_keys=issued_id, uselist=False)
     computation_id = Column(Integer, ForeignKey("computations.id"))
+    computation = relationship("Computation", foreign_keys=computation_id)
     indicator_group_id = Column(Integer, ForeignKey("indicatorGroups.id"))
+    indicator_group = relationship("IndicatorGroup", foreign_keys=indicator_group_id)
     value_id = Column(Integer, ForeignKey("values.id"))
+    value = relationship("Value", foreign_keys=value_id, uselist=False)
     indicator_id = Column(Integer, ForeignKey("indicators.id"))
-    region_id = Column(Integer, ForeignKey("regions.id"))
+    indicator = relationship("Indicator", foreign_keys=indicator_id)
     dataset_id = Column(Integer, ForeignKey("datasets.id"))
-    dataset = relationship("Dataset")
-    ref_time = relationship("Time")
-    issued = relationship("Instant")
-    computation = relationship("Computation")
-    value = relationship("Value")
-    indicator = relationship("Indicator")
-    indicator_group = relationship("IndicatorGroup")
-    region = relationship("Region")
+    dataset = relationship("Dataset", foreign_keys=dataset_id,  backref="observations")
+    region_id = Column(Integer, ForeignKey("regions.id"))
+    slice_id = Column(Integer, ForeignKey("slices.id"))
 
 
-    def __init__(self, observation_id = None, ref_time = None, issued = None,
+    def __init__(self, id = None, ref_time = None, issued = None,
                  computation = None, value = None, indicator = None, provider = None):
         '''
         Constructor
         '''
-        self.observation_id = observation_id
+        self.id = id
         self.ref_time = ref_time
         self.issued = issued
         self.computation = computation
@@ -195,7 +188,8 @@ class Indicator(db.Model):
     measurement_unit_id = Column(String(20), ForeignKey("measurementUnits.name"))
     measurement_unit = relationship("MeasurementUnit")
     dataset_id = Column(Integer, ForeignKey("datasets.id"))
-    dataset = relationship("Dataset")
+    dataset = relationship("Dataset", backref="indicators")
+    compound_indicator_id = Column(Integer, ForeignKey("compoundIndicators.id"))
     type = Column(String(50))
 
     __mapper_args__ = {
@@ -214,12 +208,12 @@ class Indicator(db.Model):
         self.license_type = license_type
         self.measurement_unit = measurement_unit
 
-class IndicatorGroup(Indicator):
+class IndicatorGroup(db.Model):
     '''
     classdocs
     '''
     __tablename__ = "indicatorGroups"
-    id = Column(Integer, ForeignKey("indicators.id"), primary_key=True)
+    id = Column(Integer, primary_key=True)
     observations = relationship("Observation")
 
     __mapper_args__ = {
@@ -297,8 +291,10 @@ class IndicatorRelationship(db.Model):
     '''
     __tablename__ = "indicatorRelationships"
     id = Column(Integer, primary_key=True)
-    source = Column(Integer, ForeignKey("indicators.id"))
-    target = Column(Integer, ForeignKey("indicators.id"))
+    source_id = Column(Integer, ForeignKey("indicators.id"))
+    source = relationship("Indicator", foreign_keys=source_id)
+    target_id = Column(Integer, ForeignKey("indicators.id"))
+    target = relationship("Indicator", foreign_keys=target_id)
     type = Column(String(50))
 
     __mapper_args__ = {
@@ -319,6 +315,10 @@ class IsPartOf(IndicatorRelationship):
     '''
     __tablename__ = "ispartof"
     id = Column(Integer, ForeignKey("indicatorRelationships.id"), primary_key=True)
+    source_id = Column(Integer, ForeignKey("indicators.id"))
+    source = relationship("Indicator", foreign_keys=source_id)
+    target_id = Column(Integer, ForeignKey("indicators.id"))
+    target = relationship("Indicator", foreign_keys=target_id)
 
     __mapper_args__ = {
         'polymorphic_identity': 'ispartof',
@@ -338,6 +338,10 @@ class Becomes(IndicatorRelationship):
     '''
     __tablename__ = "becomes"
     id = Column(Integer, ForeignKey("indicatorRelationships.id"), primary_key=True)
+    source_id = Column(Integer, ForeignKey("indicators.id"))
+    source = relationship("Indicator", foreign_keys=source_id)
+    target_id = Column(Integer, ForeignKey("indicators.id"))
+    target = relationship("Indicator", foreign_keys=target_id)
 
     __mapper_args__ = {
         'polymorphic_identity': 'becomes',
@@ -371,7 +375,6 @@ class Time(Dimension):
     '''
     __tablename__ = "times"
     id = Column(Integer, ForeignKey("dimensions.id"), primary_key=True)
-    type = Column(String(50))
 
     __mapper_args__ = {
         'polymorphic_identity': 'times',
@@ -434,6 +437,8 @@ class YearInterval(Interval):
     '''
     __tablename__ = "yearIntervals"
     id = Column(Integer, ForeignKey("intervals.id"), primary_key=True)
+    start_time = Column(sqlalchemy.Time)
+    end_time = Column(sqlalchemy.Time)
     year = Column(Integer)
 
     __mapper_args__ = {
@@ -458,7 +463,7 @@ class Region(Dimension):
     id = Column(Integer, ForeignKey("dimensions.id"), primary_key=True)
     name = Column(String(128))
     is_part_of_id = Column(Integer, ForeignKey("regions.id"))
-    is_part_of = relationship("Region")
+    is_part_of = relationship("Region", uselist=False, foreign_keys=is_part_of_id)
     observations = relationship("Observation")
 
     __mapper_args__ = {
@@ -486,22 +491,44 @@ class Country(Region):
     '''
     __tablename__ = "countries"
     id = Column(Integer, ForeignKey("regions.id"), primary_key=True)
+    faoURI = Column(String(128))
     iso2 = Column(String(10))
     iso3 = Column(String(10))
+    name = Column(String(128))
 
     __mapper_args__ = {
         'polymorphic_identity': 'countries',
     }
 
-    def __init__(self, name = None, is_part_of = None, iso2 = None, iso3 = None):
+    def __init__(self, name = None, iso2 = None, iso3 = None, fao_URI = None, is_part_of = None):
         '''
         Constructor
         '''
         super(Country, self).__init__(name, is_part_of)
         self.iso2 = iso2
         self.iso3 = iso3
+        self.fao_URI = fao_URI
 
     def get_dimension_string(self):
         return self.iso3
 
+class CompoundIndicator(Indicator):
+    '''
+    classdocs
+    '''
+    __tablename__ = "compoundIndicators"
+    id = Column(Integer, primary_key=True) #there should be a foreign, but there is not due to indicator_ref relationship
+    indicator_id = Column(Integer)
+    name = Column(String(50))
+    description = Column(String(255))
+    measurement_unit_id = Column(String(20), ForeignKey("measurementUnits.name"))
+    measurement_unit = relationship("MeasurementUnit")
+    dataset_id = Column(Integer, ForeignKey("datasets.id"))
+    #dataset = relationship("Dataset", backref="indicators") #not used due to inheritance
+    indicator_refs = relationship("Indicator")
+    indicator_ref_group_id = Column(Integer, ForeignKey("indicatorGroups.id"))
+    indicator_ref_group = relationship("IndicatorGroup", foreign_keys=indicator_ref_group_id, uselist=False, backref="compound_indicator")
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'compoundIndicators',
+    }
