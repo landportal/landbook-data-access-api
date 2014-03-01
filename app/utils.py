@@ -83,9 +83,7 @@ def row2dict(row, cls):
     '''
     @see: http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
     '''
-    object = cls()
     d = {}
-    for column in dir(row):
-        if hasattr(object, column) and column[0] is not "_":
-            d[column] = getattr(row, column)
+    for column in row.__table__.columns:
+        d[column.name] = getattr(row, column.name)
     return d
