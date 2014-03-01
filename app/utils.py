@@ -5,6 +5,7 @@ Created on 03/02/2014
 '''
 import json
 from dicttoxml import dicttoxml
+from models import Country
 
 class JSONConverter(object):
     '''
@@ -18,8 +19,8 @@ class JSONConverter(object):
         json_result = '[\n'
         for element in elements_list:
             json_result += self.object_to_json(element) + ",\n" \
-            if len(elements_list)-1 != elements_list.index(element) \
-            else self.object_to_json(element) + "\n"
+                if len(elements_list)-1 != elements_list.index(element) \
+                else self.object_to_json(element) + "\n"
         json_result += "]"
         return json_result
         
@@ -27,7 +28,7 @@ class JSONConverter(object):
         '''
         Convert a object to its json equivalent
         '''
-        return json.dumps(row2dict(element))
+        return json.dumps(row2dict(element, Country))
     
 class XMLConverter(object):
     '''
@@ -78,12 +79,11 @@ class DictionaryList2ObjectList(object):
             returned_list.append(Struct(**element))
         return returned_list
 
-def row2dict(row):
+def row2dict(row, cls):
     '''
     @see: http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
     '''
     d = {}
     for column in row.__table__.columns:
         d[column.name] = getattr(row, column.name)
-    return d    
-        
+    return d

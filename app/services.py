@@ -4,9 +4,69 @@ Created on 03/02/2014
 @author: Herminio
 '''
 from app import db
-from app.daos import CountryDAO
+from daos import DAO
+from models import Country, Indicator
 
-class CountryService(object):
+
+class GenericService(object):
+    '''
+    Service for country dao
+    '''
+
+    def __init__(self):
+        '''
+        Constructor for country service
+        '''
+        self.tm = TransactionManager()
+
+    def get_all(self):
+        '''
+        Method that returns all countries given by the dao
+        '''
+        return self.tm.execute(self.dao, self.dao.get_all)
+
+    def get_by_code(self, code):
+        '''
+        Method that returns country given by the dao
+        '''
+        return self.tm.execute(self.dao, self.dao.get_by_code, code)
+
+    def insert(self, object):
+        '''
+        Method that inserts a country calling the dao
+        '''
+        self.tm.execute(self.dao, self.dao.insert, object)
+
+    def delete(self, code):
+        '''
+        Method that deletes the country by its given code calling the dao
+        '''
+        self.tm.execute(self.dao, self.dao.delete, code)
+
+    def update(self, object):
+        '''
+        Method that updates the country by calling the dao
+        '''
+        self.tm.execute(self.dao, self.dao.update, object)
+
+
+    def delete_all(self):
+        '''
+        Method that deletes all countries by calling the dao
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        objects = self.tm.execute(self.dao, self.dao.get_all)
+        for object in objects:
+            self.tm.execute(self.dao, self.dao.delete, object)
+
+    def update_all(self, objects):
+        '''
+        Method that updates all the countries given by calling the dao
+        '''
+        for object in objects:
+            self.tm.execute(self.dao, self.dao.update, object)
+
+class CountryService(GenericService):
     '''
     Service for country dao
     '''
@@ -15,55 +75,19 @@ class CountryService(object):
         '''
         Constructor for country service
         '''
-        self.tm = TransactionManager()
-        self.dao = CountryDAO()
-    
-    def get_all_countries(self):
-        '''
-        Method that returns all countries given by the dao
-        '''
-        return self.tm.execute(self.dao, self.dao.get_all_countries)
-    
-    def get_country_by_code(self, code):
-        '''
-        Method that returns country given by the dao
-        '''
-        return self.tm.execute(self.dao, self.dao.get_country_by_code, code)
-    
-    def insert_country(self, country):
-        '''
-        Method that inserts a country calling the dao
-        '''
-        self.tm.execute(self.dao, self.dao.insert_country, country)
-    
-    def delete_country(self, code):
-        '''
-        Method that deletes the country by its given code calling the dao
-        '''
-        self.tm.execute(self.dao, self.dao.delete_country, code)
-        
-    def update_country(self, country):
-        '''
-        Method that updates the country by calling the dao
-        '''
-        self.tm.execute(self.dao, self.dao.update_country, country)
+        super(CountryService, self).__init__()
+        self.dao = DAO(Country)
 
-    
-    def delete_all_countries(self):
+class IndicatorService(GenericService):
+    '''
+    Service for indicator dao
+    '''
+    def __init__(self):
         '''
-        Method that deletes all countries by calling the dao
-        @attention: Take care of what you do, all countries will be destroyed
+        Constructor for indicator service
         '''
-        countries = self.tm.execute(self.dao, self.dao.get_all_countries)
-        for country in countries:
-            self.tm.execute(self.dao, self.dao.delete_country, country)
-    
-    def update_countries(self, countries):
-        '''
-        Method that updates all the countries given by calling the dao
-        '''
-        for country in countries:
-            self.tm.execute(self.dao, self.dao.update_country, country)
+        super(IndicatorService, self).__init__()
+        self.dao = DAO(Indicator)
     
 
 class TransactionManager(object):
