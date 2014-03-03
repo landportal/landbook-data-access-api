@@ -189,7 +189,7 @@ class Indicator(db.Model):
     measurement_unit = relationship("MeasurementUnit")
     dataset_id = Column(Integer, ForeignKey("datasets.id"))
     dataset = relationship("Dataset", backref="indicators")
-    compound_indicator_id = Column(Integer, ForeignKey("compoundIndicators.id"))
+    #compound_indicator_id = Column(Integer, ForeignKey("compoundIndicators.id")) #circular dependency
     type = Column(String(50))
 
     __mapper_args__ = {
@@ -197,16 +197,13 @@ class Indicator(db.Model):
         'polymorphic_on': type
     }
 
-    def __init__(self, name = None, description = None,
-                 license_type = None, measurement_unit = None):
-        '''
-        Constructor
-        '''
+    def __init__(self, id, name, description, measurement_unit_id=0, dataset_id=0, compound_indicator_id=0):
+        self.id = id
         self.name = name
-        self.id = "http://landportal.info/ontology/indicator/" + name
         self.description = description
-        self.license_type = license_type
-        self.measurement_unit = measurement_unit
+        self.measurement_unit_id = measurement_unit_id
+        self.dataset_id = dataset_id
+        self.compound_indicator_id = compound_indicator_id
 
 class IndicatorGroup(db.Model):
     '''
@@ -316,9 +313,7 @@ class IsPartOf(IndicatorRelationship):
     __tablename__ = "ispartof"
     id = Column(Integer, ForeignKey("indicatorRelationships.id"), primary_key=True)
     source_id = Column(Integer, ForeignKey("indicators.id"))
-    source = relationship("Indicator", foreign_keys=source_id)
     target_id = Column(Integer, ForeignKey("indicators.id"))
-    target = relationship("Indicator", foreign_keys=target_id)
 
     __mapper_args__ = {
         'polymorphic_identity': 'ispartof',
@@ -339,9 +334,7 @@ class Becomes(IndicatorRelationship):
     __tablename__ = "becomes"
     id = Column(Integer, ForeignKey("indicatorRelationships.id"), primary_key=True)
     source_id = Column(Integer, ForeignKey("indicators.id"))
-    source = relationship("Indicator", foreign_keys=source_id)
     target_id = Column(Integer, ForeignKey("indicators.id"))
-    target = relationship("Indicator", foreign_keys=target_id)
 
     __mapper_args__ = {
         'polymorphic_identity': 'becomes',
@@ -517,15 +510,13 @@ class CompoundIndicator(Indicator):
     classdocs
     '''
     __tablename__ = "compoundIndicators"
-    id = Column(Integer, primary_key=True) #there should be a foreign, but there is not due to indicator_ref relationship
+    id = Column(Integer, ForeignKey("indicators.id"), primary_key=True) #there should be a foreign, but there is not due to indicator_ref relationship
     indicator_id = Column(Integer)
     name = Column(String(50))
     description = Column(String(255))
     measurement_unit_id = Column(String(20), ForeignKey("measurementUnits.name"))
-    measurement_unit = relationship("MeasurementUnit")
     dataset_id = Column(Integer, ForeignKey("datasets.id"))
-    #dataset = relationship("Dataset", backref="indicators") #not used due to inheritance
-    indicator_refs = relationship("Indicator")
+    #indicator_refs = relationship("Indicator") #circular dependency
     indicator_ref_group_id = Column(Integer, ForeignKey("indicatorGroups.id"))
     indicator_ref_group = relationship("IndicatorGroup", foreign_keys=indicator_ref_group_id, uselist=False, backref="compound_indicator")
 
