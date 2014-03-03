@@ -6,7 +6,7 @@ python:
   - "3.3"
 # command to install dependencies
 install:
-  - "pip install -r --allow-external requirements.txt"
+  - "pip install --allow-all-external -r requirements.txt"
 # command to run tests
 script:
   - "python tests.py"
