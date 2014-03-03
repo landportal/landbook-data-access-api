@@ -4,7 +4,7 @@ Created on 03/02/2014
 @author: Herminio
 '''
 from app import db
-from daos import DAO
+from daos import DAO, CountryDAO
 from models import Country, Indicator
 
 
@@ -57,7 +57,7 @@ class GenericService(object):
         '''
         objects = self.tm.execute(self.dao, self.dao.get_all)
         for object in objects:
-            self.tm.execute(self.dao, self.dao.delete, object)
+            self.tm.execute(self.dao, self.dao.delete, object.id)
 
     def update_all(self, objects):
         '''
@@ -76,7 +76,16 @@ class CountryService(GenericService):
         Constructor for country service
         '''
         super(CountryService, self).__init__()
-        self.dao = DAO(Country)
+        self.dao = CountryDAO()
+
+    def delete_all(self):
+        '''
+        Method that deletes all countries by calling the dao
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        objects = self.tm.execute(self.dao, self.dao.get_all)
+        for object in objects:
+            self.tm.execute(self.dao, self.dao.delete, object.iso3)
 
 class IndicatorService(GenericService):
     '''
