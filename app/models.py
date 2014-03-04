@@ -22,14 +22,14 @@ class User(db.Model):
     organization = relationship("Organization", backref="users")
 
 
-    def __init__(self, id = None, ip = None, timestamp = None, organization = None):
+    def __init__(self, id = None, ip = None, timestamp = None, organization_id = None):
         '''
         Constructor for user model object
         '''
         self.id = id
         self.ip = ip
         self.timestamp = timestamp
-        self.organization = organization
+        self.organization_id = organization_id
 
 class Organization(db.Model):
     '''

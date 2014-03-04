@@ -5,6 +5,7 @@ Created on 03/02/2014
 '''
 from app.models import Country
 
+
 class DAO(object):
     '''
     Generic DAO for all classes, only the class is needed

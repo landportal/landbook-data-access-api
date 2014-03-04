@@ -1,3 +1,5 @@
+import datetime
+
 __author__ = 'Herminio'
 
 import unittest
@@ -174,6 +176,74 @@ class TestIndicator(ApiTest):
         self.assert200(response)
         indicators = response.json
         self.assertEquals(len(indicators), 0)
+
+class TestUser(ApiTest):
+    def test_item(self):
+        user_json = json.dumps(dict(
+           id='1',
+           ip='192.168.1.1'
+        ))
+        user_updated = json.dumps(dict(
+           id='1',
+           ip='192.168.1.2'
+        ))
+        response = self.client.get("/api/users/1")
+        self.assert404(response)
+        response = self.client.post("/api/users", data=user_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/users/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('ip'), "192.168.1.1")
+        response = self.client.put("/api/users/1", data=user_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/users/1")
+        self.assertEquals(response.json.get('ip'), "192.168.1.2")
+        response = self.client.delete("/api/users/1")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/users/1")
+        self.assert404(response)
+
+    def test_collection(self):
+        user_json = json.dumps(dict(
+           id='1',
+           ip='192.168.1.1'
+        ))
+        user2_json = json.dumps(dict(
+           id='2',
+           ip='192.168.1.2',
+        ))
+        users_updated = json.dumps([
+            dict(id='1', ip='192.168.1.3'),
+            dict(id='2', ip='192.168.1.4')
+        ])
+        response = self.client.get("/api/users")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+        response = self.client.post("/api/users", data=user_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/users", data=user2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/users")
+        user = response.json[0]
+        user2 = response.json[1]
+        self.assertEquals(user['id'], 1)
+        self.assertEquals(user['ip'], "192.168.1.1")
+        self.assertEquals(user2['id'], 2)
+        self.assertEquals(user2['ip'], "192.168.1.2")
+        response = self.client.put("/api/users", data=users_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/users")
+        user = response.json[0]
+        user2 = response.json[1]
+        self.assertEquals(user['ip'], "192.168.1.3")
+        self.assertEquals(user2['ip'], "192.168.1.4")
+        response = self.client.delete("/api/users")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/users")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
 
 
 if __name__ == '__main__':

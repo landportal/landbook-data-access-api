@@ -9,13 +9,14 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from app.models import Country, Indicator
-from app.services import CountryService, IndicatorService
+from app.models import Country, Indicator, User
+from app.services import CountryService, IndicatorService, UserService
 from flask import request
 
 api = Api(app)
 country_service = CountryService()
 indicator_service = IndicatorService()
+user_service = UserService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -215,11 +216,111 @@ class IndicatorAPI(Resource):
         '''
         indicator_service.delete(id)
         return {}, 204
+
+class UserListAPI(Resource):
+    '''
+    Users collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all users
+        Response 200 OK
+        '''
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(user_service.get_all(),
+                                                      'users', 'user'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(user_service.get_all()
+                                                        ), mimetype='application/json')
+
+    def post(self):
+        '''
+        Create a new user
+        Response 201 CREATED
+        @return: URI
+        '''
+        user = User(request.json.get("id"), request.json.get("ip"),
+                    request.json.get("timestamp"), request.json.get("organization_id"))
+        if user.id is not None:
+            country_service.insert(user)
+            return {'URI': url_for('users', id=user.id)}, 201  # returns the URI for the new user
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all countries given
+        Response 204 NO CONTENT
+        '''
+        user_list = json.loads(request.data)
+        user_list = list_converter.convert(user_list)
+        user_service.update_all(user_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all countries
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        user_service.delete_all()
+        return {}, 204
+
+class UserAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        user = user_service.get_by_code(id)
+        if user is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(user,
+                                                        'country'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(user
+                                                          ), mimetype='application/json')
+
+    def put(self, id):
+        '''
+        If exists update country
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        user = user_service.get_by_code(id)
+        if user is not None:
+            user.id = request.json.get("id")
+            user.ip = request.json.get("ip")
+            user.timestamp = request.json.get("timestamp")
+            user.organization_id = request.json.get("organization_id")
+            user_service.update(user)
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, id):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        user_service.delete(id)
+        return {}, 204
+
     
 api.add_resource(CountryListAPI, '/api/countries', endpoint = 'countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint = 'countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint = 'indicators_list')
 api.add_resource(IndicatorAPI, '/api/indicators/<id>', endpoint = 'indicators')
+api.add_resource(UserListAPI, '/api/users', endpoint = 'users_list')
+api.add_resource(UserAPI, '/api/users/<id>', endpoint = 'users')
       
 def is_xml_accepted(request):
     '''
