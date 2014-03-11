@@ -21,7 +21,6 @@ class User(db.Model):
     organization_id = Column(Integer, ForeignKey('organizations.id'))
     organization = relationship("Organization", backref="users")
 
-
     def __init__(self, id = None, ip = None, timestamp = None, organization_id = None):
         '''
         Constructor for user model object
@@ -42,13 +41,14 @@ class Organization(db.Model):
     is_part_of_id = Column(Integer, ForeignKey("organizations.id"))
     is_part_of = relationship("Organization", uselist=False, foreign_keys=is_part_of_id)
 
-    def __init__(self, name = None, url = None, is_part_of = None):
+    def __init__(self, id=None, name = None, url = None, is_part_of_id = None):
         '''
         Constructor
         '''
+        self.id = id
         self.name = name
         self.url = url
-        self.is_part_of = is_part_of
+        self.is_part_of_id = is_part_of_id
         self.data_sources = []
 
     def add_data_source(self, data_source):

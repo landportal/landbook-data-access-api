@@ -1,5 +1,3 @@
-import datetime
-
 __author__ = 'Herminio'
 
 import unittest
@@ -218,8 +216,8 @@ class TestUser(ApiTest):
         ])
         response = self.client.get("/api/users")
         self.assert200(response)
-        countries = response.json
-        self.assertEquals(len(countries), 0)
+        users = response.json
+        self.assertEquals(len(users), 0)
         response = self.client.post("/api/users", data=user_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/api/users", data=user2_json, content_type='application/json')
@@ -242,8 +240,173 @@ class TestUser(ApiTest):
         self.assertStatus(response, 204)
         response = self.client.get("/api/users")
         self.assert200(response)
-        countries = response.json
-        self.assertEquals(len(countries), 0)
+        users = response.json
+        self.assertEquals(len(users), 0)
+
+class TestOrganization(ApiTest):
+    def test_item(self):
+        organization_json = json.dumps(dict(
+           id='1',
+           name='Organization A',
+           url='http://www.organizationA.com'
+        ))
+        organization_updated = json.dumps(dict(
+           id='1',
+           name='Organization B',
+           url='http://www.organizationB.com'
+        ))
+        response = self.client.get("/api/organizations/1")
+        self.assert404(response)
+        response = self.client.post("/api/organizations", data=organization_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/organizations/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('name'), "Organization A")
+        self.assertEquals(response.json.get('url'), "http://www.organizationA.com")
+        response = self.client.put("/api/organizations/1", data=organization_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/organizations/1")
+        self.assertEquals(response.json.get('name'), "Organization B")
+        self.assertEquals(response.json.get('url'), "http://www.organizationB.com")
+        response = self.client.delete("/api/organizations/1")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/organizations/1")
+        self.assert404(response)
+
+    def test_collection(self):
+        organization_json = json.dumps(dict(
+           id='1',
+           name='Organization A',
+           url='http://www.organizationA.com'
+        ))
+        organization2_json = json.dumps(dict(
+           id='2',
+           name='Organization B',
+           url='http://www.organizationB.com'
+        ))
+        organizations_updated = json.dumps([
+            dict(id='1', name='Organization C', url='http://www.organizationC.com'),
+            dict(id='2', name='Organization D', url='http://www.organizationD.com')
+        ])
+        response = self.client.get("/api/organizations")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+        response = self.client.post("/api/organizations", data=organization_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/organizations", data=organization2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/organizations")
+        organization = response.json[0]
+        organization2 = response.json[1]
+        self.assertEquals(organization['id'], 1)
+        self.assertEquals(organization['name'], "Organization A")
+        self.assertEquals(organization['url'], "http://www.organizationA.com")
+        self.assertEquals(organization2['id'], 2)
+        self.assertEquals(organization2['name'], "Organization B")
+        self.assertEquals(organization2['url'], "http://www.organizationB.com")
+        response = self.client.put("/api/organizations", data=organizations_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/organizations")
+        organization = response.json[0]
+        organization2 = response.json[1]
+        self.assertEquals(organization['name'], "Organization C")
+        self.assertEquals(organization['url'], "http://www.organizationC.com")
+        self.assertEquals(organization2['name'], "Organization D")
+        self.assertEquals(organization2['url'], "http://www.organizationD.com")
+        response = self.client.delete("/api/organizations")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/organizations")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+
+    def test_user_subcolecction_item(self):
+        organization_json = json.dumps(dict(
+           id=1,
+           name='Organization A',
+           url='http://www.organizationA.com'
+        ))
+        user_json = json.dumps(dict(
+           id=1,
+           ip='192.168.1.1',
+           organization_id=1
+        ))
+        response = self.client.post("/api/organizations", data=organization_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/organizations/1/users/1")
+        self.assert404(response)
+        response = self.client.post("/api/users", data=user_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/organizations/1/users/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('ip'), "192.168.1.1")
+        response = self.client.delete("/api/organizations/1")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/api/users")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/organizations/1")
+        self.assert404(response)
+        response = self.client.get("/api/users")
+        self.assert200(response)
+        users = response.json
+        self.assertEquals(len(users), 0)
+        response = self.client.delete("/api/organizations")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/organizations")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+
+    def test_user_subcolecction_collection(self):
+        organization_json = json.dumps(dict(
+           id=1,
+           name='Organization A',
+           url='http://www.organizationA.com'
+        ))
+        user_json = json.dumps(dict(
+           id=1,
+           ip='192.168.1.1',
+           organization_id=1
+        ))
+        user2_json = json.dumps(dict(
+           id=2,
+           ip='192.168.1.2',
+           organization_id=1
+        ))
+        users_updated = json.dumps([
+            dict(id='1', ip='192.168.1.3', organization_id=1),
+            dict(id='2', ip='192.168.1.4', organization_id=1)
+        ])
+        response = self.client.post("/api/organizations", data=organization_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/organizations/1/users")
+        self.assert200(response)
+        users = response.json
+        self.assertEquals(len(users), 0)
+        response = self.client.post("/api/users", data=user_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/users", data=user2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/organizations/1/users")
+        user = response.json[0]
+        user2 = response.json[1]
+        self.assertEquals(user['id'], 1)
+        self.assertEquals(user['ip'], "192.168.1.1")
+        self.assertEquals(user2['id'], 2)
+        self.assertEquals(user2['ip'], "192.168.1.2")
+        response = self.client.delete("/api/users")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/users")
+        self.assert200(response)
+        users = response.json
+        self.assertEquals(len(users), 0)
+        response = self.client.delete("/api/organizations")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/organizations")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
 
 
 if __name__ == '__main__':
