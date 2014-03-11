@@ -3,7 +3,7 @@ Created on 03/02/2014
 
 @author: Herminio
 '''
-from app.models import Country
+from model.models import Country
 
 
 class DAO(object):

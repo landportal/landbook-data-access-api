@@ -9,7 +9,7 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from app.models import Country, Indicator, User, Organization
+from model.models import Country, Indicator, User, Organization
 from app.services import CountryService, IndicatorService, UserService, OrganizationService
 from flask import request
 

@@ -5,7 +5,7 @@ Created on 03/02/2014
 '''
 from app import db
 from daos import DAO, CountryDAO
-from models import Country, Indicator, User, Organization
+from model.models import Country, Indicator, User, Organization
 
 
 class GenericService(object):
