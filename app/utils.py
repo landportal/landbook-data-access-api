@@ -5,7 +5,6 @@ Created on 03/02/2014
 '''
 import json
 from dicttoxml import dicttoxml
-from models import Country
 
 class JSONConverter(object):
     '''
