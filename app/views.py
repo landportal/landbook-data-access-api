@@ -9,8 +9,8 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from model.models import Country, Indicator, User, Organization
-from app.services import CountryService, IndicatorService, UserService, OrganizationService
+from model.models import Country, Indicator, User, Organization, Observation
+from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService
 from flask import request
 
 api = Api(app)
@@ -18,6 +18,7 @@ country_service = CountryService()
 indicator_service = IndicatorService()
 user_service = UserService()
 organization_service = OrganizationService()
+observation_service = ObservationService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -455,6 +456,165 @@ class OrganizationUserAPI(Resource):
             return Response(json_converter.object_to_json(selected_user
                                                           ), mimetype='application/json')
 
+class CountriesIndicatorListAPI(Resource):
+    '''
+    Countries Indicator collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self, iso3):
+        '''
+        List all organizations
+        Response 200 OK
+        '''
+        observations = country_service.get_by_code(iso3).observations
+        indicators = []
+        for obs in observations:
+            if obs.indicator is not None:
+                indicators.append(obs.indicator)
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(indicators,
+                                                      'indicators', 'indicator'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(indicators
+                                                        ), mimetype='application/json')
+
+
+class CountriesIndicatorAPI(Resource):
+    '''
+    Countries Indicator element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, iso3, indicator_id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        observations = country_service.get_by_code(iso3).observations
+        indicator = None
+        for obs in observations:
+            if obs.indicator is not None and obs.indicator.id == int(indicator_id):
+                indicator = obs.indicator
+        if indicator is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(indicator,
+                                                        'indicator'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(indicator
+                                                          ), mimetype='application/json')
+
+class ObservationListAPI(Resource):
+    '''
+    Observations collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all observations
+        Response 200 OK
+        '''
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(observation_service.get_all(),
+                                                      'observations', 'observation'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(observation_service.get_all()
+                                                        ), mimetype='application/json')
+
+    def post(self):
+        '''
+        Create a new observation
+        Response 201 CREATED
+        @return: URI
+        '''
+        observation = Observation(request.json.get("id"), request.json.get("id_source"))
+        observation.ref_time_id = request.json.get("ref_time_id")
+        observation.issued_id = request.json.get("issued_id")
+        observation.computation_id = request.json.get("computation_id")
+        observation.indicator_group_id = request.json.get("indicator_group_id")
+        observation.value_id = request.json.get("value_id")
+        observation.indicator_id = request.json.get("indicator_id")
+        observation.dataset_id = request.json.get("dataset_id")
+        observation.region_id = request.json.get("region_id")
+        observation.slice_id = request.json.get("slice_id")
+        if observation.id is not None:
+            organization_service.insert(observation)
+            return {'URI': url_for('observations', id=observation.id)}, 201  # returns the URI for the new user
+        abort(400) # in case something is wrong
+
+    def put(self):
+        '''
+        Update all countries given
+        Response 204 NO CONTENT
+        '''
+        observation_list = json.loads(request.data)
+        observation_list = list_converter.convert(observation_list)
+        observation_service.update_all(observation_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all countries
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        observation_service.delete_all()
+        return {}, 204
+
+class ObservationAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        observation = observation_service.get_by_code(id)
+        if observation is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(observation,
+                                                        'observation'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(observation
+                                                          ), mimetype='application/json')
+
+    def put(self, id):
+        '''
+        If exists update country
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        observation = observation_service.get_by_code(id)
+        if observation is not None:
+            observation.id_source = request.json.get("id_source")
+            observation.ref_time_id = request.json.get("ref_time_id")
+            observation.issued_id = request.json.get("issued_id")
+            observation.computation_id = request.json.get("computation_id")
+            observation.indicator_group_id = request.json.get("indicator_group_id")
+            observation.value_id = request.json.get("value_id")
+            observation.indicator_id = request.json.get("indicator_id")
+            observation.dataset_id = request.json.get("dataset_id")
+            observation.region_id = request.json.get("region_id")
+            observation.slice_id = request.json.get("slice_id")
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, id):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        observation_service.delete(id)
+        return {}, 204
+
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
@@ -466,6 +626,10 @@ api.add_resource(OrganizationListAPI, '/api/organizations', endpoint='organizati
 api.add_resource(OrganizationAPI, '/api/organizations/<id>', endpoint='organizations')
 api.add_resource(OrganizationUserListAPI, '/api/organizations/<organization_id>/users', endpoint='organizations_users_list')
 api.add_resource(OrganizationUserAPI, '/api/organizations/<organization_id>/users/<user_id>', endpoint='organizations_users')
+api.add_resource(CountriesIndicatorListAPI, '/api/countries/<iso3>/indicators', endpoint='countries_indicators_list')
+api.add_resource(CountriesIndicatorAPI, '/api/countries/<iso3>/indicators/<indicator_id>', endpoint='countries_indicators')
+api.add_resource(ObservationListAPI, '/api/observations', endpoint='observations_list')
+api.add_resource(ObservationAPI, '/api/observations/<id>', endpoint='observations')
 
 def is_xml_accepted(request):
     '''
