@@ -5,7 +5,7 @@ Created on 03/02/2014
 '''
 from app import db
 from daos import DAO, CountryDAO
-from model.models import Country, Indicator, User, Organization
+from model.models import Country, Indicator, User, Organization, Observation
 
 
 class GenericService(object):
@@ -119,6 +119,17 @@ class OrganizationService(GenericService):
         """
         super(OrganizationService, self).__init__()
         self.dao = DAO(Organization)
+
+class ObservationService(GenericService):
+    """
+    Service for organization dao
+    """
+    def __init__(self):
+        """
+        Constructor for orgnization service
+        """
+        super(ObservationService, self).__init__()
+        self.dao = DAO(Observation)
     
 
 class TransactionManager(object):
