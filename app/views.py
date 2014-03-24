@@ -9,9 +9,9 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from model.models import Country, Indicator, User, Organization, Observation, Region
+from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
-    RegionService
+    RegionService, DataSourceService, DatasetService
 from flask import request
 
 api = Api(app)
@@ -21,6 +21,8 @@ user_service = UserService()
 organization_service = OrganizationService()
 observation_service = ObservationService()
 region_service = RegionService()
+datasource_service = DataSourceService()
+dataset_service = DatasetService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -459,6 +461,7 @@ class OrganizationUserAPI(Resource):
             return Response(json_converter.object_to_json(selected_user
                                                           ), mimetype='application/json')
 
+
 class CountriesIndicatorListAPI(Resource):
     '''
     Countries Indicator collection URI
@@ -751,7 +754,6 @@ class RegionsCountryAPI(Resource):
         '''
         selected_country = None
         for country in country_service.get_all():
-            print country.iso3 == iso3
             if country.is_part_of_id == int(id) and country.iso3 == iso3:
                 selected_country = country
         if selected_country is None:
@@ -761,6 +763,256 @@ class RegionsCountryAPI(Resource):
                                                         'country'), mimetype='application/xml')
         else:
             return Response(json_converter.object_to_json(selected_country
+                                                          ), mimetype='application/json')
+
+
+class DataSourceListAPI(Resource):
+    '''
+    DataSource collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all datasources
+        Response 200 OK
+        '''
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(datasource_service.get_all(),
+                                                      'datasources', 'datasource'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(datasource_service.get_all()
+                                                        ), mimetype='application/json')
+
+    def post(self):
+        '''
+        Create a new datasource
+        Response 201 CREATED
+        @return: URI
+        '''
+        datasource = DataSource(request.json.get("id_source"), request.json.get("name"))
+        datasource.id = request.json.get("id")
+        datasource.organization_id = request.json.get("organization_id")
+        if datasource.name is not None:
+            datasource_service.insert(datasource)
+            return {'URI': url_for('datasources', id=datasource.id)}, 201 #returns the URI for the new datasource
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all datasources given
+        Response 204 NO CONTENT
+        '''
+        datasource_list = json.loads(request.data)
+        datasource_list = list_converter.convert(datasource_list)
+        datasource_service.update_all(datasource_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all datasources
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        datasource_service.delete_all()
+        return {}, 204
+
+
+class DataSourceAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show datasource
+        Response 200 OK
+        '''
+        datasource = datasource_service.get_by_code(id)
+        if datasource is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(datasource,
+                                                        'datasource'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(datasource
+                                                          ), mimetype='application/json')
+
+    def put(self, id):
+        '''
+        If exists update datasource
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        datasource = datasource_service.get_by_code(id)
+        if datasource is not None:
+            datasource.id_source = request.json.get("id_source")
+            datasource.name = request.json.get("name")
+            datasource.organization_id = request.json.get("organization_id")
+            datasource_service.update(datasource)
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, id):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        datasource_service.delete(id)
+        return {}, 204
+
+
+class DatasetListAPI(Resource):
+    '''
+    Dataset collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all datasets
+        Response 200 OK
+        '''
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(dataset_service.get_all(),
+                                                      'datasets', 'dataset'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(dataset_service.get_all()
+                                                        ), mimetype='application/json')
+
+    def post(self):
+        '''
+        Create a new dataset
+        Response 201 CREATED
+        @return: URI
+        '''
+        dataset = Dataset(request.json.get("id"))
+        dataset.id_source = request.json.get("id_source")
+        dataset.sdmx_frequency = request.json.get("sdmx_frequency")
+        dataset.datasource_id = request.json.get("datasource_id")
+        dataset.license_id = request.json.get("license_id")
+        if dataset.id is not None:
+            dataset_service.insert(dataset)
+            return {'URI': url_for('datasets', id=dataset.id)}, 201 #returns the URI for the new dataset
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all datasets given
+        Response 204 NO CONTENT
+        '''
+        dataset_list = json.loads(request.data)
+        dataset_list = list_converter.convert(dataset_list)
+        dataset_service.update_all(dataset_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all datasets
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        dataset_service.delete_all()
+        return {}, 204
+
+
+class DatasetAPI(Resource):
+    '''
+    Dataset element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show dataset
+        Response 200 OK
+        '''
+        datasets = dataset_service.get_by_code(id)
+        if datasets is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(datasets,
+                                                        'datasets'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(datasets
+                                                          ), mimetype='application/json')
+
+    def put(self, id):
+        '''
+        If exists update dataset
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        dataset = dataset_service.get_by_code(id)
+        if dataset is not None:
+            dataset.id_source = request.json.get("id_source")
+            dataset.sdmx_frequency = request.json.get("sdmx_frequency")
+            dataset.datasource_id = request.json.get("datasource_id")
+            dataset.license_id = request.json.get("license_id")
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, id):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        dataset_service.delete(id)
+        return {}, 204
+
+
+class DataSourceIndicatorListAPI(Resource):
+    '''
+    DataSource Indicator collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        List all indicators
+        Response 200 OK
+        '''
+        datasets = datasource_service.get_by_code(id).datasets
+        indicators = []
+        for dataset in datasets:
+            indicators.extend(dataset.indicators)
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(indicators,
+                                                      'indicators', 'indicator'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(indicators
+                                                        ), mimetype='application/json')
+
+
+class DataSourceIndicatorAPI(Resource):
+    '''
+    Countries Indicator element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id, indicator_id):
+        '''
+        Show indicator
+        Response 200 OK
+        '''
+        datasets = datasource_service.get_by_code(id).datasets
+        indicator = None
+        for dataset in datasets:
+            for indicator in dataset.indicators:
+                if indicator.id == indicator_id:
+                    indicator = dataset.indicator
+        if indicator is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(indicator,
+                                                        'indicator'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(indicator
                                                           ), mimetype='application/json')
 
 
@@ -782,6 +1034,12 @@ api.add_resource(RegionListAPI, '/api/regions', endpoint='regions_list')
 api.add_resource(RegionAPI, '/api/regions/<id>', endpoint='regions')
 api.add_resource(RegionsCountryListAPI, '/api/regions/<id>/countries', endpoint='regions_countries_list')
 api.add_resource(RegionsCountryAPI, '/api/regions/<id>/countries/<iso3>', endpoint='regions_countries')
+api.add_resource(DataSourceListAPI, '/api/datasources', endpoint='datasources_list')
+api.add_resource(DataSourceAPI, '/api/datasources/<id>', endpoint='datasources')
+api.add_resource(DatasetListAPI, '/api/datasets', endpoint='datasets_list')
+api.add_resource(DatasetAPI, '/api/datasets/<id>', endpoint='datasets')
+api.add_resource(DataSourceIndicatorListAPI, '/api/datasources/<id>/indicators', endpoint='datasources_indicators_list')
+api.add_resource(DataSourceIndicatorAPI, '/api/datasources/<id>/indicators/<indicator_id>', endpoint='datasources_indicators')
 
 
 def is_xml_accepted(request):
