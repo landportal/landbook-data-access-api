@@ -5,7 +5,7 @@ Created on 03/02/2014
 '''
 from app import db
 from daos import DAO, CountryDAO
-from model.models import Country, Indicator, User, Organization, Observation, Region
+from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset
 
 
 class GenericService(object):
@@ -66,11 +66,12 @@ class GenericService(object):
         for object in objects:
             self.tm.execute(self.dao, self.dao.update, object)
 
+
 class CountryService(GenericService):
     '''
     Service for country dao
     '''
-    
+
     def __init__(self):
         '''
         Constructor for country service
@@ -87,6 +88,7 @@ class CountryService(GenericService):
         for object in objects:
             self.tm.execute(self.dao, self.dao.delete, object.iso3)
 
+
 class IndicatorService(GenericService):
     '''
     Service for indicator dao
@@ -97,6 +99,7 @@ class IndicatorService(GenericService):
         '''
         super(IndicatorService, self).__init__()
         self.dao = DAO(Indicator)
+
 
 class UserService(GenericService):
     """
@@ -109,6 +112,7 @@ class UserService(GenericService):
         super(UserService, self).__init__()
         self.dao = DAO(User)
 
+
 class OrganizationService(GenericService):
     """
     Service for organization dao
@@ -119,6 +123,7 @@ class OrganizationService(GenericService):
         """
         super(OrganizationService, self).__init__()
         self.dao = DAO(Organization)
+
 
 class ObservationService(GenericService):
     """
@@ -141,13 +146,32 @@ class RegionService(GenericService):
         super(RegionService, self).__init__()
         self.dao = DAO(Region)
 
-    
+
+class DataSourceService(GenericService):
+    """
+    Service for DataSource dao
+    """
+
+    def __init__(self):
+        super(DataSourceService, self).__init__()
+        self.dao = DAO(DataSource)
+
+
+class DatasetService(GenericService):
+    """
+    Service forDataset dao
+    """
+
+    def __init__(self):
+        super(DatasetService, self).__init__()
+        self.dao = DAO(Dataset)
+
 
 class TransactionManager(object):
     '''
     Transaction manager that helps to abstract from the execution
     '''
-    
+
     def execute(self, dao, function, *args):
         '''
         Abstraction for all calls to the dao methods, like command executor
@@ -156,7 +180,7 @@ class TransactionManager(object):
         getattr(dao, 'set_session')(session)
         result = function(*args)
         session.commit()
-        
+
         return result
 
 

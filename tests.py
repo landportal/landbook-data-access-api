@@ -765,5 +765,305 @@ class TestRegion(ApiTest):
         organizations = response.json
         self.assertEquals(len(organizations), 0)
 
+
+class TestDataSource(ApiTest):
+    def test_item(self):
+        datasource_json = json.dumps(dict(
+           id=1,
+           id_source='1',
+           name='World Bank 1',
+           organization_id=1
+        ))
+        datasource_updated = json.dumps(dict(
+           id=1,
+           id_source='1',
+           name='World Bank 2',
+           organization_id=1
+        ))
+        response = self.client.get("/api/datasources/1")
+        self.assert404(response)
+        response = self.client.post("/api/datasources", data=datasource_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasources/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('id_source'), "1")
+        self.assertEquals(response.json.get('name'), "World Bank 1")
+        self.assertEquals(response.json.get('organization_id'), 1)
+        response = self.client.put("/api/datasources/1", data=datasource_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasources/1")
+        self.assertEquals(response.json.get('name'), "World Bank 2")
+        response = self.client.delete("/api/datasources/1")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasources/1")
+        self.assert404(response)
+
+    def test_collection(self):
+        datasource_json = json.dumps(dict(
+           id=1,
+           id_source='1',
+           name='World Bank 1',
+           organization_id=1
+        ))
+        datasource2_json = json.dumps(dict(
+           id=2,
+           id_source='1',
+           name='World Bank 2',
+           organization_id=1
+        ))
+        datasources_updated = json.dumps([
+            dict(id=1, name='World Bank 3'),
+            dict(id=2, name='World Bank 4')
+        ])
+        response = self.client.get("/api/datasources")
+        self.assert200(response)
+        datasources = response.json
+        self.assertEquals(len(datasources), 0)
+        response = self.client.post("/api/datasources", data=datasource_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/datasources", data=datasource2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasources")
+        datasource = response.json[0]
+        datasource2 = response.json[1]
+        self.assertEquals(datasource['id'], 1)
+        self.assertEquals(datasource['id_source'], "1")
+        self.assertEquals(datasource['name'], "World Bank 1")
+        self.assertEquals(datasource['organization_id'], 1)
+        self.assertEquals(datasource2['id'], 2)
+        self.assertEquals(datasource2['id_source'], "1")
+        self.assertEquals(datasource2['name'], "World Bank 2")
+        self.assertEquals(datasource2['organization_id'], 1)
+        response = self.client.put("/api/datasources", data=datasources_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasources")
+        datasource = response.json[0]
+        datasource2 = response.json[1]
+        self.assertEquals(datasource['name'], "World Bank 3")
+        self.assertEquals(datasource2['name'], "World Bank 4")
+        response = self.client.delete("/api/datasources")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasources")
+        self.assert200(response)
+        datasources = response.json
+        self.assertEquals(len(datasources), 0)
+
+    def test_indicator_subcolecction_item(self):
+        datasource_json = json.dumps(dict(
+           id=1,
+           id_source='1',
+           name='World Bank 1',
+           organization_id=1
+        ))
+        indicator_json = json.dumps(dict(
+           id=1,
+           name='donation',
+           description='A gives a donation to B',
+           dataset_id=1
+        ))
+        dataset_json = json.dumps(dict(
+           id=1,
+           sdmx_frequency=1,
+           datasource_id=1,
+           license_id=1
+        ))
+        response = self.client.post("/api/datasources", data=datasource_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/datasets", data=dataset_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasources/1/indicators/1")
+        self.assert404(response)
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasources/1/indicators/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('name'), "donation")
+        self.assertEquals(response.json.get('description'), "A gives a donation to B")
+        response = self.client.delete("/api/datasources/1")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/api/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasources/1")
+        self.assert404(response)
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.delete("/api/datasources")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasources")
+        self.assert200(response)
+        datasources = response.json
+        self.assertEquals(len(datasources), 0)
+        response = self.client.delete("/api/datasets")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasets")
+        self.assert200(response)
+        datasets = response.json
+        self.assertEquals(len(datasets), 0)
+
+    def test_indicator_subcolecction_collection(self):
+        datasource_json = json.dumps(dict(
+           id=1,
+           id_source='1',
+           name='World Bank 1',
+           organization_id=1
+        ))
+        indicator_json = json.dumps(dict(
+           id=1,
+           name='donation',
+           description='A gives a donation to B',
+           dataset_id=1
+        ))
+        indicator2_json = json.dumps(dict(
+           id=2,
+           name='donation',
+           description='B gives a donation to A',
+           dataset_id=2
+        ))
+        dataset_json = json.dumps(dict(
+           id=1,
+           sdmx_frequency=1,
+           datasource_id=1,
+           license_id=1
+        ))
+        dataset2_json = json.dumps(dict(
+           id=2,
+           sdmx_frequency=1,
+           datasource_id=1,
+           license_id=2
+        ))
+        response = self.client.post("/api/datasources", data=datasource_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/datasets", data=dataset_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/datasets", data=dataset2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasources/1/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasources/1/indicators")
+        indicator = response.json[0]
+        indicator2 = response.json[1]
+        self.assertEquals(indicator['id'], 1)
+        self.assertEquals(indicator['name'], "donation")
+        self.assertEquals(indicator['description'], "A gives a donation to B")
+        self.assertEquals(indicator2['id'], 2)
+        self.assertEquals(indicator2['name'], "donation")
+        self.assertEquals(indicator2['description'], "B gives a donation to A")
+        response = self.client.delete("/api/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.delete("/api/datasources")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasources")
+        self.assert200(response)
+        datasources = response.json
+        self.assertEquals(len(datasources), 0)
+        response = self.client.delete("/api/datasets")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasets")
+        self.assert200(response)
+        datasets = response.json
+        self.assertEquals(len(datasets), 0)
+
+
+class TestDataset(ApiTest):
+    def test_item(self):
+        dataset_json = json.dumps(dict(
+           id=1,
+           sdmx_frequency=1,
+           datasource_id=1,
+           license_id=1
+        ))
+        dataset_updated = json.dumps(dict(
+           id=1,
+           sdmx_frequency=2,
+           datasource_id=2,
+           license_id=2
+        ))
+        response = self.client.get("/api/datasets/1")
+        self.assert404(response)
+        response = self.client.post("/api/datasets", data=dataset_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasets/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('sdmx_frequency'), 1)
+        self.assertEquals(response.json.get('datasource_id'), 1)
+        self.assertEquals(response.json.get('license_id'), 1)
+        response = self.client.put("/api/datasets/1", data=dataset_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasets/1")
+        self.assertEquals(response.json.get('sdmx_frequency'), 2)
+        self.assertEquals(response.json.get('datasource_id'), 2)
+        self.assertEquals(response.json.get('license_id'), 2)
+        response = self.client.delete("/api/datasets/1")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasets/1")
+        self.assert404(response)
+
+    def test_collection(self):
+        dataset_json = json.dumps(dict(
+           id=1,
+           sdmx_frequency=1,
+           datasource_id=1,
+           license_id=1
+        ))
+        dataset2_json = json.dumps(dict(
+           id=2,
+           sdmx_frequency=2,
+           datasource_id=2,
+           license_id=2
+        ))
+        datasets_updated = json.dumps([
+            dict(id=1, sdmx_frequency=3, datasource_id=3, license_id=3),
+            dict(id=2, sdmx_frequency=4, datasource_id=4, license_id=4)
+        ])
+        response = self.client.get("/api/datasets")
+        self.assert200(response)
+        datasources = response.json
+        self.assertEquals(len(datasources), 0)
+        response = self.client.post("/api/datasets", data=dataset_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/datasets", data=dataset2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/datasets")
+        dataset = response.json[0]
+        dataset2 = response.json[1]
+        self.assertEquals(dataset['id'], 1)
+        self.assertEquals(dataset['sdmx_frequency'], 1)
+        self.assertEquals(dataset['datasource_id'], 1)
+        self.assertEquals(dataset['license_id'], 1)
+        self.assertEquals(dataset2['id'], 2)
+        self.assertEquals(dataset2['sdmx_frequency'], 2)
+        self.assertEquals(dataset2['datasource_id'], 2)
+        self.assertEquals(dataset2['license_id'], 2)
+        response = self.client.put("/api/datasets", data=datasets_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasets")
+        dataset = response.json[0]
+        dataset2 = response.json[1]
+        self.assertEquals(dataset['sdmx_frequency'], 3)
+        self.assertEquals(dataset['datasource_id'], 3)
+        self.assertEquals(dataset['license_id'], 3)
+        self.assertEquals(dataset2['sdmx_frequency'], 4)
+        self.assertEquals(dataset2['datasource_id'], 4)
+        self.assertEquals(dataset2['license_id'], 4)
+        response = self.client.delete("/api/datasets")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/datasets")
+        self.assert200(response)
+        datasources = response.json
+        self.assertEquals(len(datasources), 0)
+
+
 if __name__ == '__main__':
     unittest.main()
