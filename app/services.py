@@ -5,7 +5,7 @@ Created on 03/02/2014
 '''
 from app import db
 from daos import DAO, CountryDAO
-from model.models import Country, Indicator, User, Organization, Observation
+from model.models import Country, Indicator, User, Organization, Observation, Region
 
 
 class GenericService(object):
@@ -130,6 +130,17 @@ class ObservationService(GenericService):
         """
         super(ObservationService, self).__init__()
         self.dao = DAO(Observation)
+
+
+class RegionService(GenericService):
+    """
+    Service for region dao
+    """
+
+    def __init__(self):
+        super(RegionService, self).__init__()
+        self.dao = DAO(Region)
+
     
 
 class TransactionManager(object):
@@ -147,6 +158,5 @@ class TransactionManager(object):
         session.commit()
         
         return result
-
 
 

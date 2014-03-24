@@ -9,8 +9,9 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from model.models import Country, Indicator, User, Organization, Observation
-from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService
+from model.models import Country, Indicator, User, Organization, Observation, Region
+from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
+    RegionService
 from flask import request
 
 api = Api(app)
@@ -19,6 +20,7 @@ indicator_service = IndicatorService()
 user_service = UserService()
 organization_service = OrganizationService()
 observation_service = ObservationService()
+region_service = RegionService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -50,6 +52,7 @@ class CountryListAPI(Resource):
         '''
         country = Country(request.json.get("name"), request.json.get("iso2"),
                           request.json.get("iso3"), request.json.get("fao_URI"))
+        country.is_part_of_id = request.json.get("is_part_of_id")
         if country.iso2 is not None and country.iso3 is not None:
             country_service.insert(country)
             return {'URI': url_for('countries', code=country.iso3)}, 201 #returns the URI for the new country
@@ -615,6 +618,151 @@ class ObservationAPI(Resource):
         observation_service.delete(id)
         return {}, 204
 
+class RegionListAPI(Resource):
+    '''
+    Regions collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all region
+        Response 200 OK
+        '''
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(region_service.get_all(),
+                                                      'regions', 'region'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(region_service.get_all()
+                                                        ), mimetype='application/json')
+
+    def post(self):
+        '''
+        Create a new region
+        Response 201 CREATED
+        @return: URI
+        '''
+        region = Region(request.json.get("name"))
+        region.id = request.json.get("id")
+        region.is_part_of_id = request.json.get("is_part_of_id")
+        if region.name is not None:
+            region_service.insert(region)
+            return {'URI': url_for('regions', id=region.id)}, 201 #returns the URI for the new region
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all regions given
+        Response 204 NO CONTENT
+        '''
+        region_list = json.loads(request.data)
+        region_list = list_converter.convert(region_list)
+        region_service.update_all(region_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all regions
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        region_service.delete_all()
+        return {}, 204
+
+class RegionAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show region
+        Response 200 OK
+        '''
+        region = region_service.get_by_code(id)
+        if region is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(region,
+                                                        'region'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(region
+                                                          ), mimetype='application/json')
+
+    def put(self, id):
+        '''
+        If exists update region
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        region = region_service.get_by_code(id)
+        if region is not None:
+            region.name = request.json.get("name")
+            region.is_part_of_id = request.json.get("is_part_of_id")
+            region_service.update(region)
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, id):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        region_service.delete(id)
+        return {}, 204
+
+
+class RegionsCountryListAPI(Resource):
+    '''
+    Regions Country collection URI
+    Methods: GET
+    '''
+
+    def get(self, id):
+        '''
+        List all countries
+        Response 200 OK
+        '''
+        countries = []
+        for country in country_service.get_all():
+            if country.is_part_of_id is int(id):
+                countries.append(country)
+        if is_xml_accepted(request):
+            return Response(xml_converter.list_to_xml(countries,
+                                                      'countries', 'country'), mimetype='application/xml')
+        else:
+            return Response(json_converter.list_to_json(countries
+                                                        ), mimetype='application/json')
+
+
+class RegionsCountryAPI(Resource):
+    '''
+    Countries Indicator element URI
+    Methods: GET
+    '''
+
+    def get(self, id, iso3):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        selected_country = None
+        for country in country_service.get_all():
+            print country.iso3 == iso3
+            if country.is_part_of_id == int(id) and country.iso3 == iso3:
+                selected_country = country
+        if selected_country is None:
+            abort(404)
+        if is_xml_accepted(request):
+            return Response(xml_converter.object_to_xml(selected_country,
+                                                        'country'), mimetype='application/xml')
+        else:
+            return Response(json_converter.object_to_json(selected_country
+                                                          ), mimetype='application/json')
+
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
@@ -630,6 +778,11 @@ api.add_resource(CountriesIndicatorListAPI, '/api/countries/<iso3>/indicators', 
 api.add_resource(CountriesIndicatorAPI, '/api/countries/<iso3>/indicators/<indicator_id>', endpoint='countries_indicators')
 api.add_resource(ObservationListAPI, '/api/observations', endpoint='observations_list')
 api.add_resource(ObservationAPI, '/api/observations/<id>', endpoint='observations')
+api.add_resource(RegionListAPI, '/api/regions', endpoint='regions_list')
+api.add_resource(RegionAPI, '/api/regions/<id>', endpoint='regions')
+api.add_resource(RegionsCountryListAPI, '/api/regions/<id>/countries', endpoint='regions_countries_list')
+api.add_resource(RegionsCountryAPI, '/api/regions/<id>/countries/<iso3>', endpoint='regions_countries')
+
 
 def is_xml_accepted(request):
     '''
