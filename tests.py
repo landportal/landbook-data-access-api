@@ -600,5 +600,170 @@ class TestObservation(ApiTest):
         organizations = response.json
         self.assertEquals(len(organizations), 0)
 
+
+class TestRegion(ApiTest):
+    def test_item(self):
+        region_json = json.dumps(dict(
+           id=1,
+           name='Spain',
+           #is_part_of_id=1
+        ))
+        region_updated = json.dumps(dict(
+           id=1,
+           name='France',
+           #is_part_of_id=2
+        ))
+        response = self.client.get("/api/regions/1")
+        self.assert404(response)
+        response = self.client.post("/api/regions", data=region_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('name'), "Spain")
+        #self.assertEquals(response.json.get('is_part_of_id'), 2)
+        response = self.client.put("/api/regions/1", data=region_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions/1")
+        self.assertEquals(response.json.get('name'), "France")
+        #self.assertEquals(response.json.get('is_part_of_id'), 1)
+        response = self.client.delete("/api/regions/1")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions/1")
+        self.assert404(response)
+
+    def test_collection(self):
+        region_json = json.dumps(dict(
+           id='1',
+           name='Spain',
+           #is_part_of_id=1
+        ))
+        region2_json = json.dumps(dict(
+           id='2',
+           name='France',
+           #is_part_of_id=2
+        ))
+        regions_updated = json.dumps([
+            dict(id='1', name='Denmark'),
+            dict(id='2', name='Ireland')
+        ])
+        response = self.client.get("/api/regions")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+        response = self.client.post("/api/regions", data=region_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/regions", data=region2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions")
+        region = response.json[0]
+        region2 = response.json[1]
+        self.assertEquals(region['id'], 1)
+        self.assertEquals(region['name'], "Spain")
+        #self.assertEquals(region['is_part_of_id'], 1)
+        self.assertEquals(region2['id'], 2)
+        self.assertEquals(region2['name'], "France")
+        #self.assertEquals(region2['is_part_of_id'], 2)
+        response = self.client.put("/api/regions", data=regions_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions")
+        region = response.json[0]
+        region2 = response.json[1]
+        self.assertEquals(region['name'], "Denmark")
+        self.assertEquals(region2['name'], "Ireland")
+        response = self.client.delete("/api/regions")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+
+    def test_country_subcolecction_item(self):
+        region_json = json.dumps(dict(
+           id='1',
+           name='Europe',
+           #is_part_of_id=1
+        ))
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP',
+           is_part_of_id=1
+        ))
+        response = self.client.post("/api/regions", data=region_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions/1/countries/1")
+        self.assert404(response)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions/1/countries/ESP")
+        self.assertEquals(response.json.get('name'), "Spain")
+        self.assertEquals(response.json.get('iso2'), "ES")
+        self.assertEquals(response.json.get('iso3'), "ESP")
+        response = self.client.delete("/api/regions/1")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/api/countries")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions/1")
+        self.assert404(response)
+        response = self.client.get("/api/countries")
+        self.assert200(response)
+        users = response.json
+        self.assertEquals(len(users), 0)
+        response = self.client.delete("/api/regions")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+
+    def test_country_subcolecction_collection(self):
+        region_json = json.dumps(dict(
+           id='1',
+           name='Europe',
+        ))
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP',
+           is_part_of_id=1
+        ))
+        country2_json = json.dumps(dict(
+           name='France',
+           iso2='FR',
+           iso3='FRA',
+           is_part_of_id=1
+        ))
+        response = self.client.post("/api/regions", data=region_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions/1/countries")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/countries", data=country2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions/1/countries")
+        country = response.json[0]
+        country2 = response.json[1]
+        self.assertEquals(country['name'], "Spain")
+        self.assertEquals(country['iso2'], "ES")
+        self.assertEquals(country['iso3'], "ESP")
+        self.assertEquals(country2['name'], "France")
+        self.assertEquals(country2['iso2'], "FR")
+        self.assertEquals(country2['iso3'], "FRA")
+        response = self.client.delete("/api/countries")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/countries")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+        response = self.client.delete("/api/regions")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+
 if __name__ == '__main__':
     unittest.main()
