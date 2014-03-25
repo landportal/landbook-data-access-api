@@ -553,12 +553,12 @@ class TestObservation(ApiTest):
     def test_collection(self):
         observation_json = json.dumps(dict(
            id=1,
-           id_source=1,
+           id_source='1',
            dataset_id=1
         ))
         observation2_json = json.dumps(dict(
            id=2,
-           id_source=2,
+           id_source='2',
            dataset_id=2
         ))
         observation_updated = json.dumps([
@@ -1063,6 +1063,118 @@ class TestDataset(ApiTest):
         self.assert200(response)
         datasources = response.json
         self.assertEquals(len(datasources), 0)
+
+
+class TestObservationBy(ApiTest):
+    def test_get_by_country(self):
+        observation_json = json.dumps(dict(
+           id=1,
+           id_source='1',
+           ref_time_id=1,
+           issued_id=1,
+           computation_id=1,
+           indicator_group_id=1,
+           value_id=1,
+           indicator_id=1,
+           dataset_id=1,
+           region_id=1,
+           slice_id=1
+        ))
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP'
+        ))
+        response = self.client.get("/api/observations/ESP?by=country")
+        self.assert404(response)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/observations/ESP?by=country")
+        observation = response.json[0]
+        self.assertEquals(observation['id'], 1)
+        self.assertEquals(observation['id_source'], "1")
+        self.assertEquals(observation['ref_time_id'], 1)
+        self.assertEquals(observation['issued_id'], 1)
+        self.assertEquals(observation['computation_id'], 1)
+        self.assertEquals(observation['indicator_group_id'], 1)
+        self.assertEquals(observation['value_id'], 1)
+        self.assertEquals(observation['indicator_id'], 1)
+        self.assertEquals(observation['dataset_id'], 1)
+        self.assertEquals(observation['region_id'], 1)
+        self.assertEquals(observation['slice_id'], 1)
+        response = self.client.delete("/api/countries")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/countries")
+        self.assert200(response)
+        observations = response.json
+        self.assertEquals(len(observations), 0)
+        response = self.client.delete("/api/observations")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/observations/ESP?by=country")
+        self.assert404(response)
+
+    def test_get_by_country(self):
+        observation_json = json.dumps(dict(
+           id=1,
+           id_source='1',
+           ref_time_id=1,
+           issued_id=1,
+           computation_id=1,
+           indicator_group_id=1,
+           value_id=1,
+           indicator_id=1,
+           dataset_id=1,
+           region_id=1,
+           slice_id=1
+        ))
+        indicator_json = json.dumps(dict(
+           id=1,
+           name='donation',
+           description='A gives a donation to B',
+           dataset_id=1
+        ))
+        dataset_json = json.dumps(dict(
+           id=1,
+           sdmx_frequency=1,
+           datasource_id=1,
+           license_id=1,
+        ))
+        response = self.client.get("/api/observations/1?by=indicator")
+        self.assert404(response)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/datasets", data=dataset_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/observations/1?by=indicator")
+        observation = response.json[0]
+        self.assertEquals(observation['id'], 1)
+        self.assertEquals(observation['id_source'], "1")
+        self.assertEquals(observation['ref_time_id'], 1)
+        self.assertEquals(observation['issued_id'], 1)
+        self.assertEquals(observation['computation_id'], 1)
+        self.assertEquals(observation['indicator_group_id'], 1)
+        self.assertEquals(observation['value_id'], 1)
+        self.assertEquals(observation['indicator_id'], 1)
+        self.assertEquals(observation['dataset_id'], 1)
+        self.assertEquals(observation['region_id'], 1)
+        self.assertEquals(observation['slice_id'], 1)
+        response = self.client.delete("/api/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        observations = response.json
+        self.assertEquals(len(observations), 0)
+        response = self.client.delete("/api/observations")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/api/datasets")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/observations/1?by=indicator")
+        self.assert404(response)
+
 
 
 if __name__ == '__main__':
