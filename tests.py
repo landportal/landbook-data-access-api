@@ -1115,7 +1115,7 @@ class TestObservationBy(ApiTest):
         response = self.client.get("/api/observations/ESP?by=country")
         self.assert404(response)
 
-    def test_get_by_country(self):
+    def test_get_by_indicator(self):
         observation_json = json.dumps(dict(
            id=1,
            id_source='1',
@@ -1174,6 +1174,67 @@ class TestObservationBy(ApiTest):
         self.assertStatus(response, 204)
         response = self.client.get("/api/observations/1?by=indicator")
         self.assert404(response)
+
+    def test_get_by_region(self):
+        observation_json = json.dumps(dict(
+           id=1,
+           id_source='1',
+           ref_time_id=1,
+           issued_id=1,
+           computation_id=1,
+           indicator_group_id=1,
+           value_id=1,
+           indicator_id=1,
+           dataset_id=1,
+           region_id=1,
+           slice_id=1
+        ))
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP',
+           id=1,
+           is_part_of_id=2
+        ))
+        region_json = json.dumps(dict(
+            id=2,
+            name='Europe'
+        ))
+        response = self.client.get("/api/observations/2?by=region")
+        self.assert200(response)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/regions", data=region_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/observations/2?by=region")
+        observation = response.json[0]
+        self.assertEquals(observation['id'], 1)
+        self.assertEquals(observation['id_source'], "1")
+        self.assertEquals(observation['ref_time_id'], 1)
+        self.assertEquals(observation['issued_id'], 1)
+        self.assertEquals(observation['computation_id'], 1)
+        self.assertEquals(observation['indicator_group_id'], 1)
+        self.assertEquals(observation['value_id'], 1)
+        self.assertEquals(observation['indicator_id'], 1)
+        self.assertEquals(observation['dataset_id'], 1)
+        self.assertEquals(observation['region_id'], 1)
+        self.assertEquals(observation['slice_id'], 1)
+        response = self.client.delete("/api/observations")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/api/regions")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/api/countries")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/countries")
+        self.assert200(response)
+        observations = response.json
+        self.assertEquals(len(observations), 0)
+        response = self.client.get("/api/observations/2?by=region")
+        self.assert200(response)
+        observations = response.json
+        self.assertEquals(len(observations), 0)
 
 
 
