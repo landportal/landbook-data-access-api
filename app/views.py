@@ -537,6 +537,12 @@ class ObservationAPI(Resource):
             else:
                 observations = indicator.dataset.observations
                 return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif modifier == 'region':
+            observations = []
+            for country in country_service.get_all():
+                if country.is_part_of_id is int(id):
+                    observations.extend(country.observations)
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
 
     def put(self, id):
         '''
