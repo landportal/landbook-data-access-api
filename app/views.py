@@ -39,12 +39,7 @@ class CountryListAPI(Resource):
         List all countries
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(country_service.get_all(),
-                                                      'countries', 'country'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(country_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, country_service.get_all(), 'countries', 'country')
 
     def post(self):
         '''
@@ -93,12 +88,7 @@ class CountryAPI(Resource):
         country = country_service.get_by_code(code)
         if country is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(country,
-                                                        'country'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(country
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, country, 'country')
 
     def put(self, code):
         '''
@@ -136,12 +126,7 @@ class IndicatorListAPI(Resource):
         List all countries
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(indicator_service.get_all(),
-                                                      'indicators', 'indicator'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(indicator_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, indicator_service.get_all(), 'indicators', 'indicator')
 
     def post(self):
         '''
@@ -190,12 +175,7 @@ class IndicatorAPI(Resource):
         indicator = indicator_service.get_by_code(id)
         if indicator is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(indicator,
-                                                        'indicator'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(indicator
-            ), mimetype='application/json')
+        return response_xml_or_json_item(request, indicator, 'indicator')
 
     def put(self, id):
         '''
@@ -235,12 +215,7 @@ class UserListAPI(Resource):
         List all users
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(user_service.get_all(),
-                                                      'users', 'user'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(user_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, user_service.get_all(), 'users', 'user')
 
     def post(self):
         '''
@@ -288,12 +263,7 @@ class UserAPI(Resource):
         user = user_service.get_by_code(id)
         if user is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(user,
-                                                        'user'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(user
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, user, 'user')
 
     def put(self, id):
         '''
@@ -332,12 +302,7 @@ class OrganizationListAPI(Resource):
         List all organizations
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(organization_service.get_all(),
-                                                      'organizations', 'organization'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(organization_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, organization_service.get_all(), 'organizations', 'organization')
 
     def post(self):
         '''
@@ -385,12 +350,7 @@ class OrganizationAPI(Resource):
         organization = organization_service.get_by_code(id)
         if organization is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(organization,
-                                                        'organization'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(organization
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, organization, 'organization')
 
     def put(self, id):
         '''
@@ -418,6 +378,7 @@ class OrganizationAPI(Resource):
         organization_service.delete(id)
         return {}, 204
 
+
 class OrganizationUserListAPI(Resource):
     '''
     Organizations users collection URI
@@ -429,12 +390,7 @@ class OrganizationUserListAPI(Resource):
         List all organizations
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(organization_service.get_by_code(organization_id).users,
-                                                      'users', 'user'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(organization_service.get_by_code(organization_id).users
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, organization_service.get_by_code(organization_id).users, 'users', 'user')
 
 
 class OrganizationUserAPI(Resource):
@@ -454,12 +410,7 @@ class OrganizationUserAPI(Resource):
                 selected_user = user
         if selected_user is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(selected_user,
-                                                        'user'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(selected_user
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, selected_user, 'user')
 
 
 class CountriesIndicatorListAPI(Resource):
@@ -478,12 +429,7 @@ class CountriesIndicatorListAPI(Resource):
         for obs in observations:
             if obs.indicator is not None:
                 indicators.append(obs.indicator)
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(indicators,
-                                                      'indicators', 'indicator'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(indicators
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
 class CountriesIndicatorAPI(Resource):
@@ -504,12 +450,8 @@ class CountriesIndicatorAPI(Resource):
                 indicator = obs.indicator
         if indicator is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(indicator,
-                                                        'indicator'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(indicator
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, indicator, 'indicator')
+
 
 class ObservationListAPI(Resource):
     '''
@@ -522,12 +464,7 @@ class ObservationListAPI(Resource):
         List all observations
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(observation_service.get_all(),
-                                                      'observations', 'observation'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(observation_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, observation_service.get_all(), 'observations', 'observation')
 
     def post(self):
         '''
@@ -569,6 +506,7 @@ class ObservationListAPI(Resource):
         observation_service.delete_all()
         return {}, 204
 
+
 class ObservationAPI(Resource):
     '''
     Countries element URI
@@ -580,15 +518,25 @@ class ObservationAPI(Resource):
         Show country
         Response 200 OK
         '''
-        observation = observation_service.get_by_code(id)
-        if observation is None:
-            abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(observation,
-                                                        'observation'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(observation
-                                                          ), mimetype='application/json')
+        modifier = request.args.get("by")
+        if modifier is None:
+            response = observation_service.get_by_code(id)
+            if response is None:
+                abort(404)
+            return response_xml_or_json_item(request, response, 'observation')
+        elif modifier == 'country':
+            country = country_service.get_by_code(id)
+            if country is None:
+                abort(404)
+            else:
+                return response_xml_or_json_list(request, country.observations, 'observations', 'observation')
+        elif modifier == 'indicator':
+            indicator = indicator_service.get_by_code(id)
+            if indicator is None:
+                abort(404)
+            else:
+                observations = indicator.dataset.observations
+                return response_xml_or_json_list(request, observations, 'observations', 'observation')
 
     def put(self, id):
         '''
@@ -632,12 +580,7 @@ class RegionListAPI(Resource):
         List all region
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(region_service.get_all(),
-                                                      'regions', 'region'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(region_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, region_service.get_all(), 'regions', 'region')
 
     def post(self):
         '''
@@ -686,12 +629,7 @@ class RegionAPI(Resource):
         region = region_service.get_by_code(id)
         if region is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(region,
-                                                        'region'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(region
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, region, 'region')
 
     def put(self, id):
         '''
@@ -733,12 +671,7 @@ class RegionsCountryListAPI(Resource):
         for country in country_service.get_all():
             if country.is_part_of_id is int(id):
                 countries.append(country)
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(countries,
-                                                      'countries', 'country'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(countries
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, countries, 'countries', 'country')
 
 
 class RegionsCountryAPI(Resource):
@@ -758,12 +691,7 @@ class RegionsCountryAPI(Resource):
                 selected_country = country
         if selected_country is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(selected_country,
-                                                        'country'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(selected_country
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, selected_country, 'country')
 
 
 class DataSourceListAPI(Resource):
@@ -777,12 +705,7 @@ class DataSourceListAPI(Resource):
         List all datasources
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(datasource_service.get_all(),
-                                                      'datasources', 'datasource'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(datasource_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, datasource_service.get_all(), 'datasources', 'datasource')
 
     def post(self):
         '''
@@ -832,12 +755,7 @@ class DataSourceAPI(Resource):
         datasource = datasource_service.get_by_code(id)
         if datasource is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(datasource,
-                                                        'datasource'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(datasource
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, datasource, 'datasource')
 
     def put(self, id):
         '''
@@ -876,12 +794,7 @@ class DatasetListAPI(Resource):
         List all datasets
         Response 200 OK
         '''
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(dataset_service.get_all(),
-                                                      'datasets', 'dataset'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(dataset_service.get_all()
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, dataset_service.get_all(), 'datasets', 'dataset')
 
     def post(self):
         '''
@@ -930,15 +843,10 @@ class DatasetAPI(Resource):
         Show dataset
         Response 200 OK
         '''
-        datasets = dataset_service.get_by_code(id)
-        if datasets is None:
+        dataset = dataset_service.get_by_code(id)
+        if dataset is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(datasets,
-                                                        'datasets'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(datasets
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, dataset, 'dataset')
 
     def put(self, id):
         '''
@@ -981,12 +889,7 @@ class DataSourceIndicatorListAPI(Resource):
         indicators = []
         for dataset in datasets:
             indicators.extend(dataset.indicators)
-        if is_xml_accepted(request):
-            return Response(xml_converter.list_to_xml(indicators,
-                                                      'indicators', 'indicator'), mimetype='application/xml')
-        else:
-            return Response(json_converter.list_to_json(indicators
-                                                        ), mimetype='application/json')
+        return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
 class DataSourceIndicatorAPI(Resource):
@@ -1008,12 +911,8 @@ class DataSourceIndicatorAPI(Resource):
                     indicator = dataset.indicator
         if indicator is None:
             abort(404)
-        if is_xml_accepted(request):
-            return Response(xml_converter.object_to_xml(indicator,
-                                                        'indicator'), mimetype='application/xml')
-        else:
-            return Response(json_converter.object_to_json(indicator
-                                                          ), mimetype='application/json')
+        return response_xml_or_json_item(request, indicator, 'indicator')
+
 
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
@@ -1047,3 +946,20 @@ def is_xml_accepted(request):
     Returns if json is accepted or not, returns json as default
     '''
     return request.args.get('format') == "xml"
+
+
+def response_xml_or_json_item(request, item, item_string):
+    if is_xml_accepted(request):
+        return Response(xml_converter.object_to_xml(item,
+                                                    item_string), mimetype='application/xml')
+    else:
+        return Response(json_converter.object_to_json(item
+                                                      ), mimetype='application/json')
+
+def response_xml_or_json_list(request, collection, collection_string, item_string):
+    if is_xml_accepted(request):
+        return Response(xml_converter.list_to_xml(collection,
+                                                  collection_string, item_string), mimetype='application/xml')
+    else:
+        return Response(json_converter.list_to_json(collection
+                                                    ), mimetype='application/json')

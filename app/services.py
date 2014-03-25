@@ -159,12 +159,13 @@ class DataSourceService(GenericService):
 
 class DatasetService(GenericService):
     """
-    Service forDataset dao
+    Service for Dataset dao
     """
 
     def __init__(self):
         super(DatasetService, self).__init__()
         self.dao = DAO(Dataset)
+
 
 
 class TransactionManager(object):
