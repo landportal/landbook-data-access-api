@@ -920,6 +920,46 @@ class DataSourceIndicatorAPI(Resource):
         return response_xml_or_json_item(request, indicator, 'indicator')
 
 
+class ObservationByTwoAPI(Resource):
+    '''
+    URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id_first_filter, id_second_filter):
+        '''
+        Show observations
+        Response 200 OK
+        '''
+        modifier = request.args.get("by")
+        if modifier is None:
+            abort(400)
+        elif modifier == 'country':
+            country = country_service.get_by_code(id_first_filter)
+            if country is None:
+                abort(404)
+            else:
+                observations = [observation for observation in country.observations
+                                if observation.indicator_id == int(id_second_filter)]
+                return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif modifier == 'indicator':
+            country = country_service.get_by_code(id_second_filter)
+            if country is None:
+                abort(404)
+            else:
+                observations = [observation for observation in country.observations
+                                if observation.indicator_id == int(id_first_filter)]
+                return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif modifier == 'region':
+            observations = []
+            for country in country_service.get_all():
+                if country.is_part_of_id is int(id_first_filter):
+                    country_observations = country.observations
+                    for observation in country_observations:
+                        if observation.indicator_id == int(id_second_filter):
+                            observations.append(observation)
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
@@ -935,6 +975,7 @@ api.add_resource(CountriesIndicatorListAPI, '/api/countries/<iso3>/indicators', 
 api.add_resource(CountriesIndicatorAPI, '/api/countries/<iso3>/indicators/<indicator_id>', endpoint='countries_indicators')
 api.add_resource(ObservationListAPI, '/api/observations', endpoint='observations_list')
 api.add_resource(ObservationAPI, '/api/observations/<id>', endpoint='observations')
+api.add_resource(ObservationByTwoAPI, '/api/observations/<id_first_filter>/<id_second_filter>', endpoint='observations_by_two')
 api.add_resource(RegionListAPI, '/api/regions', endpoint='regions_list')
 api.add_resource(RegionAPI, '/api/regions/<id>', endpoint='regions')
 api.add_resource(RegionsCountryListAPI, '/api/regions/<id>/countries', endpoint='regions_countries_list')
