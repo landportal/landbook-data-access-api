@@ -518,31 +518,24 @@ class ObservationAPI(Resource):
         Show country
         Response 200 OK
         '''
-        modifier = request.args.get("by")
-        if modifier is None:
-            response = observation_service.get_by_code(id)
-            if response is None:
-                abort(404)
-            return response_xml_or_json_item(request, response, 'observation')
-        elif modifier == 'country':
+        if country_service.get_by_code(id) is not None:
             country = country_service.get_by_code(id)
-            if country is None:
-                abort(404)
-            else:
-                return response_xml_or_json_list(request, country.observations, 'observations', 'observation')
-        elif modifier == 'indicator':
+            return response_xml_or_json_list(request, country.observations, 'observations', 'observation')
+        elif indicator_service.get_by_code(id) is not None:
             indicator = indicator_service.get_by_code(id)
-            if indicator is None:
-                abort(404)
-            else:
-                observations = indicator.dataset.observations
-                return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        elif modifier == 'region':
+            observations = indicator.dataset.observations
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif region_service.get_by_code(id) is not None:
             observations = []
             for country in country_service.get_all():
                 if country.is_part_of_id is int(id):
                     observations.extend(country.observations)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        else:
+            response = observation_service.get_by_code(id)
+            if response is None:
+                abort(404)
+            return response_xml_or_json_item(request, response, 'observation')
 
     def put(self, id):
         '''
@@ -931,26 +924,17 @@ class ObservationByTwoAPI(Resource):
         Show observations
         Response 200 OK
         '''
-        modifier = request.args.get("by")
-        if modifier is None:
-            abort(400)
-        elif modifier == 'country':
+        if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_first_filter)
-            if country is None:
-                abort(404)
-            else:
-                observations = [observation for observation in country.observations
-                                if observation.indicator_id == int(id_second_filter)]
-                return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        elif modifier == 'indicator':
+            observations = [observation for observation in country.observations
+                            if observation.indicator_id == int(id_second_filter)]
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_second_filter)
-            if country is None:
-                abort(404)
-            else:
-                observations = [observation for observation in country.observations
-                                if observation.indicator_id == int(id_first_filter)]
-                return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        elif modifier == 'region':
+            observations = [observation for observation in country.observations
+                            if observation.indicator_id == int(id_first_filter)]
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             observations = []
             for country in country_service.get_all():
                 if country.is_part_of_id is int(id_first_filter):
@@ -959,6 +943,8 @@ class ObservationByTwoAPI(Resource):
                         if observation.indicator_id == int(id_second_filter):
                             observations.append(observation)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        else:
+            abort(400)
 
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
