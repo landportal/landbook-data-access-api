@@ -9,9 +9,9 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset
+from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
-    RegionService, DataSourceService, DatasetService
+    RegionService, DataSourceService, DatasetService, ValueService
 from flask import request
 
 api = Api(app)
@@ -23,6 +23,7 @@ observation_service = ObservationService()
 region_service = RegionService()
 datasource_service = DataSourceService()
 dataset_service = DatasetService()
+value_service = ValueService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -203,6 +204,53 @@ class IndicatorAPI(Resource):
         '''
         indicator_service.delete(id)
         return {}, 204
+
+
+class IndicatorTopAPI(Resource):
+    '''
+    Indicator top api
+    Methods: GET
+    '''
+
+    def get(self, id):
+        '''
+        Show top 10 countries with the highest value for a given indicator
+        Response 200 OK
+        '''
+        observations = observation_service.get_all()
+        observations = [obs for obs in observations if obs.indicator_id == int(id)]
+        observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
+        countries = country_service.get_all()  # improve if changing directionality of model on observation country
+        top = observations[:10]
+        countries = [country for observation in top for country in countries if observation.region_id == country.id]
+        output = []
+        for i in range(len(countries)):
+            element = EmptyObject()
+            element.iso3 = countries[i].iso3
+            element.value_id = top[i].id
+            output.append(element)
+        return response_xml_or_json_list(request, output, 'tops', 'top')
+
+
+class IndicatorAverageAPI(Resource):
+    '''
+    Indicator average api
+    Methods: GET
+    '''
+
+    def get(self, id):
+        '''
+        Show the average value for a indicator of all countries
+        Response 200 OK
+        '''
+        observations = observation_service.get_all()
+        observations = [obs for obs in observations if obs.indicator_id == int(id)]
+        observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
+        average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), observations) / len(observations)
+        element = EmptyObject()
+        element.value = average
+        return response_xml_or_json_item(request, element, 'average')
+
 
 class UserListAPI(Resource):
     '''
@@ -947,10 +995,103 @@ class ObservationByTwoAPI(Resource):
             abort(400)
 
 
+class ValueListAPI(Resource):
+    '''
+    Value collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all values
+        Response 200 OK
+        '''
+        return response_xml_or_json_list(request, value_service.get_all(), 'values', 'value')
+
+    def post(self):
+        '''
+        Create a new value
+        Response 201 CREATED
+        @return: URI
+        '''
+        value = Value()
+        value.id = request.json.get("id")
+        value.obs_status = request.json.get("obs_status")
+        value.value_type = request.json.get("value_type")
+        value.value = request.json.get("value")
+        if value.value is not None:
+            value_service.insert(value)
+            return {'URI': url_for('values', id=value.id)}, 201  # returns the URI for the new dataset
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all values given
+        Response 204 NO CONTENT
+        '''
+        value_list = json.loads(request.data)
+        value_list = list_converter.convert(value_list)
+        value_service.update_all(value_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all value
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all values will be destroyed
+        '''
+        value_service.delete_all()
+        return {}, 204
+
+
+class ValueAPI(Resource):
+    '''
+    Value element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show dataset
+        Response 200 OK
+        '''
+        value = value_service.get_by_code(id)
+        if value is None:
+            abort(404)
+        return response_xml_or_json_item(request, value, 'value')
+
+    def put(self, id):
+        '''
+        If exists update value
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        value = value_service.get_by_code(id)
+        if value is not None:
+            value.id = request.json.get("id")
+            value.obs_status = request.json.get("obs_status")
+            value.value_type = request.json.get("value_type")
+            value.value = request.json.get("value")
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, id):
+        '''
+        Delete value
+        Response 204 NO CONTENT
+        '''
+        value_service.delete(id)
+        return {}, 204
+
+
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
 api.add_resource(IndicatorAPI, '/api/indicators/<id>', endpoint='indicators')
+api.add_resource(IndicatorTopAPI, '/api/indicators/<id>/top', endpoint='indicators_top')
+api.add_resource(IndicatorAverageAPI, '/api/indicators/<id>/average', endpoint='indicators_average')
 api.add_resource(UserListAPI, '/api/users', endpoint='users_list')
 api.add_resource(UserAPI, '/api/users/<id>', endpoint='users')
 api.add_resource(OrganizationListAPI, '/api/organizations', endpoint='organizations_list')
@@ -972,7 +1113,8 @@ api.add_resource(DatasetListAPI, '/api/datasets', endpoint='datasets_list')
 api.add_resource(DatasetAPI, '/api/datasets/<id>', endpoint='datasets')
 api.add_resource(DataSourceIndicatorListAPI, '/api/datasources/<id>/indicators', endpoint='datasources_indicators_list')
 api.add_resource(DataSourceIndicatorAPI, '/api/datasources/<id>/indicators/<indicator_id>', endpoint='datasources_indicators')
-
+api.add_resource(ValueListAPI, '/api/values', endpoint='value_list')
+api.add_resource(ValueAPI, '/api/values/<id>', endpoint='values')
 
 def is_xml_accepted(request):
     '''
@@ -989,6 +1131,7 @@ def response_xml_or_json_item(request, item, item_string):
         return Response(json_converter.object_to_json(item
                                                       ), mimetype='application/json')
 
+
 def response_xml_or_json_list(request, collection, collection_string, item_string):
     if is_xml_accepted(request):
         return Response(xml_converter.list_to_xml(collection,
@@ -996,3 +1139,7 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
     else:
         return Response(json_converter.list_to_json(collection
                                                     ), mimetype='application/json')
+
+
+class EmptyObject(object):
+    pass
