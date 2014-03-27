@@ -5,7 +5,7 @@ Created on 03/02/2014
 '''
 from app import db
 from daos import DAO, CountryDAO
-from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset
+from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value
 
 
 class GenericService(object):
@@ -167,6 +167,15 @@ class DatasetService(GenericService):
         self.dao = DAO(Dataset)
 
 
+class ValueService(GenericService):
+    """
+    Service for Value dao
+    """
+
+    def __init__(self):
+        super(ValueService, self).__init__()
+        self.dao = DAO(Value)
+
 
 class TransactionManager(object):
     '''
@@ -181,7 +190,6 @@ class TransactionManager(object):
         getattr(dao, 'set_session')(session)
         result = function(*args)
         session.commit()
-
         return result
 
 

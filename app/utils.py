@@ -28,7 +28,8 @@ class JSONConverter(object):
         Convert a object to its json equivalent
         '''
         return json.dumps(row2dict(element))
-    
+
+
 class XMLConverter(object):
     '''
     XML converter from objects and list
@@ -85,6 +86,17 @@ def row2dict(row):
     if row is None:
         return None
     d = {}
-    for column in row.__table__.columns:
-        d[column.name] = getattr(row, column.name)
-    return d
+    if hasattr(row, '__table__'):
+        for column in row.__table__.columns:
+            d[column.name] = getattr(row, column.name)
+        return d
+    else:
+        for column in get_user_attrs(row):
+            d[column] = getattr(row, column)
+        return d
+
+
+def get_user_attrs(object):
+    return [k for k in dir(object)
+            if not k.startswith('__')
+            and not k.endswith('__')]
