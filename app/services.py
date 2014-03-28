@@ -5,7 +5,7 @@ Created on 03/02/2014
 '''
 from app import db
 from daos import DAO, CountryDAO
-from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value
+from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic
 
 
 class GenericService(object):
@@ -175,6 +175,16 @@ class ValueService(GenericService):
     def __init__(self):
         super(ValueService, self).__init__()
         self.dao = DAO(Value)
+
+
+class TopicService(GenericService):
+    """
+    Service for Topic dao
+    """
+
+    def __init__(self):
+        super(TopicService, self).__init__()
+        self.dao = DAO(Topic)
 
 
 class TransactionManager(object):

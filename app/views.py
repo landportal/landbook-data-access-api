@@ -9,9 +9,9 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value
+from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
-    RegionService, DataSourceService, DatasetService, ValueService
+    RegionService, DataSourceService, DatasetService, ValueService, TopicService
 from flask import request
 
 api = Api(app)
@@ -24,6 +24,7 @@ region_service = RegionService()
 datasource_service = DataSourceService()
 dataset_service = DatasetService()
 value_service = ValueService()
+topic_service = TopicService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -54,7 +55,7 @@ class CountryListAPI(Resource):
         if country.iso2 is not None and country.iso3 is not None:
             country_service.insert(country)
             return {'URI': url_for('countries', code=country.iso3)}, 201 #returns the URI for the new country
-        abort(400) # in case something is wrong
+        abort(400)  # in case something is wrong
 
     def put(self):
         '''
@@ -138,6 +139,8 @@ class IndicatorListAPI(Resource):
         indicator = Indicator(request.json.get("id"), request.json.get("name"),
                               request.json.get("description"), request.json.get("measurement_unit_id"),
                               request.json.get("dataset_id"), request.json.get("compound_indicator_id"))
+        indicator.type = request.json.get("type")
+        indicator.topic_id = request.json.get("topic_id")
         if indicator.name is not None:
             indicator_service.insert(indicator)
             return {'URI': url_for('indicators', id=indicator.id)}, 201 #returns the URI for the new indicator
@@ -218,7 +221,7 @@ class IndicatorTopAPI(Resource):
         Response 200 OK
         '''
         observations = observation_service.get_all()
-        observations = [obs for obs in observations if obs.indicator_id == int(id)]
+        observations = [obs for obs in observations if obs.indicator_id == id]
         observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
         countries = country_service.get_all()  # improve if changing directionality of model on observation country
         top = observations[:10]
@@ -244,7 +247,7 @@ class IndicatorAverageAPI(Resource):
         Response 200 OK
         '''
         observations = observation_service.get_all()
-        observations = [obs for obs in observations if obs.indicator_id == int(id)]
+        observations = [obs for obs in observations if obs.indicator_id == id]
         observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
         average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), observations) / len(observations)
         element = EmptyObject()
@@ -274,7 +277,7 @@ class UserListAPI(Resource):
         user = User(request.json.get("id"), request.json.get("ip"),
                     request.json.get("timestamp"), request.json.get("organization_id"))
         if user.id is not None:
-            country_service.insert(user)
+            user_service.insert(user)
             return {'URI': url_for('users', id=user.id)}, 201  # returns the URI for the new user
         abort(400)  # in case something is wrong
 
@@ -358,8 +361,9 @@ class OrganizationListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        organization = Organization(request.json.get("id"), request.json.get("name"),
-                                    request.json.get("url"), request.json.get("is_part_of_id"))
+        organization = Organization(request.json.get("id"), request.json.get("name"))
+        organization.is_part_of_id = request.json.get("is_part_of_id")
+        organization.url = request.json.get("url")
         if organization.id is not None:
             organization_service.insert(organization)
             return {'URI': url_for('organizations', id=organization.id)}, 201  # returns the URI for the new user
@@ -383,6 +387,7 @@ class OrganizationListAPI(Resource):
         '''
         organization_service.delete_all()
         return {}, 204
+
 
 class OrganizationAPI(Resource):
     '''
@@ -454,7 +459,7 @@ class OrganizationUserAPI(Resource):
         '''
         selected_user = None
         for user in organization_service.get_by_code(organization_id).users:
-            if user.id == int(user_id):
+            if user.id == user_id:
                 selected_user = user
         if selected_user is None:
             abort(404)
@@ -494,7 +499,7 @@ class CountriesIndicatorAPI(Resource):
         observations = country_service.get_by_code(iso3).observations
         indicator = None
         for obs in observations:
-            if obs.indicator is not None and obs.indicator.id == int(indicator_id):
+            if obs.indicator is not None and obs.indicator.id == indicator_id:
                 indicator = obs.indicator
         if indicator is None:
             abort(404)
@@ -520,7 +525,7 @@ class ObservationListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        observation = Observation(request.json.get("id"), request.json.get("id_source"))
+        observation = Observation(request.json.get("id"))
         observation.ref_time_id = request.json.get("ref_time_id")
         observation.issued_id = request.json.get("issued_id")
         observation.computation_id = request.json.get("computation_id")
@@ -531,9 +536,9 @@ class ObservationListAPI(Resource):
         observation.region_id = request.json.get("region_id")
         observation.slice_id = request.json.get("slice_id")
         if observation.id is not None:
-            organization_service.insert(observation)
+            observation_service.insert(observation)
             return {'URI': url_for('observations', id=observation.id)}, 201  # returns the URI for the new user
-        abort(400) # in case something is wrong
+        abort(400)  # in case something is wrong
 
     def put(self):
         '''
@@ -594,7 +599,6 @@ class ObservationAPI(Resource):
         '''
         observation = observation_service.get_by_code(id)
         if observation is not None:
-            observation.id_source = request.json.get("id_source")
             observation.ref_time_id = request.json.get("ref_time_id")
             observation.issued_id = request.json.get("issued_id")
             observation.computation_id = request.json.get("computation_id")
@@ -850,7 +854,6 @@ class DatasetListAPI(Resource):
         @return: URI
         '''
         dataset = Dataset(request.json.get("id"))
-        dataset.id_source = request.json.get("id_source")
         dataset.sdmx_frequency = request.json.get("sdmx_frequency")
         dataset.datasource_id = request.json.get("datasource_id")
         dataset.license_id = request.json.get("license_id")
@@ -904,7 +907,6 @@ class DatasetAPI(Resource):
         '''
         dataset = dataset_service.get_by_code(id)
         if dataset is not None:
-            dataset.id_source = request.json.get("id_source")
             dataset.sdmx_frequency = request.json.get("sdmx_frequency")
             dataset.datasource_id = request.json.get("datasource_id")
             dataset.license_id = request.json.get("license_id")
@@ -953,9 +955,9 @@ class DataSourceIndicatorAPI(Resource):
         datasets = datasource_service.get_by_code(id).datasets
         indicator = None
         for dataset in datasets:
-            for indicator in dataset.indicators:
-                if indicator.id == indicator_id:
-                    indicator = dataset.indicator
+            for ind in dataset.indicators:
+                if ind.id == indicator_id:
+                    indicator = ind
         if indicator is None:
             abort(404)
         return response_xml_or_json_item(request, indicator, 'indicator')
@@ -975,20 +977,20 @@ class ObservationByTwoAPI(Resource):
         if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_first_filter)
             observations = [observation for observation in country.observations
-                            if observation.indicator_id == int(id_second_filter)]
+                            if observation.indicator_id == id_second_filter]
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_second_filter)
             observations = [observation for observation in country.observations
-                            if observation.indicator_id == int(id_first_filter)]
+                            if observation.indicator_id == id_first_filter]
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             observations = []
             for country in country_service.get_all():
-                if country.is_part_of_id is int(id_first_filter):
+                if country.is_part_of_id == int(id_first_filter):
                     country_observations = country.observations
                     for observation in country_observations:
-                        if observation.indicator_id == int(id_second_filter):
+                        if observation.indicator_id == id_second_filter:
                             observations.append(observation)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         else:
@@ -1086,6 +1088,124 @@ class ValueAPI(Resource):
         return {}, 204
 
 
+class TopicListAPI(Resource):
+    '''
+    Value collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all topics
+        Response 200 OK
+        '''
+        return response_xml_or_json_list(request, topic_service.get_all(), 'topics', 'topic')
+
+    def post(self):
+        '''
+        Create a new topic
+        Response 201 CREATED
+        @return: URI
+        '''
+        topic = Topic(request.json.get("id"), request.json.get("name"))
+        if topic.name is not None:
+            value_service.insert(topic)
+            return {'URI': url_for('topics', id=topic.id)}, 201  # returns the URI for the new dataset
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all topics given
+        Response 204 NO CONTENT
+        '''
+        topic_list = json.loads(request.data)
+        topic_list = list_converter.convert(topic_list)
+        topic_service.update_all(topic_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all topics
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all values will be destroyed
+        '''
+        topic_service.delete_all()
+        return {}, 204
+
+
+class TopicAPI(Resource):
+    '''
+    Topic element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show topic
+        Response 200 OK
+        '''
+        topic = topic_service.get_by_code(id)
+        if topic is None:
+            abort(404)
+        return response_xml_or_json_item(request, topic, 'topic')
+
+    def put(self, id):
+        '''
+        If exists update topic
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        topic = topic_service.get_by_code(id)
+        if topic is not None:
+            topic.id = request.json.get("id")
+            topic.name = request.json.get("name")
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, id):
+        '''
+        Delete topic
+        Response 204 NO CONTENT
+        '''
+        topic_service.delete(id)
+        return {}, 204
+
+
+class TopicIndicatorListAPI(Resource):
+    '''
+    Topics Indicator collection URI
+    Methods: GET
+    '''
+
+    def get(self, topic_id):
+        '''
+        List all indicators
+        Response 200 OK
+        '''
+        return response_xml_or_json_list(request, topic_service.get_by_code(topic_id).indicators, 'indicators', 'indicator')
+
+
+class TopicIndicatorAPI(Resource):
+    '''
+    Topics Indicator element URI
+    Methods: GET
+    '''
+
+    def get(self, topic_id, indicator_id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        selected_indicator = None
+        for indicator in topic_service.get_by_code(topic_id).indicators:
+            if indicator.id == indicator_id:
+                selected_indicator = indicator
+        if selected_indicator is None:
+            abort(404)
+        return response_xml_or_json_item(request, selected_indicator, 'indicator')
+
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
@@ -1115,6 +1235,11 @@ api.add_resource(DataSourceIndicatorListAPI, '/api/datasources/<id>/indicators',
 api.add_resource(DataSourceIndicatorAPI, '/api/datasources/<id>/indicators/<indicator_id>', endpoint='datasources_indicators')
 api.add_resource(ValueListAPI, '/api/values', endpoint='value_list')
 api.add_resource(ValueAPI, '/api/values/<id>', endpoint='values')
+api.add_resource(TopicListAPI, '/api/topics', endpoint='topic_list')
+api.add_resource(TopicAPI, '/api/topics/<id>', endpoint='topics')
+api.add_resource(TopicIndicatorListAPI, '/api/topics/<topic_id>/indicators', endpoint='topics_indicators_list')
+api.add_resource(TopicIndicatorAPI, '/api/topics/<topic_id>/indicators/<indicator_id>', endpoint='topics_indicators')
+
 
 def is_xml_accepted(request):
     '''
