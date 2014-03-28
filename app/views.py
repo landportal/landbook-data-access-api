@@ -1206,6 +1206,23 @@ class TopicIndicatorAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, selected_indicator, 'indicator')
 
+
+class RegionCountriesWithDataAPI(Resource):
+    '''
+    Cuntries with data by region element URI
+    Methods: GET
+    '''
+
+    def get(self, region_id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        countries = [country for country in country_service.get_all() if country.is_part_of_id == int(region_id)]
+        countries = [country for country in countries if len(country.observations) > 0]
+        return response_xml_or_json_list(request, countries, 'countries', 'country')
+
+
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
@@ -1239,6 +1256,7 @@ api.add_resource(TopicListAPI, '/api/topics', endpoint='topic_list')
 api.add_resource(TopicAPI, '/api/topics/<id>', endpoint='topics')
 api.add_resource(TopicIndicatorListAPI, '/api/topics/<topic_id>/indicators', endpoint='topics_indicators_list')
 api.add_resource(TopicIndicatorAPI, '/api/topics/<topic_id>/indicators/<indicator_id>', endpoint='topics_indicators')
+api.add_resource(RegionCountriesWithDataAPI, '/api/regions/<region_id>/countries_with_data', endpoint='regions_countries_with_data')
 
 
 def is_xml_accepted(request):
