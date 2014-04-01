@@ -1,10 +1,12 @@
+
 __author__ = 'Herminio'
 
 import unittest
 import app
+import json
 from flask_testing import TestCase
 from app.utils import JSONConverter
-import json
+from time import time
 
 json_converter = JSONConverter()
 
@@ -1840,6 +1842,120 @@ class TestTopic(ApiTest):
         self.assert200(response)
         topics = response.json
         self.assertEquals(len(topics), 0)
+
+
+class TestLastUpdate(ApiTest):
+    def test_by_country(self):
+        time_now = time()
+        indicator1_json = json.dumps(dict(
+            id=1,
+            name='donation',
+            description='donation from A to B',
+            last_update=time_now-1e8
+        ))
+        indicator2_json = json.dumps(dict(
+            id=2,
+            name='receiver',
+            description='receives a donation from B',
+            last_update=time_now
+        ))
+        spain_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP',
+           id=1
+        ))
+        observation_json = json.dumps(dict(
+           id=1,
+           id_source=1,
+           indicator_id=1,
+           region_id=1
+        ))
+        observation2_json = json.dumps(dict(
+           id=2,
+           id_source=2,
+           indicator_id=2,
+           region_id=1
+        ))
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.post("/api/indicators", data=indicator1_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/countries", data=spain_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/countries/ESP/last_update")
+        last_update = response.json
+        self.assertEquals(last_update['last_update'], long(time_now))
+        response = self.client.delete("/api/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+
+    def test_by_indicator_and_country(self):
+        time_now = time()
+        indicator1_json = json.dumps(dict(
+            id=1,
+            name='donation',
+            description='donation from A to B',
+            last_update=time_now-1e8
+        ))
+        indicator2_json = json.dumps(dict(
+            id=2,
+            name='receiver',
+            description='receives a donation from B',
+            last_update=time_now
+        ))
+        spain_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP',
+           id=1
+        ))
+        observation_json = json.dumps(dict(
+           id=1,
+           id_source=1,
+           indicator_id=1,
+           region_id=1
+        ))
+        observation2_json = json.dumps(dict(
+           id=2,
+           id_source=2,
+           indicator_id=2,
+           region_id=1
+        ))
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.post("/api/indicators", data=indicator1_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/countries", data=spain_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/1/ESP/last_update")
+        last_update = response.json
+        self.assertEquals(last_update['last_update'], long(time_now - 1e8))
+        response = self.client.delete("/api/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
 
 if __name__ == '__main__':
     unittest.main()

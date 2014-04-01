@@ -4,6 +4,7 @@ Created on 03/02/2014
 @author: Herminio
 '''
 import json
+import datetime, time
 from dicttoxml import dicttoxml
 
 class JSONConverter(object):
@@ -88,11 +89,17 @@ def row2dict(row):
     d = {}
     if hasattr(row, '__table__'):
         for column in row.__table__.columns:
-            d[column.name] = getattr(row, column.name)
+            if type(getattr(row, column.name)) is datetime.datetime:
+                d[column.name] = time.mktime(getattr(row, column.name).timetuple())
+            else:
+                d[column.name] = getattr(row, column.name)
         return d
     else:
         for column in get_user_attrs(row):
-            d[column] = getattr(row, column)
+            if type(getattr(row, column)) is datetime.datetime:
+                d[column] = time.mktime(getattr(row, column).timetuple())
+            else:
+                d[column] = getattr(row, column)
         return d
 
 
