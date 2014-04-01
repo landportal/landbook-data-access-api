@@ -13,6 +13,7 @@ from model.models import Country, Indicator, User, Organization, Observation, Re
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService
 from flask import request
+from datetime import datetime
 
 api = Api(app)
 country_service = CountryService()
@@ -141,6 +142,8 @@ class IndicatorListAPI(Resource):
                               request.json.get("dataset_id"), request.json.get("compound_indicator_id"))
         indicator.type = request.json.get("type")
         indicator.topic_id = request.json.get("topic_id")
+        if request.json.get("last_update") is not None:
+            indicator.last_update = datetime.fromtimestamp(long(request.json.get("last_update")))
         if indicator.name is not None:
             indicator_service.insert(indicator)
             return {'URI': url_for('indicators', id=indicator.id)}, 201 #returns the URI for the new indicator
@@ -1209,7 +1212,7 @@ class TopicIndicatorAPI(Resource):
 
 class RegionCountriesWithDataAPI(Resource):
     '''
-    Cuntries with data by region element URI
+    Countries with data by region element URI
     Methods: GET
     '''
 
@@ -1222,6 +1225,41 @@ class RegionCountriesWithDataAPI(Resource):
         countries = [country for country in countries if len(country.observations) > 0]
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
+
+class CountriesIndicatorLastUpdateAPI(Resource):
+    '''
+    More recent indicators of a country
+    Methods: GET
+    '''
+
+    def get(self, iso3):
+        '''
+        Show indicators
+        Response 200 OK
+        '''
+        indicators = [observation.indicator for observation in country_service.get_by_code(iso3).observations]
+        indicator = max(indicators, key=lambda ind: ind.last_update)
+        result = EmptyObject()
+        result.last_update = indicator.last_update
+        return response_xml_or_json_item(request, result, 'last_update')
+
+
+class IndicatorsCountryLastUpdateAPI(Resource):
+    '''
+
+    Methods: GET
+    '''
+
+    def get(self, id, iso3):
+        '''
+        Show indicators
+        Response 200 OK
+        '''
+        observations = country_service.get_by_code(iso3).observations
+        indicator = (observation.indicator for observation in observations if observation.indicator.id == id).next()
+        result = EmptyObject()
+        result.last_update = indicator.last_update
+        return response_xml_or_json_item(request, result, 'last_update')
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
@@ -1257,6 +1295,9 @@ api.add_resource(TopicAPI, '/api/topics/<id>', endpoint='topics')
 api.add_resource(TopicIndicatorListAPI, '/api/topics/<topic_id>/indicators', endpoint='topics_indicators_list')
 api.add_resource(TopicIndicatorAPI, '/api/topics/<topic_id>/indicators/<indicator_id>', endpoint='topics_indicators')
 api.add_resource(RegionCountriesWithDataAPI, '/api/regions/<region_id>/countries_with_data', endpoint='regions_countries_with_data')
+api.add_resource(CountriesIndicatorLastUpdateAPI, '/api/countries/<iso3>/last_update', endpoint='countries_indicators_last_update')
+api.add_resource(IndicatorsCountryLastUpdateAPI, '/api/indicators/<id>/<iso3>/last_update', endpoint='indicators_countries_last_update')
+
 
 
 def is_xml_accepted(request):
