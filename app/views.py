@@ -9,7 +9,8 @@ from flask.helpers import url_for
 from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
-from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic
+from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
+    Topic, Instant, Interval
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService
 from flask import request
@@ -1261,6 +1262,45 @@ class IndicatorsCountryLastUpdateAPI(Resource):
         result.last_update = indicator.last_update
         return response_xml_or_json_item(request, result, 'last_update')
 
+
+class ObservationByPeriodAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        date_from = request.args.get("from")
+        date_to = request.args.get("to")
+        if date_from is not None and date_to is not None:
+            from_date = datetime.strptime(date_from, "%Y%m%d")
+            to_date = datetime.strptime(date_to, "%Y%m%d")
+        if country_service.get_by_code(id) is not None:
+            country = country_service.get_by_code(id)
+            observations = filter_observations_by_date_range(country.observations, from_date, to_date)
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif indicator_service.get_by_code(id) is not None:
+            indicator = indicator_service.get_by_code(id)
+            observations = filter_observations_by_date_range(indicator.dataset.observations, from_date, to_date)
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        elif region_service.get_by_code(id) is not None:
+            observations = []
+            for country in country_service.get_all():
+                if country.is_part_of_id == int(id):
+                    observations.extend(country.observations)
+            observations = filter_observations_by_date_range(observations, from_date, to_date)
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        else:
+            response = observation_service.get_by_code(id)
+            if response is None:
+                abort(404)
+            return response_xml_or_json_item(request, response, 'observation')
+
+
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
@@ -1297,6 +1337,7 @@ api.add_resource(TopicIndicatorAPI, '/api/topics/<topic_id>/indicators/<indicato
 api.add_resource(RegionCountriesWithDataAPI, '/api/regions/<region_id>/countries_with_data', endpoint='regions_countries_with_data')
 api.add_resource(CountriesIndicatorLastUpdateAPI, '/api/countries/<iso3>/last_update', endpoint='countries_indicators_last_update')
 api.add_resource(IndicatorsCountryLastUpdateAPI, '/api/indicators/<id>/<iso3>/last_update', endpoint='indicators_countries_last_update')
+api.add_resource(ObservationByPeriodAPI, '/api/observations/<id>/range', endpoint='observations_by_period')
 
 
 
@@ -1323,6 +1364,15 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
     else:
         return Response(json_converter.list_to_json(collection
                                                     ), mimetype='application/json')
+
+
+def filter_observations_by_date_range(observations, from_date=None, to_date=None):
+    def filter_key(observation):
+        time = observation.ref_time
+        return (isinstance(time, Instant) and from_date <= time.timestamp <= to_date) \
+            or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)
+
+    return filter(filter_key, observations) if from_date is not None and to_date is not None else observations
 
 
 class EmptyObject(object):
