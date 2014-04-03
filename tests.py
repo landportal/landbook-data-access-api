@@ -478,6 +478,45 @@ class TestIndicator(ApiTest):
         countries = response.json
         self.assertEquals(len(countries), 0)
 
+    def test_indicator_compatible(self):
+        indicator1_json = json.dumps(dict(
+            id=1,
+            name="One",
+            measurement_unit_id=1
+        ))
+        indicator2_json = json.dumps(dict(
+            id=2,
+            name="Two",
+            measurement_unit_id=1
+        ))
+        indicator3_json = json.dumps(dict(
+            id=3,
+            name="Three",
+            measurement_unit_id=2
+        ))
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.post("/api/indicators", data=indicator1_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator3_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/1/compatible")
+        self.assertEquals(len(response.json), 1)
+        indicator = response.json[0]
+        self.assertEquals(indicator['id'], "2")
+        response = self.client.get("/api/indicators/3/compatible")
+        self.assertEquals(len(response.json), 0)
+        response = self.client.delete("/api/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+
 
 class TestUser(ApiTest):
     def test_item(self):

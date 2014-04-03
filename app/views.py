@@ -255,6 +255,25 @@ class IndicatorAverageAPI(Resource):
         return response_xml_or_json_item(request, element, 'average')
 
 
+class IndicatorCompatibleAPI(Resource):
+    '''
+    Indicator compatible api
+    Methods: GET
+    '''
+
+    def get(self, id):
+        '''
+        Show the compatible indicators of the given indicator
+        Response 200 OK
+        '''
+        indicator = indicator_service.get_by_code(id)
+        indicators = indicator_service.get_all()
+        compatibles = [ind for ind in indicators
+                       if indicator.measurement_unit_id == ind.measurement_unit_id
+                        and ind is not indicator]
+        return response_xml_or_json_list(request, compatibles, 'indicators', 'indicator')
+
+
 class UserListAPI(Resource):
     '''
     Users collection URI
@@ -1303,6 +1322,7 @@ api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list'
 api.add_resource(IndicatorAPI, '/api/indicators/<id>', endpoint='indicators')
 api.add_resource(IndicatorTopAPI, '/api/indicators/<id>/top', endpoint='indicators_top')
 api.add_resource(IndicatorAverageAPI, '/api/indicators/<id>/average', endpoint='indicators_average')
+api.add_resource(IndicatorCompatibleAPI, '/api/indicators/<id>/compatible', endpoint='indicators_compatible')
 api.add_resource(UserListAPI, '/api/users', endpoint='users_list')
 api.add_resource(UserAPI, '/api/users/<id>', endpoint='users')
 api.add_resource(OrganizationListAPI, '/api/organizations', endpoint='organizations_list')
