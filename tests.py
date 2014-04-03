@@ -2218,5 +2218,178 @@ class TestObservationByPeriod(ApiTest):
         self.assert404(response)
 
 
+class TestIndicatorByPeriod(ApiTest):
+    def test_get_by_range(self):
+        observation_json = json.dumps(dict(
+           id=1,
+           ref_time_id=2,
+           issued_id=1,
+           computation_id=1,
+           indicator_group_id=1,
+           value_id=1,
+           indicator_id='HDI',
+           dataset_id=1,
+           region_id=3,
+           slice_id=1
+        ))
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP'
+        ))
+        indicator_json = json.dumps(dict(
+            id='HDI',
+            name='HDI'
+        ))
+        time_object = models.Interval()
+        time_object.id = 2
+        time_object.start_time = datetime(2012, 06, 12)
+        time_object.end_time = datetime(2014, 04, 01)
+        app.db.session.add(time_object)
+        response = self.client.get("/api/observations/ESP")
+        self.assert404(response)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/HDI/range?from=20120611&to=20140402")
+        observation = response.json[0]
+        self.assertEquals(observation['id'], "1")
+        self.assertEquals(observation['ref_time_id'], 2)
+        self.assertEquals(observation['issued_id'], 1)
+        self.assertEquals(observation['computation_id'], 1)
+        self.assertEquals(observation['indicator_group_id'], 1)
+        self.assertEquals(observation['value_id'], 1)
+        self.assertEquals(observation['indicator_id'], "HDI")
+        self.assertEquals(observation['dataset_id'], 1)
+        self.assertEquals(observation['region_id'], 3)
+        self.assertEquals(observation['slice_id'], "1")
+        response = self.client.get("/api/indicators/HDI/range?from=20140402&to=20140403")
+        self.assertEquals(len(response.json), 0)
+        response = self.client.get("/api/indicators/HDI/range?from=20120609&to=20120610")
+        self.assertEquals(len(response.json), 0)
+
+    def test_get_average_by_range(self):
+        observation_json = json.dumps(dict(
+           id=1,
+           ref_time_id=2,
+           issued_id=1,
+           computation_id=1,
+           indicator_group_id=1,
+           value_id=1,
+           indicator_id='HDI',
+           dataset_id=1,
+           region_id=3,
+           slice_id=1
+        ))
+        observation2_json = json.dumps(dict(
+           id=2,
+           ref_time_id=2,
+           issued_id=1,
+           computation_id=1,
+           indicator_group_id=1,
+           value_id=2,
+           indicator_id='HDI',
+           dataset_id=1,
+           region_id=3,
+           slice_id=1
+        ))
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP'
+        ))
+        indicator_json = json.dumps(dict(
+            id='HDI',
+            name='HDI'
+        ))
+        value1_json = json.dumps(dict(
+            id=1,
+            value=50
+        ))
+        value2_json = json.dumps(dict(
+            id=2,
+            value=100
+        ))
+        time_object = models.Interval()
+        time_object.id = 2
+        time_object.start_time = datetime(2012, 06, 12)
+        time_object.end_time = datetime(2014, 04, 01)
+        app.db.session.add(time_object)
+        response = self.client.get("/api/observations/ESP")
+        self.assert404(response)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/values", data=value1_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/values", data=value2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/HDI/average/range?from=20120611&to=20140402")
+        self.assertEquals(response.json['value'], 75)
+        response = self.client.get("/api/indicators/HDI/average/range?from=20140402&to=20140403")
+        self.assert404(response)
+        response = self.client.get("/api/indicators/HDI/average/range?from=20120609&to=20120610")
+        self.assert404(response)
+
+    def test_get_by_country_and_range(self):
+        observation_json = json.dumps(dict(
+           id=1,
+           ref_time_id=2,
+           issued_id=1,
+           computation_id=1,
+           indicator_group_id=1,
+           value_id=1,
+           indicator_id='HDI',
+           dataset_id=1,
+           region_id=3,
+           slice_id=1
+        ))
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP'
+        ))
+        indicator_json = json.dumps(dict(
+            id='HDI',
+            name='HDI'
+        ))
+        time_object = models.Interval()
+        time_object.id = 2
+        time_object.start_time = datetime(2012, 06, 12)
+        time_object.end_time = datetime(2014, 04, 01)
+        app.db.session.add(time_object)
+        response = self.client.get("/api/observations/ESP")
+        self.assert404(response)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/ESP/range?from=20120611&to=20140402")
+        observation = response.json[0]
+        self.assertEquals(observation['id'], "1")
+        self.assertEquals(observation['ref_time_id'], 2)
+        self.assertEquals(observation['issued_id'], 1)
+        self.assertEquals(observation['computation_id'], 1)
+        self.assertEquals(observation['indicator_group_id'], 1)
+        self.assertEquals(observation['value_id'], 1)
+        self.assertEquals(observation['indicator_id'], "HDI")
+        self.assertEquals(observation['dataset_id'], 1)
+        self.assertEquals(observation['region_id'], 3)
+        self.assertEquals(observation['slice_id'], "1")
+        response = self.client.get("/api/indicators/ESP/range?from=20140402&to=20140403")
+        self.assertEquals(len(response.json), 0)
+        response = self.client.get("/api/indicators/ESP/range?from=20120609&to=20120610")
+        self.assertEquals(len(response.json), 0)
+
 if __name__ == '__main__':
     unittest.main()
