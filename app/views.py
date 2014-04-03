@@ -246,10 +246,7 @@ class IndicatorAverageAPI(Resource):
         Response 200 OK
         '''
         top = filter_by_region_and_top(id)[1]
-        if len(top) == 1:
-            average = long(top[0].value.value)
-        else:
-            average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), top) / len(top)
+        average = observation_average(top)
         element = EmptyObject()
         element.value = average
         return response_xml_or_json_item(request, element, 'average')
@@ -1316,6 +1313,64 @@ class ObservationByPeriodAPI(Resource):
             return response_xml_or_json_item(request, response, 'observation')
 
 
+class IndicatorByPeriodAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        date_from = request.args.get("from")
+        date_to = request.args.get("to")
+        if date_from is not None and date_to is not None:
+            from_date = datetime.strptime(date_from, "%Y%m%d")
+            to_date = datetime.strptime(date_to, "%Y%m%d")
+        if country_service.get_by_code(id) is not None:
+            country = country_service.get_by_code(id)
+            observations = observation_service.get_all()
+            observations = [obs for obs in observations if country.id == obs.region_id]
+            observations = filter_observations_by_date_range(observations, from_date, to_date)
+        elif indicator_service.get_by_code(id) is not None:
+            observations = observation_service.get_all()
+            observations = [obs for obs in observations if obs.indicator_id == id]
+            observations = filter_observations_by_date_range(observations, from_date, to_date)
+        else:
+            abort(404)
+        return response_xml_or_json_list(request, observations, 'observations', 'observation')
+
+
+class IndicatorAverageByPeriodAPI(Resource):
+    '''
+    Average of indicator observation by period range
+    Methods: GET
+    '''
+
+    def get(self, id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        date_from = request.args.get("from")
+        date_to = request.args.get("to")
+        if date_from is not None and date_to is not None:
+            from_date = datetime.strptime(date_from, "%Y%m%d")
+            to_date = datetime.strptime(date_to, "%Y%m%d")
+        observations = observation_service.get_all()
+        observations = [obs for obs in observations if obs.indicator_id == id]
+        observations = filter_observations_by_date_range(observations, from_date, to_date)
+        if len(observations) > 0:
+            average = observation_average(observations)
+            element = EmptyObject()
+            element.value = average
+        else:
+            abort(404)
+        return response_xml_or_json_item(request, element, 'average')
+
+
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
@@ -1354,7 +1409,8 @@ api.add_resource(RegionCountriesWithDataAPI, '/api/regions/<region_id>/countries
 api.add_resource(CountriesIndicatorLastUpdateAPI, '/api/countries/<iso3>/last_update', endpoint='countries_indicators_last_update')
 api.add_resource(IndicatorsCountryLastUpdateAPI, '/api/indicators/<id>/<iso3>/last_update', endpoint='indicators_countries_last_update')
 api.add_resource(ObservationByPeriodAPI, '/api/observations/<id>/range', endpoint='observations_by_period')
-
+api.add_resource(IndicatorByPeriodAPI, '/api/indicators/<id>/range', endpoint='indicators_by_period')
+api.add_resource(IndicatorAverageByPeriodAPI, '/api/indicators/<id>/average/range', endpoint='indicators_average_by_period')
 
 
 def is_xml_accepted(request):
@@ -1392,22 +1448,30 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
 
 
 def filter_by_region_and_top(id):
-        top = int(request.args.get("top")) if request.args.get("top") is not None else 10
-        region = int(request.args.get("region")) if request.args.get("region") not in (None, "global") else "global"
-        if region is 'global':
-            observations = observation_service.get_all()
-            observations = [obs for obs in observations if obs.indicator_id == id]
-            observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
-        else:
-            countries = country_service.get_all()
-            countries = [country for country in countries if country.is_part_of_id == region]
-            observations = []
-            for country in countries:
-                observations.extend(country.observations)
-        countries = country_service.get_all()  # improve if changing directionality of model on observation country
-        top = observations[:top]
-        countries = [country for observation in top for country in countries if observation.region_id == country.id]
-        return countries, top
+    top = int(request.args.get("top")) if request.args.get("top") is not None else 10
+    region = int(request.args.get("region")) if request.args.get("region") not in (None, "global") else "global"
+    if region is 'global':
+        observations = observation_service.get_all()
+        observations = [obs for obs in observations if obs.indicator_id == id]
+        observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
+    else:
+        countries = country_service.get_all()
+        countries = [country for country in countries if country.is_part_of_id == region]
+        observations = []
+        for country in countries:
+            observations.extend(country.observations)
+    countries = country_service.get_all()  # improve if changing directionality of model on observation country
+    top = observations[:top]
+    countries = [country for observation in top for country in countries if observation.region_id == country.id]
+    return countries, top
+
+
+def observation_average(observations):
+    if len(observations) == 1:
+        average = long(observations[0].value.value)
+    else:
+        average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), observations) / len(observations)
+    return average
 
 
 class EmptyObject(object):
