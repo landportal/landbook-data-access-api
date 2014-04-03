@@ -2374,7 +2374,7 @@ class TestIndicatorByPeriod(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/api/indicators/ESP/range?from=20120611&to=20140402")
+        response = self.client.get("/api/indicators/HDI/ESP/range?from=20120611&to=20140402")
         observation = response.json[0]
         self.assertEquals(observation['id'], "1")
         self.assertEquals(observation['ref_time_id'], 2)
@@ -2386,9 +2386,9 @@ class TestIndicatorByPeriod(ApiTest):
         self.assertEquals(observation['dataset_id'], 1)
         self.assertEquals(observation['region_id'], 3)
         self.assertEquals(observation['slice_id'], "1")
-        response = self.client.get("/api/indicators/ESP/range?from=20140402&to=20140403")
+        response = self.client.get("/api/indicators/HDI/ESP/range?from=20140402&to=20140403")
         self.assertEquals(len(response.json), 0)
-        response = self.client.get("/api/indicators/ESP/range?from=20120609&to=20120610")
+        response = self.client.get("/api/indicators/HDI/ESP/range?from=20120609&to=20120610")
         self.assertEquals(len(response.json), 0)
 
 if __name__ == '__main__':

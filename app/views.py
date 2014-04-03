@@ -1329,12 +1329,7 @@ class IndicatorByPeriodAPI(Resource):
         if date_from is not None and date_to is not None:
             from_date = datetime.strptime(date_from, "%Y%m%d")
             to_date = datetime.strptime(date_to, "%Y%m%d")
-        if country_service.get_by_code(id) is not None:
-            country = country_service.get_by_code(id)
-            observations = observation_service.get_all()
-            observations = [obs for obs in observations if country.id == obs.region_id]
-            observations = filter_observations_by_date_range(observations, from_date, to_date)
-        elif indicator_service.get_by_code(id) is not None:
+        if indicator_service.get_by_code(id) is not None:
             observations = observation_service.get_all()
             observations = [obs for obs in observations if obs.indicator_id == id]
             observations = filter_observations_by_date_range(observations, from_date, to_date)
@@ -1342,6 +1337,34 @@ class IndicatorByPeriodAPI(Resource):
             abort(404)
         return response_xml_or_json_list(request, observations, 'observations', 'observation')
 
+
+class IndicatorByCountryAndPeriodAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, indicator_id, iso3):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        date_from = request.args.get("from")
+        date_to = request.args.get("to")
+        if date_from is not None and date_to is not None:
+            from_date = datetime.strptime(date_from, "%Y%m%d")
+            to_date = datetime.strptime(date_to, "%Y%m%d")
+        if country_service.get_by_code(iso3) is not None and indicator_service.get_by_code(indicator_id):
+            country = country_service.get_by_code(iso3)
+            observations = observation_service.get_all()
+            observations = [obs for obs in observations if obs.region_id == country.id]
+            print observations
+            observations = [obs for obs in observations if obs.indicator_id == indicator_id]
+            print observations
+            observations = filter_observations_by_date_range(observations, from_date, to_date)
+        else:
+            abort(404)
+        return response_xml_or_json_list(request, observations, 'observations', 'observation')
 
 class IndicatorAverageByPeriodAPI(Resource):
     '''
@@ -1411,6 +1434,7 @@ api.add_resource(IndicatorsCountryLastUpdateAPI, '/api/indicators/<id>/<iso3>/la
 api.add_resource(ObservationByPeriodAPI, '/api/observations/<id>/range', endpoint='observations_by_period')
 api.add_resource(IndicatorByPeriodAPI, '/api/indicators/<id>/range', endpoint='indicators_by_period')
 api.add_resource(IndicatorAverageByPeriodAPI, '/api/indicators/<id>/average/range', endpoint='indicators_average_by_period')
+api.add_resource(IndicatorByCountryAndPeriodAPI, '/api/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
 
 
 def is_xml_accepted(request):
