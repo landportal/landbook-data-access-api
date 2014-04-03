@@ -224,12 +224,7 @@ class IndicatorTopAPI(Resource):
         Show top 10 countries with the highest value for a given indicator
         Response 200 OK
         '''
-        observations = observation_service.get_all()
-        observations = [obs for obs in observations if obs.indicator_id == id]
-        observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
-        countries = country_service.get_all()  # improve if changing directionality of model on observation country
-        top = observations[:10]
-        countries = [country for observation in top for country in countries if observation.region_id == country.id]
+        countries, top = filter_by_region_and_top(id)
         output = []
         for i in range(len(countries)):
             element = EmptyObject()
@@ -250,10 +245,11 @@ class IndicatorAverageAPI(Resource):
         Show the average value for a indicator of all countries
         Response 200 OK
         '''
-        observations = observation_service.get_all()
-        observations = [obs for obs in observations if obs.indicator_id == id]
-        observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
-        average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), observations) / len(observations)
+        top = filter_by_region_and_top(id)[1]
+        if len(top) == 1:
+            average = long(top[0].value.value)
+        else:
+            average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), top) / len(top)
         element = EmptyObject()
         element.value = average
         return response_xml_or_json_item(request, element, 'average')
@@ -1373,6 +1369,25 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
             or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)
 
     return filter(filter_key, observations) if from_date is not None and to_date is not None else observations
+
+
+def filter_by_region_and_top(id):
+        top = int(request.args.get("top")) if request.args.get("top") is not None else 10
+        region = int(request.args.get("region")) if request.args.get("region") not in (None, "global") else "global"
+        if region is 'global':
+            observations = observation_service.get_all()
+            observations = [obs for obs in observations if obs.indicator_id == id]
+            observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
+        else:
+            countries = country_service.get_all()
+            countries = [country for country in countries if country.is_part_of_id == region]
+            observations = []
+            for country in countries:
+                observations.extend(country.observations)
+        countries = country_service.get_all()  # improve if changing directionality of model on observation country
+        top = observations[:top]
+        countries = [country for observation in top for country in countries if observation.region_id == country.id]
+        return countries, top
 
 
 class EmptyObject(object):

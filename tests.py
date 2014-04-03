@@ -6,7 +6,7 @@ import app
 import json
 from flask_testing import TestCase
 from app.utils import JSONConverter
-import time
+from time import time
 from datetime import datetime
 from model import models
 
@@ -295,12 +295,14 @@ class TestIndicator(ApiTest):
            name='Spain',
            iso2='ES',
            iso3='ESP',
+           is_part_of_id=3,
            id=1
         ))
         france_json = json.dumps(dict(
             name='France',
             iso2='FR',
             iso3='FRA',
+            is_part_of_id=3,
             id=2
         ))
         observation1_json = json.dumps(dict(
@@ -343,6 +345,10 @@ class TestIndicator(ApiTest):
             description='A gives a donation to B',
             dataset_id=1
         ))
+        region_json = json.dumps(dict(
+            id=3,
+            name='Europe'
+        ))
         response = self.client.get("/api/countries")
         self.assert200(response)
         countries = response.json
@@ -350,6 +356,8 @@ class TestIndicator(ApiTest):
         response = self.client.post("/api/countries", data=spain_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/api/countries", data=france_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/regions", data=region_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/api/observations", data=observation1_json, content_type='application/json')
         self.assertStatus(response, 201)
@@ -361,13 +369,18 @@ class TestIndicator(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/api/values", data=value2_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/api/indicators/1/top")
+        response = self.client.get("/api/indicators/1/top?region=global&top=10")
         france = response.json[0]
         spain = response.json[1]
         self.assertEquals(spain['iso3'], "ESP")
         self.assertEquals(spain['value_id'], "1")
         self.assertEquals(france['value_id'], "2")
         self.assertEquals(france['iso3'], "FRA")
+        response = self.client.get("/api/indicators/1/top?region=3&top=1")
+        self.assertEquals(len(response.json), 1)
+        spain = response.json[0]
+        self.assertEquals(spain['iso3'], "ESP")
+        self.assertEquals(spain['value_id'], "1")
         response = self.client.delete("/api/countries")
         self.assertStatus(response, 204)
         response = self.client.get("/api/countries")
@@ -375,19 +388,24 @@ class TestIndicator(ApiTest):
         countries = response.json
         self.assertEquals(len(countries), 0)
 
-
     def test_indicator_average(self):
         spain_json = json.dumps(dict(
            name='Spain',
            iso2='ES',
            iso3='ESP',
+           is_part_of_id=3,
            id=1
         ))
         france_json = json.dumps(dict(
             name='France',
             iso2='FR',
             iso3='FRA',
+            is_part_of_id=3,
             id=2
+        ))
+        region_json = json.dumps(dict(
+            id=3,
+            name='Europe'
         ))
         observation1_json = json.dumps(dict(
            id=1,
@@ -437,6 +455,8 @@ class TestIndicator(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/api/countries", data=france_json, content_type='application/json')
         self.assertStatus(response, 201)
+        response = self.client.post("/api/regions", data=region_json, content_type='application/json')
+        self.assertStatus(response, 201)
         response = self.client.post("/api/observations", data=observation1_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/api/observations", data=observation2_json, content_type='application/json')
@@ -447,8 +467,10 @@ class TestIndicator(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/api/values", data=value2_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/api/indicators/1/average")
+        response = self.client.get("/api/indicators/1/average?region=global&top=10")
         self.assertEquals(response.json['value'], 75)
+        response = self.client.get("/api/indicators/1/average?region=3&top=1")
+        self.assertEquals(response.json['value'], 50)
         response = self.client.delete("/api/countries")
         self.assertStatus(response, 204)
         response = self.client.get("/api/countries")
@@ -2155,7 +2177,6 @@ class TestObservationByPeriod(ApiTest):
         self.assertEquals(len(observations), 0)
         response = self.client.get("/api/observations/2")
         self.assert404(response)
-
 
 
 if __name__ == '__main__':
