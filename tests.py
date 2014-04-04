@@ -2391,5 +2391,42 @@ class TestIndicatorByPeriod(ApiTest):
         response = self.client.get("/api/indicators/HDI/ESP/range?from=20120609&to=20120610")
         self.assertEquals(len(response.json), 0)
 
+
+class TestRelatedIndicator(ApiTest):
+    def test_indicator_subcolecction_collection(self):
+        indicator_json = json.dumps(dict(
+           id='HDI',
+           name='donation',
+           description='A gives a donation to B'
+        ))
+        indicator2_json = json.dumps(dict(
+           id='DHI',
+           name='donation',
+           description='B gives a donation to A'
+        ))
+        response = self.client.get("/api/indicators/HDI/related")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        is_part_of_object = models.IsPartOf()
+        is_part_of_object.source_id = 'HDI'
+        is_part_of_object.target_id = 'DHI'
+        app.db.session.add(is_part_of_object)
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators", data=indicator2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/HDI/related")
+        indicator = response.json[0]
+        self.assertEquals(indicator['id'], "DHI")
+        self.assertEquals(indicator['name'], "donation")
+        self.assertEquals(indicator['description'], "B gives a donation to A")
+        response = self.client.delete("/api/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+
 if __name__ == '__main__':
     unittest.main()
