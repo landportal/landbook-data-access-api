@@ -12,7 +12,7 @@ from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
     Topic, Instant, Interval
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
-    RegionService, DataSourceService, DatasetService, ValueService, TopicService
+    RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService
 from flask import request
 from datetime import datetime
 
@@ -27,6 +27,7 @@ datasource_service = DataSourceService()
 dataset_service = DatasetService()
 value_service = ValueService()
 topic_service = TopicService()
+indicator_relationship_service = IndicatorRelationshipService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -1366,6 +1367,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
             abort(404)
         return response_xml_or_json_list(request, observations, 'observations', 'observation')
 
+
 class IndicatorAverageByPeriodAPI(Resource):
     '''
     Average of indicator observation by period range
@@ -1392,6 +1394,23 @@ class IndicatorAverageByPeriodAPI(Resource):
         else:
             abort(404)
         return response_xml_or_json_item(request, element, 'average')
+
+
+class IndicatorRelatedAPI(Resource):
+    '''
+    Average of indicator observation by period range
+    Methods: GET
+    '''
+
+    def get(self, id):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        indicators_relation = indicator_relationship_service.get_all()
+        indicators_by_id = [indicator for indicator in indicators_relation if indicator.source_id == id]
+        indicators_related = [indicator.target for indicator in indicators_by_id]
+        return response_xml_or_json_list(request, indicators_related, "indicators", "indicator")
 
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
@@ -1435,6 +1454,7 @@ api.add_resource(ObservationByPeriodAPI, '/api/observations/<id>/range', endpoin
 api.add_resource(IndicatorByPeriodAPI, '/api/indicators/<id>/range', endpoint='indicators_by_period')
 api.add_resource(IndicatorAverageByPeriodAPI, '/api/indicators/<id>/average/range', endpoint='indicators_average_by_period')
 api.add_resource(IndicatorByCountryAndPeriodAPI, '/api/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
+api.add_resource(IndicatorRelatedAPI, '/api/indicators/<id>/related', endpoint='indicators_related')
 
 
 def is_xml_accepted(request):

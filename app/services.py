@@ -5,7 +5,8 @@ Created on 03/02/2014
 '''
 from app import db
 from daos import DAO, CountryDAO
-from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic
+from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
+    IndicatorRelationship
 
 
 class GenericService(object):
@@ -185,6 +186,16 @@ class TopicService(GenericService):
     def __init__(self):
         super(TopicService, self).__init__()
         self.dao = DAO(Topic)
+
+
+class IndicatorRelationshipService(GenericService):
+    """
+    Service for IsPartOf dao
+    """
+
+    def __init__(self):
+        super(IndicatorRelationshipService, self).__init__()
+        self.dao = DAO(IndicatorRelationship)
 
 
 class TransactionManager(object):
