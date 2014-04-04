@@ -52,8 +52,7 @@ class CountryListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        country = Country(request.json.get("name"), request.json.get("iso2"),
-                          request.json.get("iso3"), request.json.get("fao_URI"))
+        country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("fao_URI"))
         country.is_part_of_id = request.json.get("is_part_of_id")
         if country.iso2 is not None and country.iso3 is not None:
             country_service.insert(country)
@@ -140,10 +139,11 @@ class IndicatorListAPI(Resource):
         @return: URI
         '''
         indicator = Indicator(request.json.get("id"), request.json.get("name"),
-                              request.json.get("description"), request.json.get("measurement_unit_id"),
+                              request.json.get("description"), request.json.get("preferable_tendency"),  request.json.get("measurement_unit_id"),
                               request.json.get("dataset_id"), request.json.get("compound_indicator_id"))
         indicator.type = request.json.get("type")
         indicator.topic_id = request.json.get("topic_id")
+        indicator.preferable_tendency = request.json.get("preferable_tendency")
         if request.json.get("last_update") is not None:
             indicator.last_update = datetime.fromtimestamp(long(request.json.get("last_update")))
         if indicator.name is not None:
@@ -656,10 +656,12 @@ class RegionListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        region = Region(request.json.get("name"))
+        region = Region()
+        region.id = request.json.get("name")
         region.id = request.json.get("id")
         region.is_part_of_id = request.json.get("is_part_of_id")
-        if region.name is not None:
+        region.un_code = request.json.get("un_code")
+        if region.un_code is not None:
             region_service.insert(region)
             return {'URI': url_for('regions', id=region.id)}, 201 #returns the URI for the new region
         abort(400)  # in case something is wrong
@@ -708,7 +710,7 @@ class RegionAPI(Resource):
         '''
         region = region_service.get_by_code(id)
         if region is not None:
-            region.name = request.json.get("name")
+            region.un_code = request.json.get("un_code")
             region.is_part_of_id = request.json.get("is_part_of_id")
             region_service.update(region)
             return {}, 204
@@ -781,10 +783,10 @@ class DataSourceListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        datasource = DataSource(request.json.get("id_source"), request.json.get("name"))
+        datasource = DataSource(request.json.get("name"))
         datasource.id = request.json.get("id")
         datasource.organization_id = request.json.get("organization_id")
-        if datasource.name is not None:
+        if datasource.id is not None:
             datasource_service.insert(datasource)
             return {'URI': url_for('datasources', id=datasource.id)}, 201 #returns the URI for the new datasource
         abort(400)  # in case something is wrong
@@ -1413,6 +1415,26 @@ class IndicatorRelatedAPI(Resource):
         return response_xml_or_json_list(request, indicators_related, "indicators", "indicator")
 
 
+class IndicatorCountryTendencyAPI(Resource):
+    '''
+    Average of indicator observation by period range
+    Methods: GET
+    '''
+
+    def get(self, indicator_id, iso3):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        indicator = (observation.indicator for observation in country_service.get_by_code(iso3).observations
+                      if observation.indicator.id == indicator_id).next()
+        response_object = EmptyObject()
+        response_object.indicator_id = indicator.id
+        response_object.iso3 = iso3
+        response_object.tendency = indicator.preferable_tendency
+        return response_xml_or_json_item(request, response_object, "tendency")
+
+
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
@@ -1455,6 +1477,7 @@ api.add_resource(IndicatorByPeriodAPI, '/api/indicators/<id>/range', endpoint='i
 api.add_resource(IndicatorAverageByPeriodAPI, '/api/indicators/<id>/average/range', endpoint='indicators_average_by_period')
 api.add_resource(IndicatorByCountryAndPeriodAPI, '/api/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
 api.add_resource(IndicatorRelatedAPI, '/api/indicators/<id>/related', endpoint='indicators_related')
+api.add_resource(IndicatorCountryTendencyAPI, '/api/indicators/<indicator_id>/<iso3>/tendency', endpoint='indicator_country_tendency')
 
 
 def is_xml_accepted(request):
