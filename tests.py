@@ -37,21 +37,20 @@ class TestCountry(ApiTest):
            iso3='ESP'
         ))
         spain_updated = json.dumps(dict(
-            name='Espagne',
-            iso2='ES'
+            iso2='SP',
+            iso3='ESP'
         ))
         response = self.client.get("/api/countries/ESP")
         self.assert404(response)
         response = self.client.post("/api/countries", data=spain_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/api/countries/ESP")
-        self.assertEquals(response.json.get('name'), "Spain")
         self.assertEquals(response.json.get('iso2'), "ES")
         self.assertEquals(response.json.get('iso3'), "ESP")
         response = self.client.put("/api/countries/ESP", data=spain_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/api/countries/ESP")
-        self.assertEquals(response.json.get('name'), "Espagne")
+        self.assertEquals(response.json.get('iso2'), "SP")
         response = self.client.delete("/api/countries/ESP")
         self.assertStatus(response, 204)
         response = self.client.get("/api/countries/ESP")
@@ -69,8 +68,8 @@ class TestCountry(ApiTest):
             iso3='FRA'
         ))
         countries_updated = json.dumps([
-            dict(name='Espagne', iso2='ES', iso3='ESP'),
-            dict(name='France', iso2='FR', iso3='FRA')
+            dict(iso2='SP', iso3='ESP'),
+            dict(iso2='FR', iso3='FRA')
         ])
         response = self.client.get("/api/countries")
         self.assert200(response)
@@ -83,10 +82,8 @@ class TestCountry(ApiTest):
         response = self.client.get("/api/countries")
         spain = response.json[0]
         france = response.json[1]
-        self.assertEquals(spain['name'], "Spain")
         self.assertEquals(spain['iso2'], "ES")
         self.assertEquals(spain['iso3'], "ESP")
-        self.assertEquals(france['name'], "France")
         self.assertEquals(france['iso2'], "FR")
         self.assertEquals(france['iso3'], "FRA")
         response = self.client.put("/api/countries", data=countries_updated, content_type='application/json')
@@ -94,8 +91,8 @@ class TestCountry(ApiTest):
         response = self.client.get("/api/countries")
         spain = response.json[0]
         france = response.json[1]
-        self.assertEquals(spain['name'], "Espagne")
-        self.assertEquals(france['name'], "France")
+        self.assertEquals(spain['iso2'], "SP")
+        self.assertEquals(france['iso2'], "FR")
         response = self.client.delete("/api/countries")
         self.assertStatus(response, 204)
         response = self.client.get("/api/countries")
@@ -347,6 +344,7 @@ class TestIndicator(ApiTest):
         ))
         region_json = json.dumps(dict(
             id=3,
+            un_code='200',
             name='Europe'
         ))
         response = self.client.get("/api/countries")
@@ -405,6 +403,7 @@ class TestIndicator(ApiTest):
         ))
         region_json = json.dumps(dict(
             id=3,
+            un_code='200',
             name='Europe'
         ))
         observation1_json = json.dumps(dict(
@@ -830,11 +829,12 @@ class TestRegion(ApiTest):
         region_json = json.dumps(dict(
            id=1,
            name='Spain',
+           un_code='200'
            #is_part_of_id=1
         ))
         region_updated = json.dumps(dict(
            id=1,
-           name='France',
+           un_code='300',
            #is_part_of_id=2
         ))
         response = self.client.get("/api/regions/1")
@@ -843,12 +843,12 @@ class TestRegion(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/api/regions/1")
         self.assertEquals(response.json.get('id'), 1)
-        self.assertEquals(response.json.get('name'), "Spain")
+        self.assertEquals(response.json.get('un_code'), "200")
         #self.assertEquals(response.json.get('is_part_of_id'), 2)
         response = self.client.put("/api/regions/1", data=region_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/api/regions/1")
-        self.assertEquals(response.json.get('name'), "France")
+        self.assertEquals(response.json.get('un_code'), "300")
         #self.assertEquals(response.json.get('is_part_of_id'), 1)
         response = self.client.delete("/api/regions/1")
         self.assertStatus(response, 204)
@@ -858,17 +858,17 @@ class TestRegion(ApiTest):
     def test_collection(self):
         region_json = json.dumps(dict(
            id='1',
-           name='Spain',
+           un_code=200
            #is_part_of_id=1
         ))
         region2_json = json.dumps(dict(
            id='2',
-           name='France',
+           un_code=201
            #is_part_of_id=2
         ))
         regions_updated = json.dumps([
-            dict(id='1', name='Denmark'),
-            dict(id='2', name='Ireland')
+            dict(id='1', un_code=300),
+            dict(id='2', un_code=301)
         ])
         response = self.client.get("/api/regions")
         self.assert200(response)
@@ -882,18 +882,16 @@ class TestRegion(ApiTest):
         region = response.json[0]
         region2 = response.json[1]
         self.assertEquals(region['id'], 1)
-        self.assertEquals(region['name'], "Spain")
         #self.assertEquals(region['is_part_of_id'], 1)
         self.assertEquals(region2['id'], 2)
-        self.assertEquals(region2['name'], "France")
         #self.assertEquals(region2['is_part_of_id'], 2)
         response = self.client.put("/api/regions", data=regions_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/api/regions")
         region = response.json[0]
         region2 = response.json[1]
-        self.assertEquals(region['name'], "Denmark")
-        self.assertEquals(region2['name'], "Ireland")
+        self.assertEquals(region['un_code'], "300")
+        self.assertEquals(region2['un_code'], "301")
         response = self.client.delete("/api/regions")
         self.assertStatus(response, 204)
         response = self.client.get("/api/regions")
@@ -904,7 +902,7 @@ class TestRegion(ApiTest):
     def test_country_subcolecction_item(self):
         region_json = json.dumps(dict(
            id='1',
-           name='Europe',
+           un_code=200
            #is_part_of_id=1
         ))
         country_json = json.dumps(dict(
@@ -920,7 +918,6 @@ class TestRegion(ApiTest):
         response = self.client.post("/api/countries", data=country_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/api/regions/1/countries/ESP")
-        self.assertEquals(response.json.get('name'), "Spain")
         self.assertEquals(response.json.get('iso2'), "ES")
         self.assertEquals(response.json.get('iso3'), "ESP")
         response = self.client.delete("/api/regions/1")
@@ -944,6 +941,7 @@ class TestRegion(ApiTest):
         region_json = json.dumps(dict(
            id='1',
            name='Europe',
+           un_code="200"
         ))
         country_json = json.dumps(dict(
            name='Spain',
@@ -970,10 +968,8 @@ class TestRegion(ApiTest):
         response = self.client.get("/api/regions/1/countries")
         country = response.json[0]
         country2 = response.json[1]
-        self.assertEquals(country['name'], "Spain")
         self.assertEquals(country['iso2'], "ES")
         self.assertEquals(country['iso3'], "ESP")
-        self.assertEquals(country2['name'], "France")
         self.assertEquals(country2['iso2'], "FR")
         self.assertEquals(country2['iso3'], "FRA")
         response = self.client.delete("/api/countries")
@@ -992,6 +988,7 @@ class TestRegion(ApiTest):
     def test_country_with_data(self):
         region_json = json.dumps(dict(
            name='Europe',
+           un_code="200",
            id=1
         ))
         country_json = json.dumps(dict(
@@ -1027,7 +1024,6 @@ class TestRegion(ApiTest):
         response = self.client.get("/api/regions/1/countries_with_data")
         self.assertEquals(len(response.json), 1)
         country = response.json[0]
-        self.assertEquals(country['name'], "Spain")
         self.assertEquals(country['iso2'], "ES")
         self.assertEquals(country['iso3'], "ESP")
         response = self.client.delete("/api/countries")
@@ -1064,7 +1060,6 @@ class TestDataSource(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/api/datasources/1")
         self.assertEquals(response.json.get('id'), 1)
-        self.assertEquals(response.json.get('id_source'), "1")
         self.assertEquals(response.json.get('name'), "World Bank 1")
         self.assertEquals(response.json.get('organization_id'), "1")
         response = self.client.put("/api/datasources/1", data=datasource_updated, content_type='application/json')
@@ -1080,7 +1075,6 @@ class TestDataSource(ApiTest):
         datasource_json = json.dumps(dict(
            id=1,
            id_source='1',
-           name='World Bank 1',
            organization_id=1
         ))
         datasource2_json = json.dumps(dict(
@@ -1105,20 +1099,14 @@ class TestDataSource(ApiTest):
         datasource = response.json[0]
         datasource2 = response.json[1]
         self.assertEquals(datasource['id'], 1)
-        self.assertEquals(datasource['id_source'], "1")
-        self.assertEquals(datasource['name'], "World Bank 1")
         self.assertEquals(datasource['organization_id'], "1")
         self.assertEquals(datasource2['id'], 2)
-        self.assertEquals(datasource2['id_source'], "1")
-        self.assertEquals(datasource2['name'], "World Bank 2")
         self.assertEquals(datasource2['organization_id'], "1")
         response = self.client.put("/api/datasources", data=datasources_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/api/datasources")
         datasource = response.json[0]
         datasource2 = response.json[1]
-        self.assertEquals(datasource['name'], "World Bank 3")
-        self.assertEquals(datasource2['name'], "World Bank 4")
         response = self.client.delete("/api/datasources")
         self.assertStatus(response, 204)
         response = self.client.get("/api/datasources")
@@ -1471,6 +1459,7 @@ class TestObservationBy(ApiTest):
         ))
         region_json = json.dumps(dict(
             id=2,
+            un_code='200',
             name='Europe'
         ))
         response = self.client.get("/api/observations/2")
@@ -1642,6 +1631,7 @@ class TestObservationBy(ApiTest):
         ))
         region_json = json.dumps(dict(
             id=2,
+            un_code='200',
             name='Europe'
         ))
         indicator_json = json.dumps(dict(
@@ -2173,6 +2163,7 @@ class TestObservationByPeriod(ApiTest):
         ))
         region_json = json.dumps(dict(
             id=2,
+            un_code='200',
             name='Europe'
         ))
         time_object = models.Interval()
@@ -2427,6 +2418,35 @@ class TestRelatedIndicator(ApiTest):
         self.assert200(response)
         indicators = response.json
         self.assertEquals(len(indicators), 0)
+
+
+class TestIndicatorCountryTendency(ApiTest):
+
+    def test_get_indicator_country_tendency(self):
+        country_json = json.dumps(dict(
+           iso2='ES',
+           iso3='ESP',
+           id=1
+        ))
+        indicator_json = json.dumps(dict(
+            id='HDI',
+            name='HDI',
+            preferable_tendency='Increase'
+        ))
+        observation_json = json.dumps(dict(
+           id=1,
+           indicator_id='HDI',
+           region_id=1
+        ))
+        response = self.client.post("/api/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/HDI/ESP/tendency")
+        self.assertEquals(response.json['tendency'], "Increase")
+
 
 if __name__ == '__main__':
     unittest.main()
