@@ -3,7 +3,7 @@ Created on 03/02/2014
 
 @author: Herminio
 '''
-from model.models import Country
+from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation
 
 
 class DAO(object):
@@ -67,6 +67,75 @@ class CountryDAO(DAO):
         Method to update an existing country, its code will not be changed
         '''
         persisted_object = self.get_by_code(object.iso3)
+        update_object_attributes(persisted_object, object)
+
+
+class RegionTranslationDAO(DAO):
+    def __init__(self):
+        super(RegionTranslationDAO, self).__init__(RegionTranslation)
+
+    def get_by_codes(self, region_id, lang_code):
+        return self.session.query(self.cls).filter(RegionTranslation.region_id == region_id)\
+            .filter(RegionTranslation.lang_code == lang_code).first()
+
+    def delete(self, region_id, lang_code):
+        '''
+        Method to delete an existing item by its code
+        '''
+        object = self.get_by_codes(region_id, lang_code)
+        self.session.delete(object)
+
+    def update(self, object):
+        '''
+        Method to update an existing country, its code will not be changed
+        '''
+        persisted_object = self.get_by_codes(object.region_id, object.lang_code)
+        update_object_attributes(persisted_object, object)
+
+
+class IndicatorTranslationDAO(DAO):
+    def __init__(self):
+        super(IndicatorTranslationDAO, self).__init__(IndicatorTranslation)
+
+    def get_by_codes(self, indicator_id, lang_code):
+        return self.session.query(self.cls).filter(IndicatorTranslation.indicator_id == indicator_id)\
+            .filter(IndicatorTranslation.lang_code == lang_code).first()
+
+    def delete(self, indicator_id, lang_code):
+        '''
+        Method to delete an existing item by its code
+        '''
+        object = self.get_by_codes(indicator_id, lang_code)
+        self.session.delete(object)
+
+    def update(self, object):
+        '''
+        Method to update an existing country, its code will not be changed
+        '''
+        persisted_object = self.get_by_codes(object.indicator_id, object.lang_code)
+        update_object_attributes(persisted_object, object)
+
+
+class TopicTranslationDAO(DAO):
+    def __init__(self):
+        super(TopicTranslationDAO, self).__init__(TopicTranslation)
+
+    def get_by_codes(self, topic_id, lang_code):
+        return self.session.query(self.cls).filter(TopicTranslation.topic_id == topic_id)\
+            .filter(TopicTranslation.lang_code == lang_code).first()
+
+    def delete(self, topic_id, lang_code):
+        '''
+        Method to delete an existing item by its code
+        '''
+        object = self.get_by_codes(topic_id, lang_code)
+        self.session.delete(object)
+
+    def update(self, object):
+        '''
+        Method to update an existing country, its code will not be changed
+        '''
+        persisted_object = self.get_by_codes(object.topic_id, object.lang_code)
         update_object_attributes(persisted_object, object)
 
 
