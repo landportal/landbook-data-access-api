@@ -4,7 +4,7 @@ Created on 03/02/2014
 @author: Herminio
 '''
 from app import db
-from daos import DAO, CountryDAO
+from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO
 from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
     IndicatorRelationship
 
@@ -196,6 +196,99 @@ class IndicatorRelationshipService(GenericService):
     def __init__(self):
         super(IndicatorRelationshipService, self).__init__()
         self.dao = DAO(IndicatorRelationship)
+
+
+class RegionTranslationService(GenericService):
+    """
+    Service for region translation dao
+    """
+
+    def __init__(self):
+        super(RegionTranslationService, self).__init__()
+        self.dao = RegionTranslationDAO()
+
+    def get_by_codes(self, region_id, lang_code):
+        '''
+        Method that returns country given by the dao
+        '''
+        return self.tm.execute(self.dao, self.dao.get_by_codes, region_id, lang_code)
+
+    def delete(self, region_id, lang_code):
+        '''
+        Method that deletes the country by its given code calling the dao
+        '''
+        self.tm.execute(self.dao, self.dao.delete, region_id, lang_code)
+
+    def delete_all(self):
+        '''
+        Method that deletes all countries by calling the dao
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        objects = self.tm.execute(self.dao, self.dao.get_all)
+        for object in objects:
+            self.tm.execute(self.dao, self.dao.delete, object.region_id, object.lang_code)
+
+
+class IndicatorTranslationService(GenericService):
+    """
+    Service for region translation dao
+    """
+
+    def __init__(self):
+        super(IndicatorTranslationService, self).__init__()
+        self.dao = IndicatorTranslationDAO()
+
+    def get_by_codes(self, indicator_id, lang_code):
+        '''
+        Method that returns country given by the dao
+        '''
+        return self.tm.execute(self.dao, self.dao.get_by_codes, indicator_id, lang_code)
+
+    def delete(self, indicator_id, lang_code):
+        '''
+        Method that deletes the country by its given code calling the dao
+        '''
+        self.tm.execute(self.dao, self.dao.delete, indicator_id, lang_code)
+
+    def delete_all(self):
+        '''
+        Method that deletes all countries by calling the dao
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        objects = self.tm.execute(self.dao, self.dao.get_all)
+        for object in objects:
+            self.tm.execute(self.dao, self.dao.delete, object.indicator_id, object.lang_code)
+
+
+class TopicTranslationService(GenericService):
+    """
+    Service for region translation dao
+    """
+
+    def __init__(self):
+        super(TopicTranslationService, self).__init__()
+        self.dao = TopicTranslationDAO()
+
+    def get_by_codes(self, topic_id, lang_code):
+        '''
+        Method that returns country given by the dao
+        '''
+        return self.tm.execute(self.dao, self.dao.get_by_codes, topic_id, lang_code)
+
+    def delete(self, topic_id, lang_code):
+        '''
+        Method that deletes the country by its given code calling the dao
+        '''
+        self.tm.execute(self.dao, self.dao.delete, topic_id, lang_code)
+
+    def delete_all(self):
+        '''
+        Method that deletes all countries by calling the dao
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        objects = self.tm.execute(self.dao, self.dao.get_all)
+        for object in objects:
+            self.tm.execute(self.dao, self.dao.delete, object.topic_id, object.lang_code)
 
 
 class TransactionManager(object):

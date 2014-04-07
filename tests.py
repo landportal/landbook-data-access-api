@@ -2421,7 +2421,6 @@ class TestRelatedIndicator(ApiTest):
 
 
 class TestIndicatorCountryTendency(ApiTest):
-
     def test_get_indicator_country_tendency(self):
         country_json = json.dumps(dict(
            iso2='ES',
@@ -2447,6 +2446,215 @@ class TestIndicatorCountryTendency(ApiTest):
         response = self.client.get("/api/indicators/HDI/ESP/tendency")
         self.assertEquals(response.json['tendency'], "Increase")
 
+
+class TestTranslations(ApiTest):
+    def test_region_translation_list(self):
+        spain_translation_json = json.dumps(dict(
+           name='Spain',
+           lang_code='EN',
+           region_id=1
+        ))
+        france_translation_json = json.dumps(dict(
+            name='France',
+            lang_code='EN',
+            region_id=2
+        ))
+        countries_translation_updated = json.dumps([
+            dict(region_id=1, lang_code='EN', name='SPA'),
+            dict(region_id=2, lang_code='EN', name='FRA')
+        ])
+        response = self.client.get("/api/regions/translations")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+        response = self.client.post("/api/regions/translations", data=spain_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/regions/translations", data=france_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions/translations")
+        spain = response.json[0]
+        france = response.json[1]
+        self.assertEquals(spain['name'], "Spain")
+        self.assertEquals(spain['lang_code'], "EN")
+        self.assertEquals(france['name'], "France")
+        self.assertEquals(france['lang_code'], "EN")
+        response = self.client.put("/api/regions/translations", data=countries_translation_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions/translations")
+        spain = response.json[0]
+        france = response.json[1]
+        self.assertEquals(spain['name'], "SPA")
+        self.assertEquals(france['name'], "FRA")
+        response = self.client.delete("/api/regions/translations")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions/translations")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+
+    def test_region_translation_item(self):
+        spain_translation_json = json.dumps(dict(
+           name='Spain',
+           lang_code='EN',
+           region_id=1
+        ))
+        spain_translation_updated = json.dumps(dict(
+           name='SPA',
+           lang_code='EN',
+           region_id=1
+        ))
+        response = self.client.post("/api/regions/translations", data=spain_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/regions/translations/1/EN")
+        self.assertEquals(response.json.get('name'), "Spain")
+        self.assertEquals(response.json.get('lang_code'), "EN")
+        response = self.client.put("/api/regions/translations/1/EN", data=spain_translation_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions/translations/1/EN")
+        self.assertEquals(response.json.get('name'), "SPA")
+        response = self.client.delete("/api/regions/translations/1/EN")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/regions/translations/1/EN")
+        self.assert404(response)
+
+    def test_indicator_translation_list(self):
+        rp_translation_json = json.dumps(dict(
+           name='Rural Population',
+           description="Something",
+           lang_code='EN',
+           indicator_id='1'
+        ))
+        nrp_translation_json = json.dumps(dict(
+            name='Non Rural Population',
+            description="Anything",
+            lang_code='EN',
+            indicator_id='2'
+        ))
+        indicators_translation_updated = json.dumps([
+            dict(indicator_id='1', lang_code='EN', description='Rural'),
+            dict(indicator_id='2', lang_code='EN', description='Non Rural')
+        ])
+        response = self.client.get("/api/indicators/translations")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+        response = self.client.post("/api/indicators/translations", data=rp_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/indicators/translations", data=nrp_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/translations")
+        spain = response.json[0]
+        france = response.json[1]
+        self.assertEquals(spain['name'], "Rural Population")
+        self.assertEquals(spain['description'], "Something")
+        self.assertEquals(france['name'], "Non Rural Population")
+        self.assertEquals(france['description'], "Anything")
+        response = self.client.put("/api/indicators/translations", data=indicators_translation_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators/translations")
+        spain = response.json[0]
+        france = response.json[1]
+        self.assertEquals(spain['description'], "Rural")
+        self.assertEquals(france['description'], "Non Rural")
+        response = self.client.delete("/api/indicators/translations")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators/translations")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+
+    def test_indicator_translation_item(self):
+        rp_translation_json = json.dumps(dict(
+           name='Rural Population',
+           description='Something',
+           lang_code='EN',
+           indicator_id='1'
+        ))
+        rp_translation_update = json.dumps(dict(
+           name='Rural Population',
+           description='Anything',
+           lang_code='EN',
+           indicator_id='1'
+        ))
+        response = self.client.post("/api/indicators/translations", data=rp_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/indicators/translations/1/EN")
+        self.assertEquals(response.json.get('name'), "Rural Population")
+        self.assertEquals(response.json.get('description'), "Something")
+        response = self.client.put("/api/indicators/translations/1/EN", data=rp_translation_update, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators/translations/1/EN")
+        self.assertEquals(response.json.get('description'), "Anything")
+        response = self.client.delete("/api/indicators/translations/1/EN")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/indicators/translations/1/EN")
+        self.assert404(response)
+
+    def test_topic_translation_list(self):
+        topic1_translation_json = json.dumps(dict(
+           name='Topic1',
+           lang_code='EN',
+           topic_id='1'
+        ))
+        topic2_translation_json = json.dumps(dict(
+            name='Topic2',
+            lang_code='EN',
+            topic_id='2'
+        ))
+        topics_translation_updated = json.dumps([
+            dict(topic_id='1', lang_code='EN', name='TopicA'),
+            dict(topic_id='2', lang_code='EN', name='TopicB')
+        ])
+        response = self.client.get("/api/topics/translations")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+        response = self.client.post("/api/topics/translations", data=topic1_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/api/topics/translations", data=topic2_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/topics/translations")
+        spain = response.json[0]
+        france = response.json[1]
+        self.assertEquals(spain['name'], "Topic1")
+        self.assertEquals(france['name'], "Topic2")
+        response = self.client.put("/api/topics/translations", data=topics_translation_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/topics/translations")
+        spain = response.json[0]
+        france = response.json[1]
+        self.assertEquals(spain['name'], "TopicA")
+        self.assertEquals(france['name'], "TopicB")
+        response = self.client.delete("/api/topics/translations")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/topics/translations")
+        self.assert200(response)
+        countries = response.json
+        self.assertEquals(len(countries), 0)
+
+    def test_topic_translation_item(self):
+        topic1_translation_json = json.dumps(dict(
+           name='Topic1',
+           lang_code='EN',
+           topic_id='1'
+        ))
+        topic1_translation_update= json.dumps(dict(
+           name='TopicA',
+           lang_code='EN',
+           topic_id='1'
+        ))
+        response = self.client.post("/api/topics/translations", data=topic1_translation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/api/topics/translations/1/EN")
+        self.assertEquals(response.json.get('name'), "Topic1")
+        response = self.client.put("/api/topics/translations/1/EN", data=topic1_translation_update, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/topics/translations/1/EN")
+        self.assertEquals(response.json.get('name'), "TopicA")
+        response = self.client.delete("/api/topics/translations/1/EN")
+        self.assertStatus(response, 204)
+        response = self.client.get("/api/topics/translations/1/EN")
+        self.assert404(response)
 
 if __name__ == '__main__':
     unittest.main()

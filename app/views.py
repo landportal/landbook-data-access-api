@@ -10,9 +10,10 @@ from flask import json
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
-    Topic, Instant, Interval
+    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
-    RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService
+    RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
+    RegionTranslationService, IndicatorTranslationService, TopicTranslationService
 from flask import request
 from datetime import datetime
 
@@ -28,6 +29,9 @@ dataset_service = DatasetService()
 value_service = ValueService()
 topic_service = TopicService()
 indicator_relationship_service = IndicatorRelationshipService()
+region_translation_service = RegionTranslationService()
+indicator_translation_service = IndicatorTranslationService()
+topic_translation_service = TopicTranslationService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 list_converter = DictionaryList2ObjectList()
@@ -1435,6 +1439,265 @@ class IndicatorCountryTendencyAPI(Resource):
         return response_xml_or_json_item(request, response_object, "tendency")
 
 
+class RegionTranslationListAPI(Resource):
+    '''
+    Countries collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all countries
+        Response 200 OK
+        '''
+        return response_xml_or_json_list(request, region_translation_service.get_all(), 'translations', 'translation')
+
+    def post(self):
+        '''
+        Create a new country
+        Response 201 CREATED
+        @return: URI
+        '''
+        translation = RegionTranslation(request.json.get("lang_code"), request.json.get("name"),
+                                        request.json.get("region_id"))
+        if translation.lang_code is not None and translation.region_id is not None:
+            region_translation_service.insert(translation)
+            return {'URI': url_for('region_translations', lang_code=translation.lang_code, region_id=translation.region_id)}, 201 #returns the URI for the new country
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all countries given
+        Response 204 NO CONTENT
+        '''
+        translation_list = json.loads(request.data)
+        translation_list = list_converter.convert(translation_list)
+        region_translation_service.update_all(translation_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all countries
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        region_translation_service.delete_all()
+        return {}, 204
+
+
+class RegionTranslationAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, region_id, lang_code):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        translation = region_translation_service.get_by_codes(region_id, lang_code)
+        if translation is None:
+            abort(404)
+        return response_xml_or_json_item(request, translation, 'translation')
+
+    def put(self, region_id, lang_code):
+        '''
+        If exists update country
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        translation = region_translation_service.get_by_codes(region_id, lang_code)
+        if translation is not None:
+            translation.name = request.json.get("name")
+            region_translation_service.update(translation)
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, region_id, lang_code):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        region_translation_service.delete(region_id, lang_code)
+        return {}, 204
+
+
+class IndicatorTranslationListAPI(Resource):
+    '''
+    Countries collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all countries
+        Response 200 OK
+        '''
+        return response_xml_or_json_list(request, indicator_translation_service.get_all(), 'translations', 'translation')
+
+    def post(self):
+        '''
+        Create a new country
+        Response 201 CREATED
+        @return: URI
+        '''
+        translation = IndicatorTranslation(request.json.get("lang_code"), request.json.get("name"),
+                                        request.json.get("description"), request.json.get("indicator_id"))
+        if translation.lang_code is not None and translation.indicator_id is not None:
+            indicator_translation_service.insert(translation)
+            return {'URI': url_for('indicator_translations', lang_code=translation.lang_code, indicator_id=translation.indicator_id)}, 201 #returns the URI for the new country
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all countries given
+        Response 204 NO CONTENT
+        '''
+        translation_list = json.loads(request.data)
+        translation_list = list_converter.convert(translation_list)
+        indicator_translation_service.update_all(translation_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all countries
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        indicator_translation_service.delete_all()
+        return {}, 204
+
+
+class IndicatorTranslationAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, indicator_id, lang_code):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        translation = indicator_translation_service.get_by_codes(indicator_id, lang_code)
+        if translation is None:
+            abort(404)
+        return response_xml_or_json_item(request, translation, 'translation')
+
+    def put(self, indicator_id, lang_code):
+        '''
+        If exists update country
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        translation = indicator_translation_service.get_by_codes(indicator_id, lang_code)
+        if translation is not None:
+            translation.name = request.json.get("name")
+            translation.description = request.json.get("description")
+            indicator_translation_service.update(translation)
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, indicator_id, lang_code):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        indicator_translation_service.delete(indicator_id, lang_code)
+        return {}, 204
+
+
+class TopicTranslationListAPI(Resource):
+    '''
+    Countries collection URI
+    Methods: GET, POST, PUT, DELETE
+    '''
+
+    def get(self):
+        '''
+        List all countries
+        Response 200 OK
+        '''
+        return response_xml_or_json_list(request, topic_translation_service.get_all(), 'translations', 'translation')
+
+    def post(self):
+        '''
+        Create a new country
+        Response 201 CREATED
+        @return: URI
+        '''
+        translation = TopicTranslation(request.json.get("lang_code"), request.json.get("name"),
+                                        request.json.get("topic_id"))
+        if translation.lang_code is not None and translation.topic_id is not None:
+            topic_translation_service.insert(translation)
+            return {'URI': url_for('topic_translations', lang_code=translation.lang_code, topic_id=translation.topic_id)}, 201 #returns the URI for the new country
+        abort(400)  # in case something is wrong
+
+    def put(self):
+        '''
+        Update all countries given
+        Response 204 NO CONTENT
+        '''
+        translation_list = json.loads(request.data)
+        translation_list = list_converter.convert(translation_list)
+        topic_translation_service.update_all(translation_list)
+        return {}, 204
+
+    def delete(self):
+        '''
+        Delete all countries
+        Response 204 NO CONTENT
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        topic_translation_service.delete_all()
+        return {}, 204
+
+
+class TopicTranslationAPI(Resource):
+    '''
+    Countries element URI
+    Methods: GET, PUT, DELETE
+    '''
+
+    def get(self, topic_id, lang_code):
+        '''
+        Show country
+        Response 200 OK
+        '''
+        translation = topic_translation_service.get_by_codes(topic_id, lang_code)
+        if translation is None:
+            abort(404)
+        return response_xml_or_json_item(request, translation, 'translation')
+
+    def put(self, topic_id, lang_code):
+        '''
+        If exists update country
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        '''
+        translation = topic_translation_service.get_by_codes(topic_id, lang_code)
+        if translation is not None:
+            translation.name = request.json.get("name")
+            topic_translation_service.update(translation)
+            return {}, 204
+        else:
+            abort(400)
+
+    def delete(self, topic_id, lang_code):
+        '''
+        Delete country
+        Response 204 NO CONTENT
+        '''
+        topic_translation_service.delete(topic_id, lang_code)
+        return {}, 204
+
+
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
@@ -1478,6 +1741,12 @@ api.add_resource(IndicatorAverageByPeriodAPI, '/api/indicators/<id>/average/rang
 api.add_resource(IndicatorByCountryAndPeriodAPI, '/api/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
 api.add_resource(IndicatorRelatedAPI, '/api/indicators/<id>/related', endpoint='indicators_related')
 api.add_resource(IndicatorCountryTendencyAPI, '/api/indicators/<indicator_id>/<iso3>/tendency', endpoint='indicator_country_tendency')
+api.add_resource(RegionTranslationListAPI, '/api/regions/translations', endpoint='region_translation_list')
+api.add_resource(RegionTranslationAPI, '/api/regions/translations/<region_id>/<lang_code>', endpoint='region_translations')
+api.add_resource(IndicatorTranslationListAPI, '/api/indicators/translations', endpoint='indicator_translation_list')
+api.add_resource(IndicatorTranslationAPI, '/api/indicators/translations/<indicator_id>/<lang_code>', endpoint='indicator_translations')
+api.add_resource(TopicTranslationListAPI, '/api/topics/translations', endpoint='topic_translation_list')
+api.add_resource(TopicTranslationAPI, '/api/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
 
 
 def is_xml_accepted(request):
