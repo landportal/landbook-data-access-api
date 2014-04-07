@@ -596,13 +596,16 @@ class ObservationAPI(Resource):
             country = country_service.get_by_code(id)
             return response_xml_or_json_list(request, country.observations, 'observations', 'observation')
         elif indicator_service.get_by_code(id) is not None:
+            observations = []
             indicator = indicator_service.get_by_code(id)
-            observations = indicator.dataset.observations
+            for dataset in indicator.datasets:
+                observations.extend(dataset.observations)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif region_service.get_by_code(id) is not None:
+            region = region_service.get_by_code(id)
             observations = []
             for country in country_service.get_all():
-                if country.is_part_of_id is int(id):
+                if country.is_part_of_id is region.id:
                     observations.extend(country.observations)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         else:
@@ -714,7 +717,6 @@ class RegionAPI(Resource):
         '''
         region = region_service.get_by_code(id)
         if region is not None:
-            region.un_code = request.json.get("un_code")
             region.is_part_of_id = request.json.get("is_part_of_id")
             region_service.update(region)
             return {}, 204
@@ -741,9 +743,10 @@ class RegionsCountryListAPI(Resource):
         List all countries
         Response 200 OK
         '''
+        region = region_service.get_by_code(id)
         countries = []
         for country in country_service.get_all():
-            if country.is_part_of_id is int(id):
+            if country.is_part_of_id == region.id:
                 countries.append(country)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
@@ -759,9 +762,10 @@ class RegionsCountryAPI(Resource):
         Show country
         Response 200 OK
         '''
+        region = region_service.get_by_code(id)
         selected_country = None
         for country in country_service.get_all():
-            if country.is_part_of_id == int(id) and country.iso3 == iso3:
+            if country.is_part_of_id == region.id and country.iso3 == iso3:
                 selected_country = country
         if selected_country is None:
             abort(404)
@@ -880,6 +884,7 @@ class DatasetListAPI(Resource):
         dataset.sdmx_frequency = request.json.get("sdmx_frequency")
         dataset.datasource_id = request.json.get("datasource_id")
         dataset.license_id = request.json.get("license_id")
+        dataset.indicators_id = request.json.get("indicators_id")
         if dataset.id is not None:
             dataset_service.insert(dataset)
             return {'URI': url_for('datasets', id=dataset.id)}, 201 #returns the URI for the new dataset
@@ -1009,8 +1014,9 @@ class ObservationByTwoAPI(Resource):
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             observations = []
+            region = region_service.get_by_code(id_first_filter)
             for country in country_service.get_all():
-                if country.is_part_of_id == int(id_first_filter):
+                if country.is_part_of_id == region.id:
                     country_observations = country.observations
                     for observation in country_observations:
                         if observation.indicator_id == id_second_filter:
@@ -1241,7 +1247,8 @@ class RegionCountriesWithDataAPI(Resource):
         Show country
         Response 200 OK
         '''
-        countries = [country for country in country_service.get_all() if country.is_part_of_id == int(region_id)]
+        region = region_service.get_by_code(region_id)
+        countries = [country for country in country_service.get_all() if country.is_part_of_id == region.id]
         countries = [country for country in countries if len(country.observations) > 0]
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
@@ -1304,12 +1311,17 @@ class ObservationByPeriodAPI(Resource):
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif indicator_service.get_by_code(id) is not None:
             indicator = indicator_service.get_by_code(id)
-            observations = filter_observations_by_date_range(indicator.dataset.observations, from_date, to_date)
+            observations = []
+            indicator = indicator_service.get_by_code(id)
+            for dataset in indicator.datasets:
+                observations.extend(dataset.observations)
+            observations = filter_observations_by_date_range(observations, from_date, to_date)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif region_service.get_by_code(id) is not None:
+            region = region_service.get_by_code(id)
             observations = []
             for country in country_service.get_all():
-                if country.is_part_of_id == int(id):
+                if country.is_part_of_id == region.id:
                     observations.extend(country.observations)
             observations = filter_observations_by_date_range(observations, from_date, to_date)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
@@ -1365,9 +1377,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
             country = country_service.get_by_code(iso3)
             observations = observation_service.get_all()
             observations = [obs for obs in observations if obs.region_id == country.id]
-            print observations
             observations = [obs for obs in observations if obs.indicator_id == indicator_id]
-            print observations
             observations = filter_observations_by_date_range(observations, from_date, to_date)
         else:
             abort(404)

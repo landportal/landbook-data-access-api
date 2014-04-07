@@ -4,7 +4,7 @@ Created on 03/02/2014
 @author: Herminio
 '''
 from app import db
-from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO
+from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO, RegionDAO
 from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
     IndicatorRelationship
 
@@ -145,7 +145,16 @@ class RegionService(GenericService):
 
     def __init__(self):
         super(RegionService, self).__init__()
-        self.dao = DAO(Region)
+        self.dao = RegionDAO()
+
+    def delete_all(self):
+        '''
+        Method that deletes all countries by calling the dao
+        @attention: Take care of what you do, all countries will be destroyed
+        '''
+        objects = self.tm.execute(self.dao, self.dao.get_all)
+        for object in objects:
+            self.tm.execute(self.dao, self.dao.delete, object.un_code)
 
 
 class DataSourceService(GenericService):
@@ -166,6 +175,16 @@ class DatasetService(GenericService):
     def __init__(self):
         super(DatasetService, self).__init__()
         self.dao = DAO(Dataset)
+
+    def insert(self, dataset):
+        self.indicator_dao = DAO(Indicator)
+        dataset.indicators = []
+        if dataset.indicators_id is not None:
+            for indicator_id in dataset.indicators_id:
+                indicator = self.tm.execute(self.indicator_dao, self.indicator_dao.get_by_code, indicator_id)
+                if indicator is not None:
+                    dataset.indicators.append(indicator)
+        super(DatasetService, self).insert(dataset)
 
 
 class ValueService(GenericService):

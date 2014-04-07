@@ -3,7 +3,7 @@ Created on 03/02/2014
 
 @author: Herminio
 '''
-from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation
+from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Indicator, Dataset, Region
 
 
 class DAO(object):
@@ -67,6 +67,24 @@ class CountryDAO(DAO):
         Method to update an existing country, its code will not be changed
         '''
         persisted_object = self.get_by_code(object.iso3)
+        update_object_attributes(persisted_object, object)
+
+
+class RegionDAO(DAO):
+    def __init__(self):
+        super(RegionDAO, self).__init__(Region)
+
+    def get_by_code(self, code):
+        '''
+        Method that returns a country by its given code
+        '''
+        return self.session.query(self.cls).filter_by(un_code=code).first()
+
+    def update(self, object):
+        '''
+        Method to update an existing country, its code will not be changed
+        '''
+        persisted_object = self.get_by_code(object.un_code)
         update_object_attributes(persisted_object, object)
 
 
