@@ -18,6 +18,7 @@ class ApiTest(TestCase):
     Generic class for all test concerning Flask on this API
     """
     def create_app(self):
+        app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
         app.app.config['TESTING'] = True
         return app.app
 
@@ -1239,13 +1240,13 @@ class TestDataset(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/api/datasets/1")
         self.assertEquals(response.json.get('id'), 1)
-        self.assertEquals(response.json.get('sdmx_frequency'), 1)
+        self.assertEquals(response.json.get('sdmx_frequency'), '1')
         self.assertEquals(response.json.get('datasource_id'), 1)
         self.assertEquals(response.json.get('license_id'), 1)
         response = self.client.put("/api/datasets/1", data=dataset_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/api/datasets/1")
-        self.assertEquals(response.json.get('sdmx_frequency'), 2)
+        self.assertEquals(response.json.get('sdmx_frequency'), '2')
         self.assertEquals(response.json.get('datasource_id'), 2)
         self.assertEquals(response.json.get('license_id'), 2)
         response = self.client.delete("/api/datasets/1")
@@ -1282,11 +1283,11 @@ class TestDataset(ApiTest):
         dataset = response.json[0]
         dataset2 = response.json[1]
         self.assertEquals(dataset['id'], 1)
-        self.assertEquals(dataset['sdmx_frequency'], 1)
+        self.assertEquals(dataset['sdmx_frequency'], '1')
         self.assertEquals(dataset['datasource_id'], 1)
         self.assertEquals(dataset['license_id'], 1)
         self.assertEquals(dataset2['id'], 2)
-        self.assertEquals(dataset2['sdmx_frequency'], 2)
+        self.assertEquals(dataset2['sdmx_frequency'], '2')
         self.assertEquals(dataset2['datasource_id'], 2)
         self.assertEquals(dataset2['license_id'], 2)
         response = self.client.put("/api/datasets", data=datasets_updated, content_type='application/json')
@@ -1294,10 +1295,10 @@ class TestDataset(ApiTest):
         response = self.client.get("/api/datasets")
         dataset = response.json[0]
         dataset2 = response.json[1]
-        self.assertEquals(dataset['sdmx_frequency'], 3)
+        self.assertEquals(dataset['sdmx_frequency'], '3')
         self.assertEquals(dataset['datasource_id'], 3)
         self.assertEquals(dataset['license_id'], 3)
-        self.assertEquals(dataset2['sdmx_frequency'], 4)
+        self.assertEquals(dataset2['sdmx_frequency'], '4')
         self.assertEquals(dataset2['datasource_id'], 4)
         self.assertEquals(dataset2['license_id'], 4)
         response = self.client.delete("/api/datasets")
