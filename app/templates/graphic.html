@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualization - Landportal.info</title>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='wesCountry.min.js') }}"></script>
+</head>
+<body>
+    <h2>{{ title }}</h2>
+    <h3>{{ description }}</h3>
+    <script type="text/javascript">
+        var options = {{ options|safe }};
+        wesCountry.charts.chart(options);
+    </script>
+</body>
+</html>

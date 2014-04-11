@@ -6,11 +6,11 @@ Created on 03/02/2014
 from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
 from flask.helpers import url_for
-from flask import json
+from flask import json, render_template
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
-    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation
+    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
@@ -1707,6 +1707,15 @@ class TopicTranslationAPI(Resource):
         topic_translation_service.delete(topic_id, lang_code)
         return {}, 204
 
+@app.route('/api/graphs/barchart')
+def barChart():
+        '''
+        Visualization of barchart
+        '''
+        options, title, description = get_visualization_json(request, 'bar')
+        return render_template('graphic.html', options=options, title=title, description=description)
+
+
 
 api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
@@ -1788,7 +1797,8 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
     def filter_key(observation):
         time = observation.ref_time
         return (isinstance(time, Instant) and from_date <= time.timestamp <= to_date) \
-            or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)
+            or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)  \
+            or (isinstance(time, YearInterval) and to_date.year <= time.year <= from_date.year)
 
     return filter(filter_key, observations) if from_date is not None and to_date is not None else observations
 
@@ -1818,6 +1828,53 @@ def observation_average(observations):
     else:
         average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), observations) / len(observations)
     return average
+
+
+def get_visualization_json(request, chartType):
+    indicator = indicator_service.get_by_code(request.args.get('indicator'))
+    countries = request.args.get('countries').split(',')
+    countries = [country for country in country_service.get_all() if country.iso3 in countries]
+    colours = request.args.get('colours').split(',')
+    colours = ['#'+colour for colour in colours]
+    title = request.args.get('title') if request.args.get('title') is not None else ''
+    description = request.args.get('description') if request.args.get('description') is not None else ''
+    xTag = request.args.get('xTag')
+    yTag = request.args.get('yTag')
+    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d") if request.args.get('from') is not None else None
+    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d") if request.args.get('to') is not None else None
+    series = []
+    for country in countries:
+        observations = filter_observations_by_date_range([observation for observation in country.observations \
+                                                      if observation.indicator_id == indicator.id], from_time, to_time)
+        if len(observations) > 10:  # limit to ten, to ensure good view
+            observations = observations[-10:]
+        times = [observation.ref_time for observation in observations]
+        series.append({
+            'name': country.translations[0].name,
+            'values': [float(observation.value.value) for observation in observations]
+        })
+    json_object = {
+        'chartType': chartType,
+        'xAxis': {
+            'title': xTag,
+            'values': get_intervals(times)
+        },
+        'yAxis': {
+            'title': yTag
+        },
+        'series': series,
+        'serieColours': colours
+    }
+    return json.dumps(json_object), title, description
+
+
+def get_intervals(times):
+    if isinstance(times[0], Instant):
+        return [time.timestamp for time in times]
+    elif isinstance(times[0], YearInterval):
+        return [time.year for time in times]
+    elif isinstance(times[0], Interval):
+        return [time.start_time for time in times]
 
 
 class EmptyObject(object):
