@@ -8,7 +8,7 @@ from flask.wrappers import Response
 from flask.helpers import url_for
 from flask import json, render_template
 from app import app
-from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
+from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
     Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
@@ -16,7 +16,6 @@ from app.services import CountryService, IndicatorService, UserService, Organiza
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
 from flask import request
 from datetime import datetime
-import utils
 
 api = Api(app)
 country_service = CountryService()
@@ -35,6 +34,7 @@ indicator_translation_service = IndicatorTranslationService()
 topic_translation_service = TopicTranslationService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
+csv_converter = CSVConverter()
 list_converter = DictionaryList2ObjectList()
 
 
@@ -1857,11 +1857,19 @@ def is_xml_accepted(request):
     '''
     return request.args.get('format') == "xml"
 
+
 def is_jsonp_accepted(request):
     '''
     Returns if jsonp is accepted or not
     '''
     return request.args.get('format') == "jsonp"
+
+
+def is_csv_accepted(request):
+    '''
+    Returns if jsonp is accepted or not
+    '''
+    return request.args.get('format') == "csv"
 
 
 def response_xml_or_json_item(request, item, item_string):
@@ -1871,7 +1879,12 @@ def response_xml_or_json_item(request, item, item_string):
     elif is_jsonp_accepted(request):
         function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
         response = function + '(' + json_converter.object_to_json(item) + ');'
-        return Response(response, mimetype='application/jsonp')
+        return Response(response, mimetype='application/javascript')
+    elif is_csv_accepted(request):
+        response = Response(csv_converter.object_to_csv(item
+                                                    ), mimetype='text/csv', content_type='application/octet-stream')
+        response.headers["Content-Disposition"] = 'attachment; filename="' + item_string + '".csv'
+        return response
     else:
         return Response(json_converter.object_to_json(item
                                                       ), mimetype='application/json')
@@ -1884,7 +1897,12 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
     elif is_jsonp_accepted(request):
         function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
         response = function + '(' + json_converter.list_to_json(collection) + ');'
-        return Response(response, mimetype='application/jsonp')
+        return Response(response, mimetype='application/javascript')
+    elif is_csv_accepted(request):
+        response = Response(csv_converter.list_to_csv(collection
+                                ), mimetype='text/csv', content_type='application/octet-stream')
+        response.headers["Content-Disposition"] = 'attachment; filename="' + collection_string + '".csv'
+        return response
     else:
         return Response(json_converter.list_to_json(collection
                                                     ), mimetype='application/json')

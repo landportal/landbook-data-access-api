@@ -7,6 +7,7 @@ import json
 import datetime, time
 from dicttoxml import dicttoxml
 
+
 class JSONConverter(object):
     '''
     JSON converter from objects and list
@@ -61,6 +62,46 @@ class XMLConverter(object):
         xml_result += dicttoxml(element, False)        
         xml_result += '</' + root_node + '>'
         return xml_result
+
+
+class CSVConverter(object):
+    '''
+    CSV converter from objects and list
+    '''
+
+    def list_to_csv(self, elements_list):
+        '''
+        Convert a list to its json equivalent
+        '''
+        csv_result = ''
+        keys = row2dict(elements_list[0]).keys()
+        csv_result += ';'.join(keys) + '\n'
+        for element in elements_list:
+            csv_result += self.object_to_csv(element, False, keys)
+        return csv_result
+
+    def object_to_csv(self, element, header=True, keys=None):
+        '''
+        Convert a object to its json equivalent
+        '''
+        element = row2dict(element)
+        csv = ''
+        if keys is None:
+            keys = element.keys()
+        if header:
+            csv += ';'.join(element.keys()) + '\n'
+        for key in keys:
+            if key in element.keys():
+                try:
+                    value = str(element[key])
+                except UnicodeEncodeError:
+                    value = element[key]
+            else:
+                value = ''
+            csv += value + ';'
+        csv += '\n'
+        return csv
+
 
 class Struct(object):
     '''
