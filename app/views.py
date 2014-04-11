@@ -6,16 +6,17 @@ Created on 03/02/2014
 from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
 from flask.helpers import url_for
-from flask import json
+from flask import json, render_template
 from app import app
 from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
-    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation
+    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
 from flask import request
 from datetime import datetime
+import utils
 
 api = Api(app)
 country_service = CountryService()
@@ -48,7 +49,9 @@ class CountryListAPI(Resource):
         List all countries
         Response 200 OK
         '''
-        return response_xml_or_json_list(request, country_service.get_all(), 'countries', 'country')
+        countries = country_service.get_all()
+        translate_region_list(countries)
+        return response_xml_or_json_list(request, countries, 'countries', 'country')
 
     def post(self):
         '''
@@ -82,6 +85,7 @@ class CountryListAPI(Resource):
         country_service.delete_all()
         return {}, 204
 
+
 class CountryAPI(Resource):
     '''
     Countries element URI
@@ -96,6 +100,7 @@ class CountryAPI(Resource):
         country = country_service.get_by_code(code)
         if country is None:
             abort(404)
+        translate_region(country)
         return response_xml_or_json_item(request, country, 'country')
 
     def put(self, code):
@@ -123,6 +128,7 @@ class CountryAPI(Resource):
         country_service.delete(code)
         return {}, 204
 
+
 class IndicatorListAPI(Resource):
     '''
     Indicators collection URI
@@ -134,7 +140,9 @@ class IndicatorListAPI(Resource):
         List all countries
         Response 200 OK
         '''
-        return response_xml_or_json_list(request, indicator_service.get_all(), 'indicators', 'indicator')
+        indicators = indicator_service.get_all()
+        translate_indicator_list(indicators)
+        return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
     def post(self):
         '''
@@ -174,6 +182,7 @@ class IndicatorListAPI(Resource):
         indicator_service.delete_all()
         return {}, 204
 
+
 class IndicatorAPI(Resource):
     '''
     Countries element URI
@@ -188,6 +197,7 @@ class IndicatorAPI(Resource):
         indicator = indicator_service.get_by_code(id)
         if indicator is None:
             abort(404)
+        translate_indicator(indicator)
         return response_xml_or_json_item(request, indicator, 'indicator')
 
     def put(self, id):
@@ -273,6 +283,7 @@ class IndicatorCompatibleAPI(Resource):
         compatibles = [ind for ind in indicators
                        if indicator.measurement_unit_id == ind.measurement_unit_id
                         and ind is not indicator]
+        translate_indicator_list(compatibles)
         return response_xml_or_json_list(request, compatibles, 'indicators', 'indicator')
 
 
@@ -321,6 +332,7 @@ class UserListAPI(Resource):
         user_service.delete_all()
         return {}, 204
 
+
 class UserAPI(Resource):
     '''
     Countries element URI
@@ -362,6 +374,7 @@ class UserAPI(Resource):
         '''
         user_service.delete(id)
         return {}, 204
+
 
 class OrganizationListAPI(Resource):
     '''
@@ -503,6 +516,7 @@ class CountriesIndicatorListAPI(Resource):
         for obs in observations:
             if obs.indicator is not None:
                 indicators.append(obs.indicator)
+        translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
@@ -524,6 +538,7 @@ class CountriesIndicatorAPI(Resource):
                 indicator = obs.indicator
         if indicator is None:
             abort(404)
+        translate_indicator(indicator)
         return response_xml_or_json_item(request, indicator, 'indicator')
 
 
@@ -644,6 +659,7 @@ class ObservationAPI(Resource):
         observation_service.delete(id)
         return {}, 204
 
+
 class RegionListAPI(Resource):
     '''
     Regions collection URI
@@ -655,7 +671,9 @@ class RegionListAPI(Resource):
         List all region
         Response 200 OK
         '''
-        return response_xml_or_json_list(request, region_service.get_all(), 'regions', 'region')
+        regions = region_service.get_all()
+        translate_region_list(regions)
+        return response_xml_or_json_list(request, regions, 'regions', 'region')
 
     def post(self):
         '''
@@ -692,6 +710,7 @@ class RegionListAPI(Resource):
         region_service.delete_all()
         return {}, 204
 
+
 class RegionAPI(Resource):
     '''
     Countries element URI
@@ -706,6 +725,7 @@ class RegionAPI(Resource):
         region = region_service.get_by_code(id)
         if region is None:
             abort(404)
+        translate_region(region)
         return response_xml_or_json_item(request, region, 'region')
 
     def put(self, id):
@@ -748,6 +768,7 @@ class RegionsCountryListAPI(Resource):
         for country in country_service.get_all():
             if country.is_part_of_id == region.id:
                 countries.append(country)
+        translate_region_list(countries)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
 
@@ -769,6 +790,7 @@ class RegionsCountryAPI(Resource):
                 selected_country = country
         if selected_country is None:
             abort(404)
+        translate_region(selected_country)
         return response_xml_or_json_item(request, selected_country, 'country')
 
 
@@ -1128,7 +1150,9 @@ class TopicListAPI(Resource):
         List all topics
         Response 200 OK
         '''
-        return response_xml_or_json_list(request, topic_service.get_all(), 'topics', 'topic')
+        topics = topic_service.get_all()
+        translate_topic_list(topics)
+        return response_xml_or_json_list(request, topics, 'topics', 'topic')
 
     def post(self):
         '''
@@ -1176,6 +1200,7 @@ class TopicAPI(Resource):
         topic = topic_service.get_by_code(id)
         if topic is None:
             abort(404)
+        translate_topic(topic)
         return response_xml_or_json_item(request, topic, 'topic')
 
     def put(self, id):
@@ -1250,6 +1275,7 @@ class RegionCountriesWithDataAPI(Resource):
         region = region_service.get_by_code(region_id)
         countries = [country for country in country_service.get_all() if country.is_part_of_id == region.id]
         countries = [country for country in countries if len(country.observations) > 0]
+        translate_region_list(countries)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
 
@@ -1426,6 +1452,7 @@ class IndicatorRelatedAPI(Resource):
         indicators_relation = indicator_relationship_service.get_all()
         indicators_by_id = [indicator for indicator in indicators_relation if indicator.source_id == id]
         indicators_related = [indicator.target for indicator in indicators_by_id]
+        translate_indicator_list(indicators_related)
         return response_xml_or_json_list(request, indicators_related, "indicators", "indicator")
 
 
@@ -1708,55 +1735,120 @@ class TopicTranslationAPI(Resource):
         return {}, 204
 
 
-api.add_resource(CountryListAPI, '/api/countries', endpoint='countries_list')
-api.add_resource(CountryAPI, '/api/countries/<code>', endpoint='countries')
-api.add_resource(IndicatorListAPI, '/api/indicators', endpoint='indicators_list')
-api.add_resource(IndicatorAPI, '/api/indicators/<id>', endpoint='indicators')
-api.add_resource(IndicatorTopAPI, '/api/indicators/<id>/top', endpoint='indicators_top')
-api.add_resource(IndicatorAverageAPI, '/api/indicators/<id>/average', endpoint='indicators_average')
-api.add_resource(IndicatorCompatibleAPI, '/api/indicators/<id>/compatible', endpoint='indicators_compatible')
-api.add_resource(UserListAPI, '/api/users', endpoint='users_list')
-api.add_resource(UserAPI, '/api/users/<id>', endpoint='users')
-api.add_resource(OrganizationListAPI, '/api/organizations', endpoint='organizations_list')
-api.add_resource(OrganizationAPI, '/api/organizations/<id>', endpoint='organizations')
-api.add_resource(OrganizationUserListAPI, '/api/organizations/<organization_id>/users', endpoint='organizations_users_list')
-api.add_resource(OrganizationUserAPI, '/api/organizations/<organization_id>/users/<user_id>', endpoint='organizations_users')
-api.add_resource(CountriesIndicatorListAPI, '/api/countries/<iso3>/indicators', endpoint='countries_indicators_list')
-api.add_resource(CountriesIndicatorAPI, '/api/countries/<iso3>/indicators/<indicator_id>', endpoint='countries_indicators')
-api.add_resource(ObservationListAPI, '/api/observations', endpoint='observations_list')
-api.add_resource(ObservationAPI, '/api/observations/<id>', endpoint='observations')
-api.add_resource(ObservationByTwoAPI, '/api/observations/<id_first_filter>/<id_second_filter>', endpoint='observations_by_two')
-api.add_resource(RegionListAPI, '/api/regions', endpoint='regions_list')
-api.add_resource(RegionAPI, '/api/regions/<id>', endpoint='regions')
-api.add_resource(RegionsCountryListAPI, '/api/regions/<id>/countries', endpoint='regions_countries_list')
-api.add_resource(RegionsCountryAPI, '/api/regions/<id>/countries/<iso3>', endpoint='regions_countries')
-api.add_resource(DataSourceListAPI, '/api/datasources', endpoint='datasources_list')
-api.add_resource(DataSourceAPI, '/api/datasources/<id>', endpoint='datasources')
-api.add_resource(DatasetListAPI, '/api/datasets', endpoint='datasets_list')
-api.add_resource(DatasetAPI, '/api/datasets/<id>', endpoint='datasets')
-api.add_resource(DataSourceIndicatorListAPI, '/api/datasources/<id>/indicators', endpoint='datasources_indicators_list')
-api.add_resource(DataSourceIndicatorAPI, '/api/datasources/<id>/indicators/<indicator_id>', endpoint='datasources_indicators')
-api.add_resource(ValueListAPI, '/api/values', endpoint='value_list')
-api.add_resource(ValueAPI, '/api/values/<id>', endpoint='values')
-api.add_resource(TopicListAPI, '/api/topics', endpoint='topic_list')
-api.add_resource(TopicAPI, '/api/topics/<id>', endpoint='topics')
-api.add_resource(TopicIndicatorListAPI, '/api/topics/<topic_id>/indicators', endpoint='topics_indicators_list')
-api.add_resource(TopicIndicatorAPI, '/api/topics/<topic_id>/indicators/<indicator_id>', endpoint='topics_indicators')
-api.add_resource(RegionCountriesWithDataAPI, '/api/regions/<region_id>/countries_with_data', endpoint='regions_countries_with_data')
-api.add_resource(CountriesIndicatorLastUpdateAPI, '/api/countries/<iso3>/last_update', endpoint='countries_indicators_last_update')
-api.add_resource(IndicatorsCountryLastUpdateAPI, '/api/indicators/<id>/<iso3>/last_update', endpoint='indicators_countries_last_update')
-api.add_resource(ObservationByPeriodAPI, '/api/observations/<id>/range', endpoint='observations_by_period')
-api.add_resource(IndicatorByPeriodAPI, '/api/indicators/<id>/range', endpoint='indicators_by_period')
-api.add_resource(IndicatorAverageByPeriodAPI, '/api/indicators/<id>/average/range', endpoint='indicators_average_by_period')
-api.add_resource(IndicatorByCountryAndPeriodAPI, '/api/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
-api.add_resource(IndicatorRelatedAPI, '/api/indicators/<id>/related', endpoint='indicators_related')
-api.add_resource(IndicatorCountryTendencyAPI, '/api/indicators/<indicator_id>/<iso3>/tendency', endpoint='indicator_country_tendency')
-api.add_resource(RegionTranslationListAPI, '/api/regions/translations', endpoint='region_translation_list')
-api.add_resource(RegionTranslationAPI, '/api/regions/translations/<region_id>/<lang_code>', endpoint='region_translations')
-api.add_resource(IndicatorTranslationListAPI, '/api/indicators/translations', endpoint='indicator_translation_list')
-api.add_resource(IndicatorTranslationAPI, '/api/indicators/translations/<indicator_id>/<lang_code>', endpoint='indicator_translations')
-api.add_resource(TopicTranslationListAPI, '/api/topics/translations', endpoint='topic_translation_list')
-api.add_resource(TopicTranslationAPI, '/api/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
+@app.route('/api/graphs/barchart')
+def barChart():
+        '''
+        Visualization of barchart
+        '''
+        options, title, description = get_visualization_json(request, 'bar')
+        return render_template('graphic.html', options=options, title=title, description=description)
+
+
+api.add_resource(CountryListAPI, '/countries', endpoint='countries_list')
+api.add_resource(CountryAPI, '/countries/<code>', endpoint='countries')
+api.add_resource(IndicatorListAPI, '/indicators', endpoint='indicators_list')
+api.add_resource(IndicatorAPI, '/indicators/<id>', endpoint='indicators')
+api.add_resource(IndicatorTopAPI, '/indicators/<id>/top', endpoint='indicators_top')
+api.add_resource(IndicatorAverageAPI, '/indicators/<id>/average', endpoint='indicators_average')
+api.add_resource(IndicatorCompatibleAPI, '/indicators/<id>/compatible', endpoint='indicators_compatible')
+api.add_resource(UserListAPI, '/users', endpoint='users_list')
+api.add_resource(UserAPI, '/users/<id>', endpoint='users')
+api.add_resource(OrganizationListAPI, '/organizations', endpoint='organizations_list')
+api.add_resource(OrganizationAPI, '/organizations/<id>', endpoint='organizations')
+api.add_resource(OrganizationUserListAPI, '/organizations/<organization_id>/users', endpoint='organizations_users_list')
+api.add_resource(OrganizationUserAPI, '/organizations/<organization_id>/users/<user_id>', endpoint='organizations_users')
+api.add_resource(CountriesIndicatorListAPI, '/countries/<iso3>/indicators', endpoint='countries_indicators_list')
+api.add_resource(CountriesIndicatorAPI, '/countries/<iso3>/indicators/<indicator_id>', endpoint='countries_indicators')
+api.add_resource(ObservationListAPI, '/observations', endpoint='observations_list')
+api.add_resource(ObservationAPI, '/observations/<id>', endpoint='observations')
+api.add_resource(ObservationByTwoAPI, '/observations/<id_first_filter>/<id_second_filter>', endpoint='observations_by_two')
+api.add_resource(RegionListAPI, '/regions', endpoint='regions_list')
+api.add_resource(RegionAPI, '/regions/<id>', endpoint='regions')
+api.add_resource(RegionsCountryListAPI, '/regions/<id>/countries', endpoint='regions_countries_list')
+api.add_resource(RegionsCountryAPI, '/regions/<id>/countries/<iso3>', endpoint='regions_countries')
+api.add_resource(DataSourceListAPI, '/datasources', endpoint='datasources_list')
+api.add_resource(DataSourceAPI, '/datasources/<id>', endpoint='datasources')
+api.add_resource(DatasetListAPI, '/datasets', endpoint='datasets_list')
+api.add_resource(DatasetAPI, '/datasets/<id>', endpoint='datasets')
+api.add_resource(DataSourceIndicatorListAPI, '/datasources/<id>/indicators', endpoint='datasources_indicators_list')
+api.add_resource(DataSourceIndicatorAPI, '/datasources/<id>/indicators/<indicator_id>', endpoint='datasources_indicators')
+api.add_resource(ValueListAPI, '/values', endpoint='value_list')
+api.add_resource(ValueAPI, '/values/<id>', endpoint='values')
+api.add_resource(TopicListAPI, '/topics', endpoint='topic_list')
+api.add_resource(TopicAPI, '/topics/<id>', endpoint='topics')
+api.add_resource(TopicIndicatorListAPI, '/topics/<topic_id>/indicators', endpoint='topics_indicators_list')
+api.add_resource(TopicIndicatorAPI, '/topics/<topic_id>/indicators/<indicator_id>', endpoint='topics_indicators')
+api.add_resource(RegionCountriesWithDataAPI, '/regions/<region_id>/countries_with_data', endpoint='regions_countries_with_data')
+api.add_resource(CountriesIndicatorLastUpdateAPI, '/countries/<iso3>/last_update', endpoint='countries_indicators_last_update')
+api.add_resource(IndicatorsCountryLastUpdateAPI, '/indicators/<id>/<iso3>/last_update', endpoint='indicators_countries_last_update')
+api.add_resource(ObservationByPeriodAPI, '/observations/<id>/range', endpoint='observations_by_period')
+api.add_resource(IndicatorByPeriodAPI, '/indicators/<id>/range', endpoint='indicators_by_period')
+api.add_resource(IndicatorAverageByPeriodAPI, '/indicators/<id>/average/range', endpoint='indicators_average_by_period')
+api.add_resource(IndicatorByCountryAndPeriodAPI, '/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
+api.add_resource(IndicatorRelatedAPI, '/indicators/<id>/related', endpoint='indicators_related')
+api.add_resource(IndicatorCountryTendencyAPI, '/indicators/<indicator_id>/<iso3>/tendency', endpoint='indicator_country_tendency')
+api.add_resource(RegionTranslationListAPI, '/regions/translations', endpoint='region_translation_list')
+api.add_resource(RegionTranslationAPI, '/regions/translations/<region_id>/<lang_code>', endpoint='region_translations')
+api.add_resource(IndicatorTranslationListAPI, '/indicators/translations', endpoint='indicator_translation_list')
+api.add_resource(IndicatorTranslationAPI, '/indicators/translations/<indicator_id>/<lang_code>', endpoint='indicator_translations')
+api.add_resource(TopicTranslationListAPI, '/topics/translations', endpoint='topic_translation_list')
+api.add_resource(TopicTranslationAPI, '/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
+
+
+def translate_indicator_list(indicators):
+    lang = get_requested_lang()
+    for indicator in indicators:
+        translate_indicator(indicator, lang)
+
+
+def translate_indicator(indicator, lang=None):
+    if lang is None:
+        lang = get_requested_lang()
+    translation = indicator_translation_service.get_by_codes(indicator.id, lang)
+    indicator.name = translation.name
+    indicator.description = translation.description
+    indicator.other_parseable_fields = ['name, description']
+
+
+def translate_region_list(regions):
+    lang = get_requested_lang()
+    for region in regions:
+        translate_region(region, lang)
+
+
+def translate_region(region, lang=None):
+    if lang is None:
+        lang = get_requested_lang()
+    translation = region_translation_service.get_by_codes(region.id, lang)
+    region.name = translation.name
+    region.other_parseable_fields = ['name']
+
+
+def translate_topic_list(topics):
+    lang = get_requested_lang()
+    for topic in topics:
+        translate_topic(topic, lang)
+
+
+def translate_topic(topic, lang=None):
+    if lang is None:
+        lang = get_requested_lang()
+    translation = topic_translation_service.get_by_codes(topic.id, lang)
+    topic.translation_name = translation.name
+    topic.other_parseable_fields = ['translation_name']
+
+
+def get_requested_lang():
+    lang = request.args.get('lang') if request.args.get('lang') is not None else 'en'
+    return lang
+
+
+def translate_indicator(indicator, lang=None):
+    if lang is None:
+        lang = get_requested_lang()
+    translation = indicator_translation_service.get_by_codes(indicator.id, lang)
+    indicator.name = translation.name
+    indicator.description = translation.description
 
 
 def is_xml_accepted(request):
@@ -1788,7 +1880,8 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
     def filter_key(observation):
         time = observation.ref_time
         return (isinstance(time, Instant) and from_date <= time.timestamp <= to_date) \
-            or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)
+            or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)  \
+            or (isinstance(time, YearInterval) and to_date.year <= time.year <= from_date.year)
 
     return filter(filter_key, observations) if from_date is not None and to_date is not None else observations
 
@@ -1820,5 +1913,52 @@ def observation_average(observations):
     return average
 
 
-class EmptyObject(object):
+def get_visualization_json(request, chartType):
+    indicator = indicator_service.get_by_code(request.args.get('indicator'))
+    countries = request.args.get('countries').split(',')
+    countries = [country for country in country_service.get_all() if country.iso3 in countries]
+    colours = request.args.get('colours').split(',')
+    colours = ['#'+colour for colour in colours]
+    title = request.args.get('title') if request.args.get('title') is not None else ''
+    description = request.args.get('description') if request.args.get('description') is not None else ''
+    xTag = request.args.get('xTag')
+    yTag = request.args.get('yTag')
+    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d") if request.args.get('from') is not None else None
+    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d") if request.args.get('to') is not None else None
+    series = []
+    for country in countries:
+        observations = filter_observations_by_date_range([observation for observation in country.observations \
+                                                      if observation.indicator_id == indicator.id], from_time, to_time)
+        if len(observations) > 10:  # limit to ten, to ensure good view
+            observations = observations[-10:]
+        times = [observation.ref_time for observation in observations]
+        series.append({
+            'name': country.translations[0].name,
+            'values': [float(observation.value.value) for observation in observations]
+        })
+    json_object = {
+        'chartType': chartType,
+        'xAxis': {
+            'title': xTag,
+            'values': get_intervals(times)
+        },
+        'yAxis': {
+            'title': yTag
+        },
+        'series': series,
+        'serieColours': colours
+    }
+    return json.dumps(json_object), title, description
+
+
+def get_intervals(times):
+    if isinstance(times[0], Instant):
+        return [time.timestamp for time in times]
+    elif isinstance(times[0], YearInterval):
+        return [time.year for time in times]
+    elif isinstance(times[0], Interval):
+        return [time.start_time for time in times]
+
+
+class EmptyObject():
     pass

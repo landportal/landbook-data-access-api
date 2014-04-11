@@ -80,6 +80,7 @@ class DictionaryList2ObjectList(object):
             returned_list.append(Struct(**element))
         return returned_list
 
+
 def row2dict(row):
     '''
     @see: http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
@@ -93,6 +94,9 @@ def row2dict(row):
                 d[column.name] = time.mktime(getattr(row, column.name).timetuple())
             else:
                 d[column.name] = getattr(row, column.name)
+        if hasattr(row, 'other_parseable_fields'):
+            for field in row.other_parseable_fields:
+                d[field] = getattr(row, field)
         return d
     else:
         for column in get_user_attrs(row):
