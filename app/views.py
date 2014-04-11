@@ -1853,15 +1853,25 @@ def translate_indicator(indicator, lang=None):
 
 def is_xml_accepted(request):
     '''
-    Returns if json is accepted or not, returns json as default
+    Returns if xml is accepted or not
     '''
     return request.args.get('format') == "xml"
+
+def is_jsonp_accepted(request):
+    '''
+    Returns if jsonp is accepted or not
+    '''
+    return request.args.get('format') == "jsonp"
 
 
 def response_xml_or_json_item(request, item, item_string):
     if is_xml_accepted(request):
         return Response(xml_converter.object_to_xml(item,
                                                     item_string), mimetype='application/xml')
+    elif is_jsonp_accepted(request):
+        function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
+        response = function + '(' + json_converter.object_to_json(item) + ');'
+        return Response(response, mimetype='application/jsonp')
     else:
         return Response(json_converter.object_to_json(item
                                                       ), mimetype='application/json')
@@ -1871,6 +1881,10 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
     if is_xml_accepted(request):
         return Response(xml_converter.list_to_xml(collection,
                                                   collection_string, item_string), mimetype='application/xml')
+    elif is_jsonp_accepted(request):
+        function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
+        response = function + '(' + json_converter.list_to_json(collection) + ');'
+        return Response(response, mimetype='application/jsonp')
     else:
         return Response(json_converter.list_to_json(collection
                                                     ), mimetype='application/json')
