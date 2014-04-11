@@ -20,6 +20,7 @@ class ApiTest(TestCase):
     def create_app(self):
         app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
         app.app.config['TESTING'] = True
+        app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
         return app.app
 
     def setUp(self):
