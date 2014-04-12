@@ -1805,9 +1805,10 @@ def translate_indicator(indicator, lang=None):
     if lang is None:
         lang = get_requested_lang()
     translation = indicator_translation_service.get_by_codes(indicator.id, lang)
-    indicator.name = translation.name
-    indicator.description = translation.description
-    indicator.other_parseable_fields = ['name, description']
+    if translation is not None:
+        indicator.name = translation.name
+        indicator.description = translation.description
+        indicator.other_parseable_fields = ['name, description']
 
 
 def translate_region_list(regions):
@@ -1820,8 +1821,9 @@ def translate_region(region, lang=None):
     if lang is None:
         lang = get_requested_lang()
     translation = region_translation_service.get_by_codes(region.id, lang)
-    region.name = translation.name
-    region.other_parseable_fields = ['name']
+    if translation is not None:
+        region.name = translation.name
+        region.other_parseable_fields = ['name']
 
 
 def translate_topic_list(topics):
@@ -1834,21 +1836,14 @@ def translate_topic(topic, lang=None):
     if lang is None:
         lang = get_requested_lang()
     translation = topic_translation_service.get_by_codes(topic.id, lang)
-    topic.translation_name = translation.name
-    topic.other_parseable_fields = ['translation_name']
+    if translation is not None:
+        topic.translation_name = translation.name
+        topic.other_parseable_fields = ['translation_name']
 
 
 def get_requested_lang():
     lang = request.args.get('lang') if request.args.get('lang') is not None else 'en'
     return lang
-
-
-def translate_indicator(indicator, lang=None):
-    if lang is None:
-        lang = get_requested_lang()
-    translation = indicator_translation_service.get_by_codes(indicator.id, lang)
-    indicator.name = translation.name
-    indicator.description = translation.description
 
 
 def is_xml_accepted(request):
