@@ -2430,22 +2430,29 @@ class TestTranslations(ApiTest):
     def test_region_translation_list(self):
         spain_translation_json = json.dumps(dict(
            name='Spain',
-           lang_code='EN',
+           lang_code='en',
            region_id=1
         ))
         france_translation_json = json.dumps(dict(
             name='France',
-            lang_code='EN',
+            lang_code='en',
             region_id=2
         ))
+        spain_region_json = json.dumps(dict(
+            id=1,
+            iso3='ESP',
+            iso2='ES'
+        ))
         countries_translation_updated = json.dumps([
-            dict(region_id=1, lang_code='EN', name='SPA'),
-            dict(region_id=2, lang_code='EN', name='FRA')
+            dict(region_id=1, lang_code='en', name='SPA'),
+            dict(region_id=2, lang_code='en', name='FRA')
         ])
         response = self.client.get("/regions/translations")
         self.assert200(response)
         countries = response.json
         self.assertEquals(len(countries), 0)
+        response = self.client.post("/countries", data=spain_region_json, content_type='application/json')
+        self.assertStatus(response, 201)
         response = self.client.post("/regions/translations", data=spain_translation_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/regions/translations", data=france_translation_json, content_type='application/json')
@@ -2454,9 +2461,11 @@ class TestTranslations(ApiTest):
         spain = response.json[0]
         france = response.json[1]
         self.assertEquals(spain['name'], "Spain")
-        self.assertEquals(spain['lang_code'], "EN")
+        self.assertEquals(spain['lang_code'], "en")
         self.assertEquals(france['name'], "France")
-        self.assertEquals(france['lang_code'], "EN")
+        self.assertEquals(france['lang_code'], "en")
+        response = self.client.get("/countries/ESP")
+        self.assertEqual(response.json.get('name'), 'Spain')
         response = self.client.put("/regions/translations", data=countries_translation_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/regions/translations")
@@ -2474,26 +2483,34 @@ class TestTranslations(ApiTest):
     def test_region_translation_item(self):
         spain_translation_json = json.dumps(dict(
            name='Spain',
-           lang_code='EN',
+           lang_code='en',
            region_id=1
         ))
         spain_translation_updated = json.dumps(dict(
            name='SPA',
-           lang_code='EN',
+           lang_code='en',
            region_id=1
         ))
+        spain_region_json = json.dumps(dict(
+            id=1,
+            un_code=200
+        ))
+        response = self.client.post("/regions", data=spain_region_json, content_type='application/json')
+        self.assertStatus(response, 201)
         response = self.client.post("/regions/translations", data=spain_translation_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/regions/translations/1/EN")
+        response = self.client.get("/regions/translations/1/en")
         self.assertEquals(response.json.get('name'), "Spain")
-        self.assertEquals(response.json.get('lang_code'), "EN")
-        response = self.client.put("/regions/translations/1/EN", data=spain_translation_updated, content_type='application/json')
+        self.assertEquals(response.json.get('lang_code'), "en")
+        response = self.client.get("/regions/200")
+        self.assertEqual(response.json.get('name'), 'Spain')
+        response = self.client.put("/regions/translations/1/en", data=spain_translation_updated, content_type='application/json')
         self.assertStatus(response, 204)
-        response = self.client.get("/regions/translations/1/EN")
+        response = self.client.get("/regions/translations/1/en")
         self.assertEquals(response.json.get('name'), "SPA")
-        response = self.client.delete("/regions/translations/1/EN")
+        response = self.client.delete("/regions/translations/1/en")
         self.assertStatus(response, 204)
-        response = self.client.get("/regions/translations/1/EN")
+        response = self.client.get("/regions/translations/1/en")
         self.assert404(response)
 
     def test_indicator_translation_list(self):
@@ -2546,27 +2563,35 @@ class TestTranslations(ApiTest):
         rp_translation_json = json.dumps(dict(
            name='Rural Population',
            description='Something',
-           lang_code='EN',
+           lang_code='en',
            indicator_id='1'
         ))
         rp_translation_update = json.dumps(dict(
            name='Rural Population',
            description='Anything',
-           lang_code='EN',
+           lang_code='en',
            indicator_id='1'
         ))
+        indicator_json = json.dumps(dict(
+            id='1',
+        ))
+        response = self.client.post("/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
         response = self.client.post("/indicators/translations", data=rp_translation_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/indicators/translations/1/EN")
+        response = self.client.get("/indicators/translations/1/en")
         self.assertEquals(response.json.get('name'), "Rural Population")
         self.assertEquals(response.json.get('description'), "Something")
-        response = self.client.put("/indicators/translations/1/EN", data=rp_translation_update, content_type='application/json')
+        response = self.client.get("/indicators/1")
+        self.assertEquals(response.json.get('name'), "Rural Population")
+        self.assertEquals(response.json.get('description'), "Something")
+        response = self.client.put("/indicators/translations/1/en", data=rp_translation_update, content_type='application/json')
         self.assertStatus(response, 204)
-        response = self.client.get("/indicators/translations/1/EN")
+        response = self.client.get("/indicators/translations/1/en")
         self.assertEquals(response.json.get('description'), "Anything")
-        response = self.client.delete("/indicators/translations/1/EN")
+        response = self.client.delete("/indicators/translations/1/en")
         self.assertStatus(response, 204)
-        response = self.client.get("/indicators/translations/1/EN")
+        response = self.client.get("/indicators/translations/1/en")
         self.assert404(response)
 
     def test_topic_translation_list(self):
@@ -2614,26 +2639,65 @@ class TestTranslations(ApiTest):
     def test_topic_translation_item(self):
         topic1_translation_json = json.dumps(dict(
            name='Topic1',
-           lang_code='EN',
+           lang_code='en',
            topic_id='1'
         ))
-        topic1_translation_update= json.dumps(dict(
+        topic1_translation_update = json.dumps(dict(
            name='TopicA',
-           lang_code='EN',
+           lang_code='en',
            topic_id='1'
         ))
+        topic_json = json.dumps(dict(
+            id='1',
+        ))
+        response = self.client.post("/topics", data=topic_json, content_type='application/json')
+        self.assertStatus(response, 201)
         response = self.client.post("/topics/translations", data=topic1_translation_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/topics/translations/1/EN")
+        response = self.client.get("/topics/translations/1/en")
         self.assertEquals(response.json.get('name'), "Topic1")
-        response = self.client.put("/topics/translations/1/EN", data=topic1_translation_update, content_type='application/json')
+        response = self.client.get("/topics/1")
+        self.assertEquals(response.json.get('translation_name'), "Topic1")
+        response = self.client.put("/topics/translations/1/en", data=topic1_translation_update, content_type='application/json')
         self.assertStatus(response, 204)
-        response = self.client.get("/topics/translations/1/EN")
+        response = self.client.get("/topics/translations/1/en")
         self.assertEquals(response.json.get('name'), "TopicA")
-        response = self.client.delete("/topics/translations/1/EN")
+        response = self.client.delete("/topics/translations/1/en")
         self.assertStatus(response, 204)
-        response = self.client.get("/topics/translations/1/EN")
+        response = self.client.get("/topics/translations/1/en")
         self.assert404(response)
+
+
+class TestCSV(ApiTest):
+    def test_csv(self):
+        spain_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP'
+        ))
+        response = self.client.get("/countries/ESP?format=csv")
+        self.assert404(response)
+        response = self.client.post("/countries", data=spain_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/countries/ESP?format=csv")
+        self.assertEquals(response.data, "faoURI;iso2;id;iso3\nNone;ES;1;ESP;\n")
+
+
+class TestJSONP(ApiTest):
+    def test_jsonp(self):
+        spain_json = json.dumps(dict(
+           iso2='ES',
+           iso3='ESP',
+           id=1,
+           faoURI='http://aims.fao.org/aos/geopolitical.owl#Spain',
+        ))
+        response = self.client.get("/countries/ESP?format=jsonp")
+        self.assert404(response)
+        response = self.client.post("/countries", data=spain_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/countries/ESP?format=jsonp")
+        self.assertEquals(response.data, "callback(" + spain_json + ");")
+
 
 if __name__ == '__main__':
     unittest.main()
