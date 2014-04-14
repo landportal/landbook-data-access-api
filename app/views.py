@@ -150,9 +150,9 @@ class IndicatorListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        indicator = Indicator(request.json.get("id"), request.json.get("name"),
-                              request.json.get("description"), request.json.get("preferable_tendency"),  request.json.get("measurement_unit_id"),
-                              request.json.get("dataset_id"), request.json.get("compound_indicator_id"))
+        indicator = Indicator(request.json.get("id"), request.json.get("preferable_tendency"),
+                              request.json.get("measurement_unit_id"), request.json.get("dataset_id"),
+                              request.json.get("compound_indicator_id"), request.json.get("starred"))
         indicator.type = request.json.get("type")
         indicator.topic_id = request.json.get("topic_id")
         indicator.preferable_tendency = request.json.get("preferable_tendency")
@@ -285,6 +285,23 @@ class IndicatorCompatibleAPI(Resource):
                         and ind is not indicator]
         translate_indicator_list(compatibles)
         return response_xml_or_json_list(request, compatibles, 'indicators', 'indicator')
+
+
+class IndicatorStarredAPI(Resource):
+    '''
+    Indicators starred URI
+    Methods: GET
+    '''
+
+    def get(self):
+        '''
+        List starred indicators
+        Response 200 OK
+        '''
+        indicators = indicator_service.get_all()
+        indicators = filter(lambda i: i.starred, indicators)
+        translate_indicator_list(indicators)
+        return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
 class UserListAPI(Resource):
@@ -1160,7 +1177,7 @@ class TopicListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        topic = Topic(request.json.get("id"), request.json.get("name"))
+        topic = Topic(request.json.get("id"))
         if topic.id is not None:
             value_service.insert(topic)
             return {'URI': url_for('topics', id=topic.id)}, 201  # returns the URI for the new dataset
@@ -1328,9 +1345,7 @@ class ObservationByPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         if country_service.get_by_code(id) is not None:
             country = country_service.get_by_code(id)
             observations = filter_observations_by_date_range(country.observations, from_date, to_date)
@@ -1371,9 +1386,7 @@ class IndicatorByPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         if indicator_service.get_by_code(id) is not None:
             observations = observation_service.get_all()
             observations = [obs for obs in observations if obs.indicator_id == id]
@@ -1396,9 +1409,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         if country_service.get_by_code(iso3) is not None and indicator_service.get_by_code(indicator_id):
             country = country_service.get_by_code(iso3)
             observations = observation_service.get_all()
@@ -1423,9 +1434,7 @@ class IndicatorAverageByPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         observations = observation_service.get_all()
         observations = [obs for obs in observations if obs.indicator_id == id]
         observations = filter_observations_by_date_range(observations, from_date, to_date)
@@ -1793,6 +1802,7 @@ api.add_resource(IndicatorTranslationListAPI, '/indicators/translations', endpoi
 api.add_resource(IndicatorTranslationAPI, '/indicators/translations/<indicator_id>/<lang_code>', endpoint='indicator_translations')
 api.add_resource(TopicTranslationListAPI, '/topics/translations', endpoint='topic_translation_list')
 api.add_resource(TopicTranslationAPI, '/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
+api.add_resource(IndicatorStarredAPI, '/indicators/starred', endpoint='indicator_starred')
 
 
 def translate_indicator_list(indicators):
@@ -1911,6 +1921,13 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
             or (isinstance(time, YearInterval) and to_date.year <= time.year <= from_date.year)
 
     return filter(filter_key, observations) if from_date is not None and to_date is not None else observations
+
+
+def str_date_to_date(date_from, date_to):
+        if date_from is not None and date_to is not None:
+            from_date = datetime.strptime(date_from, "%Y%m%d").date()
+            to_date = datetime.strptime(date_to, "%Y%m%d").date()
+        return from_date, to_date
 
 
 def filter_by_region_and_top(id):
