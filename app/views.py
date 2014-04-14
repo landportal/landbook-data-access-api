@@ -59,11 +59,11 @@ class CountryListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("fao_URI"))
+        country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("faoURI"))
         country.is_part_of_id = request.json.get("is_part_of_id")
         if country.iso2 is not None and country.iso3 is not None:
             country_service.insert(country)
-            return {'URI': url_for('countries', code=country.iso3)}, 201 #returns the URI for the new country
+            return {'URI': url_for('countries', code=country.iso3)}, 201  # returns the URI for the new country
         abort(400)  # in case something is wrong
 
     def put(self):
@@ -113,7 +113,7 @@ class CountryAPI(Resource):
         country = country_service.get_by_code(code)
         if country is not None:
             country.iso2 = request.json.get("iso2")
-            country.fao_URI = request.json.get("fao_URI")
+            country.fao_URI = request.json.get("faoURI")
             country.name = request.json.get("name")
             country_service.update(country)
             return {}, 204
@@ -158,10 +158,10 @@ class IndicatorListAPI(Resource):
         indicator.preferable_tendency = request.json.get("preferable_tendency")
         if request.json.get("last_update") is not None:
             indicator.last_update = datetime.fromtimestamp(long(request.json.get("last_update")))
-        if indicator.name is not None:
+        if indicator.id is not None:
             indicator_service.insert(indicator)
-            return {'URI': url_for('indicators', id=indicator.id)}, 201 #returns the URI for the new indicator
-        abort(400) # in case something is wrong
+            return {'URI': url_for('indicators', id=indicator.id)}, 201  # returns the URI for the new indicator
+        abort(400)  # in case something is wrong
 
     def put(self):
         '''
@@ -1161,7 +1161,7 @@ class TopicListAPI(Resource):
         @return: URI
         '''
         topic = Topic(request.json.get("id"), request.json.get("name"))
-        if topic.name is not None:
+        if topic.id is not None:
             value_service.insert(topic)
             return {'URI': url_for('topics', id=topic.id)}, 201  # returns the URI for the new dataset
         abort(400)  # in case something is wrong
@@ -1808,7 +1808,7 @@ def translate_indicator(indicator, lang=None):
     if translation is not None:
         indicator.name = translation.name
         indicator.description = translation.description
-        indicator.other_parseable_fields = ['name, description']
+        indicator.other_parseable_fields = ['name', 'description']
 
 
 def translate_region_list(regions):
