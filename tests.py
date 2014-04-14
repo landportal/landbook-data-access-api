@@ -130,8 +130,6 @@ class TestCountry(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/countries/ESP/indicators/1")
         self.assertEquals(response.json.get('id'), "1")
-        self.assertEquals(response.json.get('name'), "donation")
-        self.assertEquals(response.json.get('description'), "A gives a donation to B")
         response = self.client.delete("/countries/ESP")
         self.assertStatus(response, 204)
         response = self.client.delete("/indicators")
@@ -195,11 +193,7 @@ class TestCountry(ApiTest):
         indicator = response.json[0]
         indicator2 = response.json[1]
         self.assertEquals(indicator['id'], "1")
-        self.assertEquals(indicator['name'], "donation")
-        self.assertEquals(indicator['description'], "A gives a donation to B")
         self.assertEquals(indicator2['id'], "2")
-        self.assertEquals(indicator2['name'], "donation")
-        self.assertEquals(indicator2['description'], "B gives a donation to A")
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
         response = self.client.get("/indicators")
@@ -232,12 +226,10 @@ class TestIndicator(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/indicators/1")
         self.assertEquals(response.json.get('id'), "1")
-        self.assertEquals(response.json.get('name'), "donation")
-        self.assertEquals(response.json.get('description'), "donation from A to B")
         response = self.client.put("/indicators/1", data=indicator_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/indicators/1")
-        self.assertEquals(response.json.get('description'), "donation from B to A")
+        self.assertEquals(response.json.get('id'), "1")
         response = self.client.delete("/indicators/1")
         self.assertStatus(response, 204)
         response = self.client.get("/indicators/1")
@@ -270,18 +262,11 @@ class TestIndicator(ApiTest):
         donation = response.json[0]
         receiver = response.json[1]
         self.assertEquals(donation['id'], "1")
-        self.assertEquals(donation['name'], "donation")
-        self.assertEquals(donation['description'], "donation from A to B")
         self.assertEquals(receiver['id'], "2")
-        self.assertEquals(receiver['name'], "receiver")
-        self.assertEquals(receiver['description'], "receives a donation from B")
         response = self.client.put("/indicators", data=indicators_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/indicators")
-        donation = response.json[0]
-        receiver = response.json[1]
-        self.assertEquals(donation['description'], "donation from B to A")
-        self.assertEquals(receiver['description'], "receives a donation from A")
+        self.assertEquals(len(response.json), 2)
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
         response = self.client.get("/indicators")
@@ -511,6 +496,34 @@ class TestIndicator(ApiTest):
         self.assertEquals(indicator['id'], "2")
         response = self.client.get("/indicators/3/compatible")
         self.assertEquals(len(response.json), 0)
+        response = self.client.delete("/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+
+    def test_starred(self):
+        donation_json = json.dumps(dict(
+            id=1,
+            starred=False
+        ))
+        receiver_json = json.dumps(dict(
+            id=2,
+            starred=True
+        ))
+        response = self.client.get("/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.post("/indicators", data=donation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/indicators", data=receiver_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/indicators/starred")
+        self.assertEquals(len(response.json), 1)
+        receiver = response.json[0]
+        self.assertEquals(receiver['id'], "2")
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
         response = self.client.get("/indicators")
@@ -1122,8 +1135,6 @@ class TestDataSource(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/datasources/1/indicators/1")
         self.assertEquals(response.json.get('id'), "1")
-        self.assertEquals(response.json.get('name'), "donation")
-        self.assertEquals(response.json.get('description'), "A gives a donation to B")
         response = self.client.delete("/datasources/1")
         self.assertStatus(response, 204)
         response = self.client.delete("/indicators")
@@ -1196,11 +1207,7 @@ class TestDataSource(ApiTest):
         indicator = response.json[0]
         indicator2 = response.json[1]
         self.assertEquals(indicator['id'], "1")
-        self.assertEquals(indicator['name'], "donation")
-        self.assertEquals(indicator['description'], "A gives a donation to B")
         self.assertEquals(indicator2['id'], "2")
-        self.assertEquals(indicator2['name'], "donation")
-        self.assertEquals(indicator2['description'], "B gives a donation to A")
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
         response = self.client.get("/indicators")
@@ -1739,11 +1746,11 @@ class TestTopic(ApiTest):
         response = self.client.post("/topics", data=topic_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/topics/1")
-        self.assertEquals(response.json.get('name'), "Land rights")
+        self.assertEquals(response.json.get('id'), "1")
         response = self.client.put("/topics/1", data=topic_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/topics/1")
-        self.assertEquals(response.json.get('name'), "Rural indicators")
+        self.assertEquals(response.json.get('id'), "1")
         response = self.client.delete("/topics/1")
         self.assertStatus(response, 204)
         response = self.client.get("/topics/1")
@@ -1771,17 +1778,11 @@ class TestTopic(ApiTest):
         response = self.client.post("/topics", data=topic2_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/topics")
-        topic1 = response.json[0]
-        topic2 = response.json[1]
-        self.assertEquals(topic1['name'], "Land rights")
-        self.assertEquals(topic2['name'], "Rural indicators")
+        self.assertEquals(len(response.json), 2)
         response = self.client.put("/topics", data=topics_updated, content_type='application/json')
         self.assertStatus(response, 204)
         response = self.client.get("/topics")
-        topic1 = response.json[0]
-        topic2 = response.json[1]
-        self.assertEquals(topic1['name'], "Land")
-        self.assertEquals(topic2['name'], "Rural")
+        self.assertEquals(len(response.json), 2)
         response = self.client.delete("/topics")
         self.assertStatus(response, 204)
         response = self.client.get("/topics")
@@ -1808,8 +1809,6 @@ class TestTopic(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/topics/1/indicators/1")
         self.assertEquals(response.json.get('id'), "1")
-        self.assertEquals(response.json.get('name'), "donation")
-        self.assertEquals(response.json.get('description'), "A gives a donation to B")
         response = self.client.delete("/topics/1")
         self.assertStatus(response, 204)
         response = self.client.delete("/indicators")
@@ -1855,13 +1854,10 @@ class TestTopic(ApiTest):
         response = self.client.post("/indicators", data=indicator2_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/topics/1/indicators")
-        user = response.json[0]
-        user2 = response.json[1]
-        self.assertEquals(user['id'], "1")
-        self.assertEquals(user['name'], "donation")
-        self.assertEquals(user['description'], "A gives a donation to B")
-        self.assertEquals(user2['name'], "donationB")
-        self.assertEquals(user2['description'], "B gives a donation to A")
+        indicator = response.json[0]
+        indicator2 = response.json[1]
+        self.assertEquals(indicator['id'], "1")
+        self.assertEquals(indicator2['id'], "2")
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
         response = self.client.get("/indicators")
@@ -2389,8 +2385,6 @@ class TestRelatedIndicator(ApiTest):
         response = self.client.get("/indicators/HDI/related")
         indicator = response.json[0]
         self.assertEquals(indicator['id'], "DHI")
-        self.assertEquals(indicator['name'], "donation")
-        self.assertEquals(indicator['description'], "B gives a donation to A")
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
         response = self.client.get("/indicators")
