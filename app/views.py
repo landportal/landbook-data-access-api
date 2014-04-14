@@ -8,7 +8,7 @@ from flask.wrappers import Response
 from flask.helpers import url_for
 from flask import json, render_template
 from app import app
-from app.utils import JSONConverter, XMLConverter, DictionaryList2ObjectList
+from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
     Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
@@ -16,7 +16,6 @@ from app.services import CountryService, IndicatorService, UserService, Organiza
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
 from flask import request
 from datetime import datetime
-import utils
 
 api = Api(app)
 country_service = CountryService()
@@ -35,6 +34,7 @@ indicator_translation_service = IndicatorTranslationService()
 topic_translation_service = TopicTranslationService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
+csv_converter = CSVConverter()
 list_converter = DictionaryList2ObjectList()
 
 
@@ -59,11 +59,11 @@ class CountryListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("fao_URI"))
+        country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("faoURI"))
         country.is_part_of_id = request.json.get("is_part_of_id")
         if country.iso2 is not None and country.iso3 is not None:
             country_service.insert(country)
-            return {'URI': url_for('countries', code=country.iso3)}, 201 #returns the URI for the new country
+            return {'URI': url_for('countries', code=country.iso3)}, 201  # returns the URI for the new country
         abort(400)  # in case something is wrong
 
     def put(self):
@@ -113,7 +113,7 @@ class CountryAPI(Resource):
         country = country_service.get_by_code(code)
         if country is not None:
             country.iso2 = request.json.get("iso2")
-            country.fao_URI = request.json.get("fao_URI")
+            country.fao_URI = request.json.get("faoURI")
             country.name = request.json.get("name")
             country_service.update(country)
             return {}, 204
@@ -150,18 +150,18 @@ class IndicatorListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        indicator = Indicator(request.json.get("id"), request.json.get("name"),
-                              request.json.get("description"), request.json.get("preferable_tendency"),  request.json.get("measurement_unit_id"),
-                              request.json.get("dataset_id"), request.json.get("compound_indicator_id"))
+        indicator = Indicator(request.json.get("id"), request.json.get("preferable_tendency"),
+                              request.json.get("measurement_unit_id"), request.json.get("dataset_id"),
+                              request.json.get("compound_indicator_id"), request.json.get("starred"))
         indicator.type = request.json.get("type")
         indicator.topic_id = request.json.get("topic_id")
         indicator.preferable_tendency = request.json.get("preferable_tendency")
         if request.json.get("last_update") is not None:
             indicator.last_update = datetime.fromtimestamp(long(request.json.get("last_update")))
-        if indicator.name is not None:
+        if indicator.id is not None:
             indicator_service.insert(indicator)
-            return {'URI': url_for('indicators', id=indicator.id)}, 201 #returns the URI for the new indicator
-        abort(400) # in case something is wrong
+            return {'URI': url_for('indicators', id=indicator.id)}, 201  # returns the URI for the new indicator
+        abort(400)  # in case something is wrong
 
     def put(self):
         '''
@@ -285,6 +285,23 @@ class IndicatorCompatibleAPI(Resource):
                         and ind is not indicator]
         translate_indicator_list(compatibles)
         return response_xml_or_json_list(request, compatibles, 'indicators', 'indicator')
+
+
+class IndicatorStarredAPI(Resource):
+    '''
+    Indicators starred URI
+    Methods: GET
+    '''
+
+    def get(self):
+        '''
+        List starred indicators
+        Response 200 OK
+        '''
+        indicators = indicator_service.get_all()
+        indicators = filter(lambda i: i.starred, indicators)
+        translate_indicator_list(indicators)
+        return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
 class UserListAPI(Resource):
@@ -1160,8 +1177,8 @@ class TopicListAPI(Resource):
         Response 201 CREATED
         @return: URI
         '''
-        topic = Topic(request.json.get("id"), request.json.get("name"))
-        if topic.name is not None:
+        topic = Topic(request.json.get("id"))
+        if topic.id is not None:
             value_service.insert(topic)
             return {'URI': url_for('topics', id=topic.id)}, 201  # returns the URI for the new dataset
         abort(400)  # in case something is wrong
@@ -1328,9 +1345,7 @@ class ObservationByPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         if country_service.get_by_code(id) is not None:
             country = country_service.get_by_code(id)
             observations = filter_observations_by_date_range(country.observations, from_date, to_date)
@@ -1371,9 +1386,7 @@ class IndicatorByPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         if indicator_service.get_by_code(id) is not None:
             observations = observation_service.get_all()
             observations = [obs for obs in observations if obs.indicator_id == id]
@@ -1396,9 +1409,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         if country_service.get_by_code(iso3) is not None and indicator_service.get_by_code(indicator_id):
             country = country_service.get_by_code(iso3)
             observations = observation_service.get_all()
@@ -1423,9 +1434,7 @@ class IndicatorAverageByPeriodAPI(Resource):
         '''
         date_from = request.args.get("from")
         date_to = request.args.get("to")
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d")
-            to_date = datetime.strptime(date_to, "%Y%m%d")
+        from_date, to_date = str_date_to_date(date_from, date_to)
         observations = observation_service.get_all()
         observations = [obs for obs in observations if obs.indicator_id == id]
         observations = filter_observations_by_date_range(observations, from_date, to_date)
@@ -1793,6 +1802,7 @@ api.add_resource(IndicatorTranslationListAPI, '/indicators/translations', endpoi
 api.add_resource(IndicatorTranslationAPI, '/indicators/translations/<indicator_id>/<lang_code>', endpoint='indicator_translations')
 api.add_resource(TopicTranslationListAPI, '/topics/translations', endpoint='topic_translation_list')
 api.add_resource(TopicTranslationAPI, '/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
+api.add_resource(IndicatorStarredAPI, '/indicators/starred', endpoint='indicator_starred')
 
 
 def translate_indicator_list(indicators):
@@ -1805,9 +1815,10 @@ def translate_indicator(indicator, lang=None):
     if lang is None:
         lang = get_requested_lang()
     translation = indicator_translation_service.get_by_codes(indicator.id, lang)
-    indicator.name = translation.name
-    indicator.description = translation.description
-    indicator.other_parseable_fields = ['name, description']
+    if translation is not None:
+        indicator.name = translation.name
+        indicator.description = translation.description
+        indicator.other_parseable_fields = ['name', 'description']
 
 
 def translate_region_list(regions):
@@ -1820,8 +1831,9 @@ def translate_region(region, lang=None):
     if lang is None:
         lang = get_requested_lang()
     translation = region_translation_service.get_by_codes(region.id, lang)
-    region.name = translation.name
-    region.other_parseable_fields = ['name']
+    if translation is not None:
+        region.name = translation.name
+        region.other_parseable_fields = ['name']
 
 
 def translate_topic_list(topics):
@@ -1834,8 +1846,9 @@ def translate_topic(topic, lang=None):
     if lang is None:
         lang = get_requested_lang()
     translation = topic_translation_service.get_by_codes(topic.id, lang)
-    topic.translation_name = translation.name
-    topic.other_parseable_fields = ['translation_name']
+    if translation is not None:
+        topic.translation_name = translation.name
+        topic.other_parseable_fields = ['translation_name']
 
 
 def get_requested_lang():
@@ -1843,25 +1856,40 @@ def get_requested_lang():
     return lang
 
 
-def translate_indicator(indicator, lang=None):
-    if lang is None:
-        lang = get_requested_lang()
-    translation = indicator_translation_service.get_by_codes(indicator.id, lang)
-    indicator.name = translation.name
-    indicator.description = translation.description
-
-
 def is_xml_accepted(request):
     '''
-    Returns if json is accepted or not, returns json as default
+    Returns if xml is accepted or not
     '''
     return request.args.get('format') == "xml"
+
+
+def is_jsonp_accepted(request):
+    '''
+    Returns if jsonp is accepted or not
+    '''
+    return request.args.get('format') == "jsonp"
+
+
+def is_csv_accepted(request):
+    '''
+    Returns if jsonp is accepted or not
+    '''
+    return request.args.get('format') == "csv"
 
 
 def response_xml_or_json_item(request, item, item_string):
     if is_xml_accepted(request):
         return Response(xml_converter.object_to_xml(item,
                                                     item_string), mimetype='application/xml')
+    elif is_jsonp_accepted(request):
+        function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
+        response = function + '(' + json_converter.object_to_json(item) + ');'
+        return Response(response, mimetype='application/javascript')
+    elif is_csv_accepted(request):
+        response = Response(csv_converter.object_to_csv(item
+                                                    ), mimetype='text/csv', content_type='application/octet-stream')
+        response.headers["Content-Disposition"] = 'attachment; filename="' + item_string + '".csv'
+        return response
     else:
         return Response(json_converter.object_to_json(item
                                                       ), mimetype='application/json')
@@ -1871,6 +1899,15 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
     if is_xml_accepted(request):
         return Response(xml_converter.list_to_xml(collection,
                                                   collection_string, item_string), mimetype='application/xml')
+    elif is_jsonp_accepted(request):
+        function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
+        response = function + '(' + json_converter.list_to_json(collection) + ');'
+        return Response(response, mimetype='application/javascript')
+    elif is_csv_accepted(request):
+        response = Response(csv_converter.list_to_csv(collection
+                                ), mimetype='text/csv', content_type='application/octet-stream')
+        response.headers["Content-Disposition"] = 'attachment; filename="' + collection_string + '".csv'
+        return response
     else:
         return Response(json_converter.list_to_json(collection
                                                     ), mimetype='application/json')
@@ -1884,6 +1921,13 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
             or (isinstance(time, YearInterval) and to_date.year <= time.year <= from_date.year)
 
     return filter(filter_key, observations) if from_date is not None and to_date is not None else observations
+
+
+def str_date_to_date(date_from, date_to):
+        if date_from is not None and date_to is not None:
+            from_date = datetime.strptime(date_from, "%Y%m%d").date()
+            to_date = datetime.strptime(date_to, "%Y%m%d").date()
+        return from_date, to_date
 
 
 def filter_by_region_and_top(id):
