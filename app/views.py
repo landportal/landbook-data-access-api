@@ -1750,7 +1750,61 @@ def barChart():
         Visualization of barchart
         '''
         options, title, description = get_visualization_json(request, 'bar')
-        return render_template('graphic.html', options=options, title=title, description=description)
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/piechart')
+def pieChart():
+        '''
+        Visualization of piechart
+        '''
+        options, title, description = get_visualization_json(request, 'pie')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/linechart')
+def lineChart():
+        '''
+        Visualization of linechart
+        '''
+        options, title, description = get_visualization_json(request, 'line')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/areachart')
+def areaChart():
+        '''
+        Visualization of areachart
+        '''
+        options, title, description = get_visualization_json(request, 'area')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/scatterchart')
+def scatterChart():
+        '''
+        Visualization of scatterchart
+        '''
+        options, title, description = get_visualization_json(request, 'scatter')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/polarchart')
+def polarChart():
+        '''
+        Visualization of polarchart
+        '''
+        options, title, description = get_visualization_json(request, 'polar')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/table')
+def table():
+        '''
+        Visualization of table
+        '''
+        options, title, description = get_visualization_json(request, 'table')
+        return render_template('table.html', options=options, title=title, description=description)
 
 
 api.add_resource(CountryListAPI, '/countries', endpoint='countries_list')
@@ -1990,18 +2044,22 @@ def get_visualization_json(request, chartType):
             'title': yTag
         },
         'series': series,
-        'serieColours': colours
+        'serieColours': colours,
+        'valueOnItem': {
+            'show': False
+        }
     }
-    return json.dumps(json_object), title, description
+    return json_object, title, description
 
 
 def get_intervals(times):
-    if isinstance(times[0], Instant):
-        return [time.timestamp for time in times]
-    elif isinstance(times[0], YearInterval):
-        return [time.year for time in times]
-    elif isinstance(times[0], Interval):
-        return [time.start_time for time in times]
+    if len(times) > 1:
+        if isinstance(times[0], Instant):
+            return [time.timestamp for time in times]
+        elif isinstance(times[0], YearInterval):
+            return [time.year for time in times]
+        elif isinstance(times[0], Interval):
+            return [time.start_time for time in times]
 
 
 class EmptyObject():

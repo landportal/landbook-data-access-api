@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table - Landportal.info</title>
+    <meta charset="UTF-8"/>
+    <link href="{{ url_for('static', filename='wesCountry.min.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h2>{{ title }}</h2>
+    <h3>{{ description }}</h3>
+    <table class="sortable pages">
+			<thead>
+				<tr>
+					<th data-sort-type="text">Country</th>
+					<th data-sort-type="number">Year</th>
+					<th data-sort-type="number">Value</th>
+				</tr>
+			</thead>
+            <tbody>
+            {% for i in range(options['series']|length) %}
+                {% for j in range(options['xAxis']['values']|length) %}
+                    <tr>
+                        <td>{{ options['series'][i]['name'] }}</td>
+                        <td>{{ options['xAxis']['values'][j] }}</td>
+                        <td>{{ options['series'][i]['values'][j] }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+			</tbody>
+		</table>
+        <script type="text/javascript" src="{{ url_for('static', filename='wesCountry.js') }}"></script>
+</body>
+</html>
