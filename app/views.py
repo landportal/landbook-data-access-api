@@ -2021,8 +2021,8 @@ def get_visualization_json(request, chartType):
     description = request.args.get('description') if request.args.get('description') is not None else ''
     xTag = request.args.get('xTag')
     yTag = request.args.get('yTag')
-    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d") if request.args.get('from') is not None else None
-    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d") if request.args.get('to') is not None else None
+    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
+    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
     series = []
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
