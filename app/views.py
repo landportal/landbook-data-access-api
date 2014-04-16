@@ -1005,6 +1005,7 @@ class DataSourceIndicatorListAPI(Resource):
         indicators = []
         for dataset in datasets:
             indicators.extend(dataset.indicators)
+        translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
@@ -1027,6 +1028,7 @@ class DataSourceIndicatorAPI(Resource):
                     indicator = ind
         if indicator is None:
             abort(404)
+        translate_indicator(indicator)
         return response_xml_or_json_item(request, indicator, 'indicator')
 
 
@@ -1041,29 +1043,49 @@ class ObservationByTwoAPI(Resource):
         Show observations
         Response 200 OK
         '''
+
+        def append_objects():
+            translate_region(country)
+            translate_indicator(indicator)
+            for observation in observations:
+                observation.country = country
+                observation.indicator = indicator
+                observation.ref_time = observation.ref_time
+                observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+
         if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_first_filter)
+            indicator = indicator_service.get_by_code(id_second_filter)
             observations = [observation for observation in country.observations
                             if observation.indicator_id == id_second_filter]
+            append_objects()
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_second_filter)
+            indicator = indicator_service.get_by_code(id_first_filter)
             observations = [observation for observation in country.observations
                             if observation.indicator_id == id_first_filter]
+            append_objects()
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             observations = []
             region = region_service.get_by_code(id_first_filter)
+            indicator = indicator_service.get_by_code(id_second_filter)
+            translate_indicator(indicator)
             for country in country_service.get_all():
                 if country.is_part_of_id == region.id:
                     country_observations = country.observations
                     for observation in country_observations:
                         if observation.indicator_id == id_second_filter:
+                            observation.country = country
+                            translate_region(country)
+                            observation.indicator = indicator
+                            observation.ref_time = observation.ref_time
+                            observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
                             observations.append(observation)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         else:
             abort(400)
-
 
 class ValueListAPI(Resource):
     '''
