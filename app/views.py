@@ -1277,7 +1277,9 @@ class TopicIndicatorListAPI(Resource):
         List all indicators
         Response 200 OK
         '''
-        return response_xml_or_json_list(request, topic_service.get_by_code(topic_id).indicators, 'indicators', 'indicator')
+        indicators = topic_service.get_by_code(topic_id).indicators
+        translate_indicator_list(indicators)
+        return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
 class TopicIndicatorAPI(Resource):
@@ -1297,6 +1299,7 @@ class TopicIndicatorAPI(Resource):
                 selected_indicator = indicator
         if selected_indicator is None:
             abort(404)
+        translate_indicator(selected_indicator)
         return response_xml_or_json_item(request, selected_indicator, 'indicator')
 
 

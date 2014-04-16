@@ -123,7 +123,7 @@ class DictionaryList2ObjectList(object):
 
 
 def check_if_date(field_name, object, row):
-    if type(getattr(row, field_name)) is datetime.date:
+    if type(getattr(row, field_name)) is datetime.date or type(getattr(row, field_name)) is datetime.datetime:
         object[field_name] = time.mktime(getattr(row, field_name).timetuple())
     else:
         object[field_name] = getattr(row, field_name)
