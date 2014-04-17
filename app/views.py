@@ -261,7 +261,7 @@ class IndicatorAverageAPI(Resource):
         Response 200 OK
         '''
         top = filter_by_region_and_top(id)[1]
-        average = observation_average(top)
+        average = observations_average(top)
         element = EmptyObject()
         element.value = average
         return response_xml_or_json_item(request, element, 'average')
@@ -1035,7 +1035,7 @@ class DataSourceIndicatorAPI(Resource):
 class ObservationByTwoAPI(Resource):
     '''
     URI
-    Methods: GET, PUT, DELETE
+    Methods: GET
     '''
 
     def get(self, id_first_filter, id_second_filter):
@@ -1044,48 +1044,75 @@ class ObservationByTwoAPI(Resource):
         Response 200 OK
         '''
 
-        def append_objects():
-            translate_region(country)
-            translate_indicator(indicator)
-            for observation in observations:
-                observation.country = country
-                observation.indicator = indicator
-                observation.ref_time = observation.ref_time
-                observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+        observations = get_observations_by_two_filters(id_first_filter, id_second_filter)
+        if observations is not None:
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        abort(400)
 
-        if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
+
+class ObservationByTwoAverageAPI(Resource):
+    '''
+    URI
+    Methods: GET
+    '''
+
+    def get(self, id_first_filter, id_second_filter):
+        '''
+        Show observations average
+        Response 200 OK
+        '''
+
+        observations = get_observations_by_two_filters(id_first_filter, id_second_filter)
+        if observations is not None:
+            average = EmptyObject()
+            average.value = observations_average(observations)
+            return response_xml_or_json_item(request, average, 'average')
+        abort(400)
+
+
+def get_observations_by_two_filters(id_first_filter, id_second_filter):
+    def append_objects():
+        translate_region(country)
+        translate_indicator(indicator)
+        for observation in observations:
+            observation.country = country
+            observation.indicator = indicator
+            observation.ref_time = observation.ref_time
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+
+    observations = None
+    if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_first_filter)
             indicator = indicator_service.get_by_code(id_second_filter)
             observations = [observation for observation in country.observations
                             if observation.indicator_id == id_second_filter]
             append_objects()
-            return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
-            country = country_service.get_by_code(id_second_filter)
-            indicator = indicator_service.get_by_code(id_first_filter)
-            observations = [observation for observation in country.observations
-                            if observation.indicator_id == id_first_filter]
-            append_objects()
-            return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
-            observations = []
-            region = region_service.get_by_code(id_first_filter)
-            indicator = indicator_service.get_by_code(id_second_filter)
-            translate_indicator(indicator)
-            for country in country_service.get_all():
-                if country.is_part_of_id == region.id:
-                    country_observations = country.observations
-                    for observation in country_observations:
-                        if observation.indicator_id == id_second_filter:
-                            observation.country = country
-                            translate_region(country)
-                            observation.indicator = indicator
-                            observation.ref_time = observation.ref_time
-                            observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
-                            observations.append(observation)
-            return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        else:
-            abort(400)
+    elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
+        country = country_service.get_by_code(id_second_filter)
+        indicator = indicator_service.get_by_code(id_first_filter)
+        observations = [observation for observation in country.observations
+                        if observation.indicator_id == id_first_filter]
+        append_objects()
+    elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
+        observations = []
+        region = region_service.get_by_code(id_first_filter)
+        indicator = indicator_service.get_by_code(id_second_filter)
+        translate_indicator(indicator)
+        for country in country_service.get_all():
+            if country.is_part_of_id == region.id:
+                country_observations = country.observations
+                for observation in country_observations:
+                    if observation.indicator_id == id_second_filter:
+                        observation.country = country
+                        translate_region(country)
+                        observation.indicator = indicator
+                        observation.ref_time = observation.ref_time
+                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+                        observations.append(observation)
+    return observations if observations is not None else None
+
+
+
 
 class ValueListAPI(Resource):
     '''
@@ -1464,7 +1491,7 @@ class IndicatorAverageByPeriodAPI(Resource):
         observations = [obs for obs in observations if obs.indicator_id == id]
         observations = filter_observations_by_date_range(observations, from_date, to_date)
         if len(observations) > 0:
-            average = observation_average(observations)
+            average = observations_average(observations)
             element = EmptyObject()
             element.value = average
         else:
@@ -1850,6 +1877,7 @@ api.add_resource(CountriesIndicatorAPI, '/countries/<iso3>/indicators/<indicator
 api.add_resource(ObservationListAPI, '/observations', endpoint='observations_list')
 api.add_resource(ObservationAPI, '/observations/<id>', endpoint='observations')
 api.add_resource(ObservationByTwoAPI, '/observations/<id_first_filter>/<id_second_filter>', endpoint='observations_by_two')
+api.add_resource(ObservationByTwoAverageAPI, '/observations/<id_first_filter>/<id_second_filter>/average', endpoint='observations_by_two_average')
 api.add_resource(RegionListAPI, '/regions', endpoint='regions_list')
 api.add_resource(RegionAPI, '/regions/<id>', endpoint='regions')
 api.add_resource(RegionsCountryListAPI, '/regions/<id>/countries', endpoint='regions_countries_list')
@@ -2028,12 +2056,14 @@ def filter_by_region_and_top(id):
     return countries, top
 
 
-def observation_average(observations):
+def observations_average(observations):
     if len(observations) == 1:
-        average = long(observations[0].value.value)
+        average = observations[0].value.value
     else:
-        average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), observations) / len(observations)
-    return average
+        average = 0
+        for observation in observations:
+            average += float(observation.value.value)
+    return float(average)/len(observations)
 
 
 def get_visualization_json(request, chartType):
