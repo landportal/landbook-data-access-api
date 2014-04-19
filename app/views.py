@@ -61,6 +61,7 @@ class CountryListAPI(Resource):
         '''
         country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("faoURI"))
         country.is_part_of_id = request.json.get("is_part_of_id")
+        country.un_code = request.json.get("un_code")
         if country.iso2 is not None and country.iso3 is not None:
             country_service.insert(country)
             return {'URI': url_for('countries', code=country.iso3)}, 201  # returns the URI for the new country

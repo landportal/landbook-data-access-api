@@ -137,7 +137,7 @@ def row2dict(row):
         return None
     d = {}
     if hasattr(row, '__table__'):
-        for column in row.__table__.columns:
+        for column in row.__mapper__.columns:
             check_if_date(column.name, d, row)
         if hasattr(row, 'other_parseable_fields'):
             for field in row.other_parseable_fields:

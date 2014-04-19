@@ -2674,23 +2674,22 @@ class TestCSV(ApiTest):
         response = self.client.post("/countries", data=spain_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/countries/ESP?format=csv")
-        self.assertEquals(response.data, "faoURI;iso2;id;iso3\nNone;ES;1;ESP;\n")
+        self.assertEquals(response.data, "is_part_of_id;type;faoURI;iso3;iso2;un_code;id\nNone;countries;None;ESP;ES;None;1;\n")
 
 
 class TestJSONP(ApiTest):
     def test_jsonp(self):
-        spain_json = json.dumps(dict(
-           iso2='ES',
-           iso3='ESP',
-           id=1,
-           faoURI='http://aims.fao.org/aos/geopolitical.owl#Spain',
+        topic_json = json.dumps(dict(
+           lang_code='en',
+           topic_id='1',
+           name='Topic'
         ))
-        response = self.client.get("/countries/ESP?format=jsonp")
+        response = self.client.get("/topics/translations/1/en?format=jsonp")
         self.assert404(response)
-        response = self.client.post("/countries", data=spain_json, content_type='application/json')
+        response = self.client.post("/topics/translations", data=topic_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/countries/ESP?format=jsonp")
-        self.assertEquals(response.data, "callback(" + spain_json + ");")
+        response = self.client.get("/topics/translations/1/en?format=jsonp")
+        self.assertEquals(response.data, "callback(" + topic_json + ");")
 
 
 if __name__ == '__main__':
