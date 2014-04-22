@@ -13,6 +13,20 @@ from model import models
 json_converter = JSONConverter()
 
 
+class MyProxyHack(object):
+    '''
+    Hack to proxy in testing, if not will fail because of bad ip address
+    @see http://stackoverflow.com/questions/14872829/get-ip-address-when-testing-flask-application-through-nosetests
+    '''
+
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        environ['REMOTE_ADDR'] = environ.get('REMOTE_ADDR', '127.0.0.1')
+        return self.app(environ, start_response)
+
+
 class ApiTest(TestCase):
     """
     Generic class for all test concerning Flask on this API
@@ -21,6 +35,7 @@ class ApiTest(TestCase):
         app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
         app.app.config['TESTING'] = True
         app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
+        app.app.wsgi_app = MyProxyHack(app.app.wsgi_app)
         return app.app
 
     def setUp(self):
