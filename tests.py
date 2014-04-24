@@ -13,6 +13,20 @@ from model import models
 json_converter = JSONConverter()
 
 
+class MyProxyHack(object):
+    '''
+    Hack to proxy in testing, if not will fail because of bad ip address
+    @see http://stackoverflow.com/questions/14872829/get-ip-address-when-testing-flask-application-through-nosetests
+    '''
+
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        environ['REMOTE_ADDR'] = environ.get('REMOTE_ADDR', '127.0.0.1')
+        return self.app(environ, start_response)
+
+
 class ApiTest(TestCase):
     """
     Generic class for all test concerning Flask on this API
@@ -21,6 +35,7 @@ class ApiTest(TestCase):
         app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
         app.app.config['TESTING'] = True
         app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
+        app.app.wsgi_app = MyProxyHack(app.app.wsgi_app)
         return app.app
 
     def setUp(self):
@@ -2674,23 +2689,22 @@ class TestCSV(ApiTest):
         response = self.client.post("/countries", data=spain_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/countries/ESP?format=csv")
-        self.assertEquals(response.data, "faoURI;iso2;id;iso3\nNone;ES;1;ESP;\n")
+        self.assertEquals(response.data, "is_part_of_id;type;faoURI;iso3;iso2;un_code;id\nNone;countries;None;ESP;ES;None;1;\n")
 
 
 class TestJSONP(ApiTest):
     def test_jsonp(self):
-        spain_json = json.dumps(dict(
-           iso2='ES',
-           iso3='ESP',
-           id=1,
-           faoURI='http://aims.fao.org/aos/geopolitical.owl#Spain',
+        topic_json = json.dumps(dict(
+           lang_code='en',
+           topic_id='1',
+           name='Topic'
         ))
-        response = self.client.get("/countries/ESP?format=jsonp")
+        response = self.client.get("/topics/translations/1/en?format=jsonp")
         self.assert404(response)
-        response = self.client.post("/countries", data=spain_json, content_type='application/json')
+        response = self.client.post("/topics/translations", data=topic_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/countries/ESP?format=jsonp")
-        self.assertEquals(response.data, "callback(" + spain_json + ");")
+        response = self.client.get("/topics/translations/1/en?format=jsonp")
+        self.assertEquals(response.data, "callback(" + topic_json + ");")
 
 
 if __name__ == '__main__':

@@ -38,6 +38,15 @@ csv_converter = CSVConverter()
 list_converter = DictionaryList2ObjectList()
 
 
+def localhost_decorator(f):
+    def call(*args, **kwargs):
+        if request.remote_addr == '127.0.0.1' or request.remote_addr == 'localhost':
+            return f(*args, **kwargs)
+        else:
+            abort(403)
+    return call
+
+
 class CountryListAPI(Resource):
     '''
     Countries collection URI
@@ -53,6 +62,7 @@ class CountryListAPI(Resource):
         translate_region_list(countries)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new country
@@ -61,11 +71,13 @@ class CountryListAPI(Resource):
         '''
         country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("faoURI"))
         country.is_part_of_id = request.json.get("is_part_of_id")
+        country.un_code = request.json.get("un_code")
         if country.iso2 is not None and country.iso3 is not None:
             country_service.insert(country)
             return {'URI': url_for('countries', code=country.iso3)}, 201  # returns the URI for the new country
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -76,6 +88,7 @@ class CountryListAPI(Resource):
         country_service.update_all(country_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -103,6 +116,7 @@ class CountryAPI(Resource):
         translate_region(country)
         return response_xml_or_json_item(request, country, 'country')
 
+    @localhost_decorator
     def put(self, code):
         '''
         If exists update country
@@ -120,6 +134,7 @@ class CountryAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, code):
         '''
         Delete country
@@ -144,6 +159,7 @@ class IndicatorListAPI(Resource):
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new indicator
@@ -163,6 +179,7 @@ class IndicatorListAPI(Resource):
             return {'URI': url_for('indicators', id=indicator.id)}, 201  # returns the URI for the new indicator
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -173,6 +190,7 @@ class IndicatorListAPI(Resource):
         indicator_service.update_all(indicator_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -200,6 +218,7 @@ class IndicatorAPI(Resource):
         translate_indicator(indicator)
         return response_xml_or_json_item(request, indicator, 'indicator')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update country
@@ -219,6 +238,7 @@ class IndicatorAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete country
@@ -261,7 +281,7 @@ class IndicatorAverageAPI(Resource):
         Response 200 OK
         '''
         top = filter_by_region_and_top(id)[1]
-        average = observation_average(top)
+        average = observations_average(top)
         element = EmptyObject()
         element.value = average
         return response_xml_or_json_item(request, element, 'average')
@@ -317,6 +337,7 @@ class UserListAPI(Resource):
         '''
         return response_xml_or_json_list(request, user_service.get_all(), 'users', 'user')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new user
@@ -330,6 +351,7 @@ class UserListAPI(Resource):
             return {'URI': url_for('users', id=user.id)}, 201  # returns the URI for the new user
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -340,6 +362,7 @@ class UserListAPI(Resource):
         user_service.update_all(user_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -366,6 +389,7 @@ class UserAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, user, 'user')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update country
@@ -384,6 +408,7 @@ class UserAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete country
@@ -406,6 +431,7 @@ class OrganizationListAPI(Resource):
         '''
         return response_xml_or_json_list(request, organization_service.get_all(), 'organizations', 'organization')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new organization
@@ -420,6 +446,7 @@ class OrganizationListAPI(Resource):
             return {'URI': url_for('organizations', id=organization.id)}, 201  # returns the URI for the new user
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -430,6 +457,7 @@ class OrganizationListAPI(Resource):
         organization_service.update_all(organization_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -456,6 +484,7 @@ class OrganizationAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, organization, 'organization')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update country
@@ -474,6 +503,7 @@ class OrganizationAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete country
@@ -572,6 +602,7 @@ class ObservationListAPI(Resource):
         '''
         return response_xml_or_json_list(request, observation_service.get_all(), 'observations', 'observation')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new observation
@@ -593,6 +624,7 @@ class ObservationListAPI(Resource):
             return {'URI': url_for('observations', id=observation.id)}, 201  # returns the URI for the new user
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -603,6 +635,7 @@ class ObservationListAPI(Resource):
         observation_service.update_all(observation_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -646,6 +679,7 @@ class ObservationAPI(Resource):
                 abort(404)
             return response_xml_or_json_item(request, response, 'observation')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update country
@@ -668,6 +702,7 @@ class ObservationAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete country
@@ -692,6 +727,7 @@ class RegionListAPI(Resource):
         translate_region_list(regions)
         return response_xml_or_json_list(request, regions, 'regions', 'region')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new region
@@ -708,6 +744,7 @@ class RegionListAPI(Resource):
             return {'URI': url_for('regions', id=region.id)}, 201 #returns the URI for the new region
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all regions given
@@ -718,6 +755,7 @@ class RegionListAPI(Resource):
         region_service.update_all(region_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all regions
@@ -745,6 +783,7 @@ class RegionAPI(Resource):
         translate_region(region)
         return response_xml_or_json_item(request, region, 'region')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update region
@@ -760,6 +799,7 @@ class RegionAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete country
@@ -824,6 +864,7 @@ class DataSourceListAPI(Resource):
         '''
         return response_xml_or_json_list(request, datasource_service.get_all(), 'datasources', 'datasource')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new datasource
@@ -838,6 +879,7 @@ class DataSourceListAPI(Resource):
             return {'URI': url_for('datasources', id=datasource.id)}, 201 #returns the URI for the new datasource
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all datasources given
@@ -848,6 +890,7 @@ class DataSourceListAPI(Resource):
         datasource_service.update_all(datasource_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all datasources
@@ -874,6 +917,7 @@ class DataSourceAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, datasource, 'datasource')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update datasource
@@ -891,6 +935,7 @@ class DataSourceAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete country
@@ -913,6 +958,7 @@ class DatasetListAPI(Resource):
         '''
         return response_xml_or_json_list(request, dataset_service.get_all(), 'datasets', 'dataset')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new dataset
@@ -929,6 +975,7 @@ class DatasetListAPI(Resource):
             return {'URI': url_for('datasets', id=dataset.id)}, 201 #returns the URI for the new dataset
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all datasets given
@@ -939,6 +986,7 @@ class DatasetListAPI(Resource):
         dataset_service.update_all(dataset_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all datasets
@@ -965,6 +1013,7 @@ class DatasetAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, dataset, 'dataset')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update dataset
@@ -981,6 +1030,7 @@ class DatasetAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete country
@@ -1005,6 +1055,7 @@ class DataSourceIndicatorListAPI(Resource):
         indicators = []
         for dataset in datasets:
             indicators.extend(dataset.indicators)
+        translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
@@ -1027,13 +1078,14 @@ class DataSourceIndicatorAPI(Resource):
                     indicator = ind
         if indicator is None:
             abort(404)
+        translate_indicator(indicator)
         return response_xml_or_json_item(request, indicator, 'indicator')
 
 
 class ObservationByTwoAPI(Resource):
     '''
     URI
-    Methods: GET, PUT, DELETE
+    Methods: GET
     '''
 
     def get(self, id_first_filter, id_second_filter):
@@ -1041,28 +1093,75 @@ class ObservationByTwoAPI(Resource):
         Show observations
         Response 200 OK
         '''
-        if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
+
+        observations = get_observations_by_two_filters(id_first_filter, id_second_filter)
+        if observations is not None:
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        abort(400)
+
+
+class ObservationByTwoAverageAPI(Resource):
+    '''
+    URI
+    Methods: GET
+    '''
+
+    def get(self, id_first_filter, id_second_filter):
+        '''
+        Show observations average
+        Response 200 OK
+        '''
+
+        observations = get_observations_by_two_filters(id_first_filter, id_second_filter)
+        if observations is not None:
+            average = EmptyObject()
+            average.value = observations_average(observations)
+            return response_xml_or_json_item(request, average, 'average')
+        abort(400)
+
+
+def get_observations_by_two_filters(id_first_filter, id_second_filter):
+    def append_objects():
+        translate_region(country)
+        translate_indicator(indicator)
+        for observation in observations:
+            observation.country = country
+            observation.indicator = indicator
+            observation.ref_time = observation.ref_time
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+
+    observations = None
+    if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_first_filter)
+            indicator = indicator_service.get_by_code(id_second_filter)
             observations = [observation for observation in country.observations
                             if observation.indicator_id == id_second_filter]
-            return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
-            country = country_service.get_by_code(id_second_filter)
-            observations = [observation for observation in country.observations
-                            if observation.indicator_id == id_first_filter]
-            return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
-            observations = []
-            region = region_service.get_by_code(id_first_filter)
-            for country in country_service.get_all():
-                if country.is_part_of_id == region.id:
-                    country_observations = country.observations
-                    for observation in country_observations:
-                        if observation.indicator_id == id_second_filter:
-                            observations.append(observation)
-            return response_xml_or_json_list(request, observations, 'observations', 'observation')
-        else:
-            abort(400)
+            append_objects()
+    elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
+        country = country_service.get_by_code(id_second_filter)
+        indicator = indicator_service.get_by_code(id_first_filter)
+        observations = [observation for observation in country.observations
+                        if observation.indicator_id == id_first_filter]
+        append_objects()
+    elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
+        observations = []
+        region = region_service.get_by_code(id_first_filter)
+        indicator = indicator_service.get_by_code(id_second_filter)
+        translate_indicator(indicator)
+        for country in country_service.get_all():
+            if country.is_part_of_id == region.id:
+                country_observations = country.observations
+                for observation in country_observations:
+                    if observation.indicator_id == id_second_filter:
+                        observation.country = country
+                        translate_region(country)
+                        observation.indicator = indicator
+                        observation.ref_time = observation.ref_time
+                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+                        observations.append(observation)
+    return observations if observations is not None else None
+
+
 
 
 class ValueListAPI(Resource):
@@ -1078,6 +1177,7 @@ class ValueListAPI(Resource):
         '''
         return response_xml_or_json_list(request, value_service.get_all(), 'values', 'value')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new value
@@ -1094,6 +1194,7 @@ class ValueListAPI(Resource):
             return {'URI': url_for('values', id=value.id)}, 201  # returns the URI for the new dataset
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all values given
@@ -1104,6 +1205,7 @@ class ValueListAPI(Resource):
         value_service.update_all(value_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all value
@@ -1130,6 +1232,7 @@ class ValueAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, value, 'value')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update value
@@ -1147,6 +1250,7 @@ class ValueAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete value
@@ -1171,6 +1275,7 @@ class TopicListAPI(Resource):
         translate_topic_list(topics)
         return response_xml_or_json_list(request, topics, 'topics', 'topic')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new topic
@@ -1183,6 +1288,7 @@ class TopicListAPI(Resource):
             return {'URI': url_for('topics', id=topic.id)}, 201  # returns the URI for the new dataset
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all topics given
@@ -1193,6 +1299,7 @@ class TopicListAPI(Resource):
         topic_service.update_all(topic_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all topics
@@ -1220,6 +1327,7 @@ class TopicAPI(Resource):
         translate_topic(topic)
         return response_xml_or_json_item(request, topic, 'topic')
 
+    @localhost_decorator
     def put(self, id):
         '''
         If exists update topic
@@ -1235,6 +1343,7 @@ class TopicAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, id):
         '''
         Delete topic
@@ -1255,7 +1364,9 @@ class TopicIndicatorListAPI(Resource):
         List all indicators
         Response 200 OK
         '''
-        return response_xml_or_json_list(request, topic_service.get_by_code(topic_id).indicators, 'indicators', 'indicator')
+        indicators = topic_service.get_by_code(topic_id).indicators
+        translate_indicator_list(indicators)
+        return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
 class TopicIndicatorAPI(Resource):
@@ -1275,6 +1386,7 @@ class TopicIndicatorAPI(Resource):
                 selected_indicator = indicator
         if selected_indicator is None:
             abort(404)
+        translate_indicator(selected_indicator)
         return response_xml_or_json_item(request, selected_indicator, 'indicator')
 
 
@@ -1439,7 +1551,7 @@ class IndicatorAverageByPeriodAPI(Resource):
         observations = [obs for obs in observations if obs.indicator_id == id]
         observations = filter_observations_by_date_range(observations, from_date, to_date)
         if len(observations) > 0:
-            average = observation_average(observations)
+            average = observations_average(observations)
             element = EmptyObject()
             element.value = average
         else:
@@ -1498,6 +1610,7 @@ class RegionTranslationListAPI(Resource):
         '''
         return response_xml_or_json_list(request, region_translation_service.get_all(), 'translations', 'translation')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new country
@@ -1511,6 +1624,7 @@ class RegionTranslationListAPI(Resource):
             return {'URI': url_for('region_translations', lang_code=translation.lang_code, region_id=translation.region_id)}, 201 #returns the URI for the new country
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -1521,6 +1635,7 @@ class RegionTranslationListAPI(Resource):
         region_translation_service.update_all(translation_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -1547,6 +1662,7 @@ class RegionTranslationAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, translation, 'translation')
 
+    @localhost_decorator
     def put(self, region_id, lang_code):
         '''
         If exists update country
@@ -1562,6 +1678,7 @@ class RegionTranslationAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, region_id, lang_code):
         '''
         Delete country
@@ -1584,6 +1701,7 @@ class IndicatorTranslationListAPI(Resource):
         '''
         return response_xml_or_json_list(request, indicator_translation_service.get_all(), 'translations', 'translation')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new country
@@ -1597,6 +1715,7 @@ class IndicatorTranslationListAPI(Resource):
             return {'URI': url_for('indicator_translations', lang_code=translation.lang_code, indicator_id=translation.indicator_id)}, 201 #returns the URI for the new country
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -1607,6 +1726,7 @@ class IndicatorTranslationListAPI(Resource):
         indicator_translation_service.update_all(translation_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -1633,6 +1753,7 @@ class IndicatorTranslationAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, translation, 'translation')
 
+    @localhost_decorator
     def put(self, indicator_id, lang_code):
         '''
         If exists update country
@@ -1649,6 +1770,7 @@ class IndicatorTranslationAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, indicator_id, lang_code):
         '''
         Delete country
@@ -1671,6 +1793,7 @@ class TopicTranslationListAPI(Resource):
         '''
         return response_xml_or_json_list(request, topic_translation_service.get_all(), 'translations', 'translation')
 
+    @localhost_decorator
     def post(self):
         '''
         Create a new country
@@ -1684,6 +1807,7 @@ class TopicTranslationListAPI(Resource):
             return {'URI': url_for('topic_translations', lang_code=translation.lang_code, topic_id=translation.topic_id)}, 201 #returns the URI for the new country
         abort(400)  # in case something is wrong
 
+    @localhost_decorator
     def put(self):
         '''
         Update all countries given
@@ -1694,6 +1818,7 @@ class TopicTranslationListAPI(Resource):
         topic_translation_service.update_all(translation_list)
         return {}, 204
 
+    @localhost_decorator
     def delete(self):
         '''
         Delete all countries
@@ -1720,6 +1845,7 @@ class TopicTranslationAPI(Resource):
             abort(404)
         return response_xml_or_json_item(request, translation, 'translation')
 
+    @localhost_decorator
     def put(self, topic_id, lang_code):
         '''
         If exists update country
@@ -1735,6 +1861,7 @@ class TopicTranslationAPI(Resource):
         else:
             abort(400)
 
+    @localhost_decorator
     def delete(self, topic_id, lang_code):
         '''
         Delete country
@@ -1750,7 +1877,61 @@ def barChart():
         Visualization of barchart
         '''
         options, title, description = get_visualization_json(request, 'bar')
-        return render_template('graphic.html', options=options, title=title, description=description)
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/piechart')
+def pieChart():
+        '''
+        Visualization of piechart
+        '''
+        options, title, description = get_visualization_json(request, 'pie')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/linechart')
+def lineChart():
+        '''
+        Visualization of linechart
+        '''
+        options, title, description = get_visualization_json(request, 'line')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/areachart')
+def areaChart():
+        '''
+        Visualization of areachart
+        '''
+        options, title, description = get_visualization_json(request, 'area')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/scatterchart')
+def scatterChart():
+        '''
+        Visualization of scatterchart
+        '''
+        options, title, description = get_visualization_json(request, 'scatter')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/polarchart')
+def polarChart():
+        '''
+        Visualization of polarchart
+        '''
+        options, title, description = get_visualization_json(request, 'polar')
+        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+@app.route('/api/graphs/table')
+def table():
+        '''
+        Visualization of table
+        '''
+        options, title, description = get_visualization_json(request, 'table')
+        return render_template('table.html', options=options, title=title, description=description)
 
 
 api.add_resource(CountryListAPI, '/countries', endpoint='countries_list')
@@ -1771,6 +1952,7 @@ api.add_resource(CountriesIndicatorAPI, '/countries/<iso3>/indicators/<indicator
 api.add_resource(ObservationListAPI, '/observations', endpoint='observations_list')
 api.add_resource(ObservationAPI, '/observations/<id>', endpoint='observations')
 api.add_resource(ObservationByTwoAPI, '/observations/<id_first_filter>/<id_second_filter>', endpoint='observations_by_two')
+api.add_resource(ObservationByTwoAverageAPI, '/observations/<id_first_filter>/<id_second_filter>/average', endpoint='observations_by_two_average')
 api.add_resource(RegionListAPI, '/regions', endpoint='regions_list')
 api.add_resource(RegionAPI, '/regions/<id>', endpoint='regions')
 api.add_resource(RegionsCountryListAPI, '/regions/<id>/countries', endpoint='regions_countries_list')
@@ -1949,12 +2131,14 @@ def filter_by_region_and_top(id):
     return countries, top
 
 
-def observation_average(observations):
+def observations_average(observations):
     if len(observations) == 1:
-        average = long(observations[0].value.value)
+        average = observations[0].value.value
     else:
-        average = reduce(lambda obs1, obs2: long(obs1.value.value) + long(obs2.value.value), observations) / len(observations)
-    return average
+        average = 0
+        for observation in observations:
+            average += float(observation.value.value)
+    return float(average)/len(observations)
 
 
 def get_visualization_json(request, chartType):
@@ -1967,8 +2151,8 @@ def get_visualization_json(request, chartType):
     description = request.args.get('description') if request.args.get('description') is not None else ''
     xTag = request.args.get('xTag')
     yTag = request.args.get('yTag')
-    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d") if request.args.get('from') is not None else None
-    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d") if request.args.get('to') is not None else None
+    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
+    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
     series = []
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
@@ -1990,19 +2174,26 @@ def get_visualization_json(request, chartType):
             'title': yTag
         },
         'series': series,
-        'serieColours': colours
+        'serieColours': colours,
+        'valueOnItem': {
+            'show': False
+        }
     }
-    return json.dumps(json_object), title, description
+    return json_object, title, description
 
 
 def get_intervals(times):
-    if isinstance(times[0], Instant):
-        return [time.timestamp for time in times]
-    elif isinstance(times[0], YearInterval):
-        return [time.year for time in times]
-    elif isinstance(times[0], Interval):
-        return [time.start_time for time in times]
+    if len(times) > 1:
+        if isinstance(times[0], Instant):
+            return [time.timestamp for time in times]
+        elif isinstance(times[0], YearInterval):
+            return [time.year for time in times]
+        elif isinstance(times[0], Interval):
+            return [time.start_time for time in times]
 
 
 class EmptyObject():
     pass
+
+
+

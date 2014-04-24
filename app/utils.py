@@ -122,6 +122,13 @@ class DictionaryList2ObjectList(object):
         return returned_list
 
 
+def check_if_date(field_name, object, row):
+    if type(getattr(row, field_name)) is datetime.date or type(getattr(row, field_name)) is datetime.datetime:
+        object[field_name] = time.mktime(getattr(row, field_name).timetuple())
+    else:
+        object[field_name] = getattr(row, field_name)
+
+
 def row2dict(row):
     '''
     @see: http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
@@ -130,21 +137,19 @@ def row2dict(row):
         return None
     d = {}
     if hasattr(row, '__table__'):
-        for column in row.__table__.columns:
-            if type(getattr(row, column.name)) is datetime.datetime:
-                d[column.name] = time.mktime(getattr(row, column.name).timetuple())
-            else:
-                d[column.name] = getattr(row, column.name)
+        for column in row.__mapper__.columns:
+            check_if_date(column.name, d, row)
         if hasattr(row, 'other_parseable_fields'):
             for field in row.other_parseable_fields:
-                d[field] = getattr(row, field)
+                result = is_primitive(getattr(row, field))
+                if isinstance(getattr(row, field), object) and not is_primitive(getattr(row, field)):
+                    d[field] = row2dict(getattr(row, field))
+                else:
+                    check_if_date(field, d, row)
         return d
     else:
         for column in get_user_attrs(row):
-            if type(getattr(row, column)) is datetime.datetime:
-                d[column] = time.mktime(getattr(row, column).timetuple())
-            else:
-                d[column] = getattr(row, column)
+            check_if_date(column, d, row)
         return d
 
 
@@ -152,3 +157,8 @@ def get_user_attrs(object):
     return [k for k in dir(object)
             if not k.startswith('__')
             and not k.endswith('__')]
+
+
+def is_primitive(thing):
+    primitive = (int, str, bool, float, unicode)
+    return type(thing) in primitive
