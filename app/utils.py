@@ -1,22 +1,25 @@
-'''
+"""
 Created on 03/02/2014
 
-@author: Herminio
-'''
+:author: Herminio
+"""
+
 import json
 import datetime, time
 from dicttoxml import dicttoxml
 
 
 class JSONConverter(object):
-    '''
+    """
     JSON converter from objects and list
-    '''
+    """
     
     def list_to_json(self, elements_list):
-        '''
+        """
         Convert a list to its json equivalent
-        '''
+        :param elements_list: list of elements to be converted
+        :return: json array ready be returned as string
+        """
         json_result = '[\n'
         for element in elements_list:
             json_result += self.object_to_json(element) + ",\n" \
@@ -26,27 +29,33 @@ class JSONConverter(object):
         return json_result
         
     def object_to_json(self, element):
-        '''
+        """
         Convert a object to its json equivalent
-        '''
+        :param element: element to be converted
+        :return: json object in string format
+        """
         return json.dumps(row2dict(element))
 
 
 class XMLConverter(object):
-    '''
+    """
     XML converter from objects and list
-    '''
+    """
     
     def __init__(self):
-        '''
+        """
         Constructor for XML converter
-        '''
-        self.json_converter = JSONConverter()
+        """
+        self.json_converter = JSONConverter()  # needed, first to json and then to xml
     
     def list_to_xml(self, elements_list, root_node="elements", child_node="element"):
-        '''
+        """
         Convert a list to its XML equivalent
-        '''
+        :param elements_list: list of elements to be converted
+        :param root_node: name for the root tag in the xml, by default *elements*
+        :param child_node: name for object tag in every element of the list, by default *element*
+        :return: Xml string
+        """
         xml_result = '<' + root_node + '>'
         for element in elements_list:
             xml_result += self.object_to_xml(element, child_node)
@@ -54,9 +63,12 @@ class XMLConverter(object):
         return xml_result
 
     def object_to_xml(self, element, root_node="element"):
-        '''
+        """
         Convert a object to its XML equivalent
-        '''
+        :param element: element to be converted
+        :param root_node: name for root tag on xml, by default *element*
+        :return: Xml string
+        """
         element = json.loads(self.json_converter.object_to_json(element))
         xml_result = '<' + root_node + '>'
         xml_result += dicttoxml(element, False)        
@@ -65,14 +77,16 @@ class XMLConverter(object):
 
 
 class CSVConverter(object):
-    '''
+    """
     CSV converter from objects and list
-    '''
+    """
 
     def list_to_csv(self, elements_list):
-        '''
-        Convert a list to its json equivalent
-        '''
+        """
+        Convert a list to its csv equivalent
+        :param elements_list: collection to be converted
+        :return: csv string
+        """
         csv_result = ''
         keys = row2dict(elements_list[0]).keys()
         csv_result += ';'.join(keys) + '\n'
@@ -81,9 +95,13 @@ class CSVConverter(object):
         return csv_result
 
     def object_to_csv(self, element, header=True, keys=None):
-        '''
-        Convert a object to its json equivalent
-        '''
+        """
+        Convert a object to its csv equivalent
+        :param element: object to be converted
+        :param header: True if headers are desired, False if not, by default True
+        :param keys: Header keys to use if method used by list_to_csv, default None
+        :return: csv string
+        """
         element = row2dict(element)
         csv = ''
         if keys is None:
@@ -104,18 +122,24 @@ class CSVConverter(object):
 
 
 class Struct(object):
-    '''
+    """
     Class to convert from dictionary to object
-    @see: http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663
-    '''
+    :see: http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663
+    """
     def __init__(self, **entries): 
         self.__dict__.update(entries)
-        
+
+
 class DictionaryList2ObjectList(object):
-    '''
+    """
     Class to convert from a list of dictionaries to a list of objects
-    '''
+    """
     def convert(self, given_list):
+        """
+        Convert a list of dictionaries in a list of objects
+        :param given_list: list of dictionaries
+        :return: list of object
+        """
         returned_list = []
         for element in given_list:
             returned_list.append(Struct(**element))
@@ -123,6 +147,12 @@ class DictionaryList2ObjectList(object):
 
 
 def check_if_date(field_name, object, row):
+    """
+    Convert a date field into long format
+    :param field_name: name of the field where the date is
+    :param object: object to store the date in long format
+    :param row: object, usually a SQLAlchemy row where field is stored
+    """
     if type(getattr(row, field_name)) is datetime.date or type(getattr(row, field_name)) is datetime.datetime:
         object[field_name] = time.mktime(getattr(row, field_name).timetuple())
     else:
@@ -130,9 +160,12 @@ def check_if_date(field_name, object, row):
 
 
 def row2dict(row):
-    '''
-    @see: http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
-    '''
+    """
+    Converts a row of SQLAlchemy into a dictionary
+    :see: http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
+    :param row: SQLAlchemy row
+    :return: dictionary
+    """
     if row is None:
         return None
     d = {}
@@ -154,11 +187,21 @@ def row2dict(row):
 
 
 def get_user_attrs(object):
+    """
+    Return the attributes of an object
+    :param object: the object to get attributes from
+    :return: list of attributes
+    """
     return [k for k in dir(object)
             if not k.startswith('__')
             and not k.endswith('__')]
 
 
 def is_primitive(thing):
+    """
+    Check whether a object is of a primitive type or not
+    :param thing: object to check if its type is primitive
+    :return: True if it is primitive, else False
+    """
     primitive = (int, str, bool, float, unicode)
     return type(thing) in primitive

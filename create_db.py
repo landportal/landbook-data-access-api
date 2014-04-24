@@ -1,8 +1,8 @@
-'''
+"""
 Created on 10/02/2014
 
-@author: Herminio
-'''
+:author: Herminio
+"""
 from app import db
 
 
