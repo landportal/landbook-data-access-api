@@ -1998,6 +1998,8 @@ def barChart():
         Visualization of barchart
         """
         options, title, description = get_visualization_json(request, 'bar')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2007,6 +2009,8 @@ def pieChart():
         Visualization of piechart
         """
         options, title, description = get_visualization_json(request, 'pie')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2016,6 +2020,8 @@ def lineChart():
         Visualization of linechart
         """
         options, title, description = get_visualization_json(request, 'line')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2025,6 +2031,8 @@ def areaChart():
         Visualization of areachart
         """
         options, title, description = get_visualization_json(request, 'area')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2034,6 +2042,8 @@ def scatterChart():
         Visualization of scatterchart
         """
         options, title, description = get_visualization_json(request, 'scatter')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2043,6 +2053,8 @@ def polarChart():
         Visualization of polarchart
         """
         options, title, description = get_visualization_json(request, 'polar')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2052,6 +2064,8 @@ def table():
         Visualization of table
         """
         options, title, description = get_visualization_json(request, 'table')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('table.html', options=options, title=title, description=description)
 
 
