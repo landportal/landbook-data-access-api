@@ -1,0 +1,13 @@
+h2 {
+    font-family: Helvetica;
+    color: #666;
+    font-weight: normal;
+	margin-left: 40px;
+}
+h3 {
+    font-family: Helvetica;
+    color: #666;
+    font-weight: normal;
+    margin-left: 40px;
+    font-style: oblique;
+}

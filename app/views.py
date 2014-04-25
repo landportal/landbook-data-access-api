@@ -1,8 +1,8 @@
-'''
+"""
 Created on 03/02/2014
 
-@author: Herminio
-'''
+:author: Herminio
+"""
 from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
 from flask.helpers import url_for
@@ -16,6 +16,8 @@ from app.services import CountryService, IndicatorService, UserService, Organiza
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
 from flask import request
 from datetime import datetime
+from functools import wraps
+
 
 api = Api(app)
 country_service = CountryService()
@@ -39,6 +41,10 @@ list_converter = DictionaryList2ObjectList()
 
 
 def localhost_decorator(f):
+    """
+    Decorator that allows connections only from localhost if not
+    it will return a 403 FORBIDDEN error code
+    """
     def call(*args, **kwargs):
         if request.remote_addr == '127.0.0.1' or request.remote_addr == 'localhost':
             return f(*args, **kwargs)
@@ -47,28 +53,58 @@ def localhost_decorator(f):
     return call
 
 
+def check_auth(username, password):
+    """
+    This function is called to check if a username /
+    password combination is valid.
+    """
+    return username == 'admin' and password == 'secret'
+
+
+def authenticate():
+    """Sends a 401 response that enables basic auth"""
+    return Response(
+    'Could not verify your access level for that URL.\n'
+    'You have to login with proper credentials', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if (not auth or not check_auth(auth.username, auth.password)) \
+                and (not request.remote_addr == '127.0.0.1' and not request.remote_addr == 'localhost'):
+            return authenticate()
+        if auth:
+            app.logger.info("Request from user: " + auth.username)
+        return f(*args, **kwargs)
+    return decorated
+
+
 class CountryListAPI(Resource):
-    '''
+    """
     Countries collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all countries
         Response 200 OK
-        '''
+        """
         countries = country_service.get_all()
         translate_region_list(countries)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new country
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("faoURI"))
         country.is_part_of_id = request.json.get("is_part_of_id")
         country.un_code = request.json.get("un_code")
@@ -79,10 +115,10 @@ class CountryListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
+        """
         Update all countries given
         Response 204 NO CONTENT
-        '''
+        """
         country_list = json.loads(request.data)
         country_list = list_converter.convert(country_list)
         country_service.update_all(country_list)
@@ -90,26 +126,27 @@ class CountryListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
+        """
         Delete all countries
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all countries will be destroyed
+        """
         country_service.delete_all()
         return {}, 204
 
 
 class CountryAPI(Resource):
-    '''
+    """
     Countries element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, code):
-        '''
+        """
         Show country
         Response 200 OK
-        '''
+        """
         country = country_service.get_by_code(code)
         if country is None:
             abort(404)
@@ -118,12 +155,12 @@ class CountryAPI(Resource):
 
     @localhost_decorator
     def put(self, code):
-        '''
+        """
         If exists update country
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         country = country_service.get_by_code(code)
         if country is not None:
             country.iso2 = request.json.get("iso2")
@@ -136,36 +173,37 @@ class CountryAPI(Resource):
 
     @localhost_decorator
     def delete(self, code):
-        '''
+        """
         Delete country
         Response 204 NO CONTENT
-        '''
+        """
         country_service.delete(code)
         return {}, 204
 
 
 class IndicatorListAPI(Resource):
-    '''
+    """
     Indicators collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
-        List all countries
+        """
+        List all indicators
         Response 200 OK
-        '''
+        """
         indicators = indicator_service.get_all()
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new indicator
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         indicator = Indicator(request.json.get("id"), request.json.get("preferable_tendency"),
                               request.json.get("measurement_unit_id"), request.json.get("dataset_id"),
                               request.json.get("compound_indicator_id"), request.json.get("starred"))
@@ -181,10 +219,10 @@ class IndicatorListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
-        Update all countries given
+        """
+        Update all indicators given
         Response 204 NO CONTENT
-        '''
+        """
         indicator_list = json.loads(request.data)
         indicator_list = list_converter.convert(indicator_list)
         indicator_service.update_all(indicator_list)
@@ -192,26 +230,27 @@ class IndicatorListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
-        Delete all countries
+        """
+        Delete all indicators
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all indicators will be destroyed
+        """
         indicator_service.delete_all()
         return {}, 204
 
 
 class IndicatorAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Indicators element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show country
+        """
+        Show indicator
         Response 200 OK
-        '''
+        """
         indicator = indicator_service.get_by_code(id)
         if indicator is None:
             abort(404)
@@ -220,12 +259,12 @@ class IndicatorAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
-        If exists update country
+        """
+        If exists update indicator
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         indicator = indicator_service.get_by_code(id)
         if indicator is not None:
             indicator.name = request.json.get("name")
@@ -240,25 +279,26 @@ class IndicatorAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
-        Delete country
+        """
+        Delete indicators
         Response 204 NO CONTENT
-        '''
+        """
         indicator_service.delete(id)
         return {}, 204
 
 
 class IndicatorTopAPI(Resource):
-    '''
+    """
     Indicator top api
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
+        """
         Show top 10 countries with the highest value for a given indicator
         Response 200 OK
-        '''
+        """
         countries, top = filter_by_region_and_top(id)
         output = []
         for i in range(len(countries)):
@@ -270,16 +310,17 @@ class IndicatorTopAPI(Resource):
 
 
 class IndicatorAverageAPI(Resource):
-    '''
+    """
     Indicator average api
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
+        """
         Show the average value for a indicator of all countries
         Response 200 OK
-        '''
+        """
         top = filter_by_region_and_top(id)[1]
         average = observations_average(top)
         element = EmptyObject()
@@ -288,16 +329,17 @@ class IndicatorAverageAPI(Resource):
 
 
 class IndicatorCompatibleAPI(Resource):
-    '''
+    """
     Indicator compatible api
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
+        """
         Show the compatible indicators of the given indicator
         Response 200 OK
-        '''
+        """
         indicator = indicator_service.get_by_code(id)
         indicators = indicator_service.get_all()
         compatibles = [ind for ind in indicators
@@ -308,16 +350,17 @@ class IndicatorCompatibleAPI(Resource):
 
 
 class IndicatorStarredAPI(Resource):
-    '''
+    """
     Indicators starred URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List starred indicators
         Response 200 OK
-        '''
+        """
         indicators = indicator_service.get_all()
         indicators = filter(lambda i: i.starred, indicators)
         translate_indicator_list(indicators)
@@ -325,25 +368,26 @@ class IndicatorStarredAPI(Resource):
 
 
 class UserListAPI(Resource):
-    '''
+    """
     Users collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all users
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, user_service.get_all(), 'users', 'user')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new user
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         user = User(request.json.get("id"), request.json.get("ip"),
                     request.json.get("timestamp"), request.json.get("organization_id"))
         if user.id is not None:
@@ -353,10 +397,10 @@ class UserListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
-        Update all countries given
+        """
+        Update all users given
         Response 204 NO CONTENT
-        '''
+        """
         user_list = json.loads(request.data)
         user_list = list_converter.convert(user_list)
         user_service.update_all(user_list)
@@ -364,26 +408,27 @@ class UserListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
-        Delete all countries
+        """
+        Delete all users
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all users will be destroyed
+        """
         user_service.delete_all()
         return {}, 204
 
 
 class UserAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Users element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show country
+        """
+        Show user
         Response 200 OK
-        '''
+        """
         user = user_service.get_by_code(id)
         if user is None:
             abort(404)
@@ -391,12 +436,12 @@ class UserAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
-        If exists update country
+        """
+        If exists update user
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         user = user_service.get_by_code(id)
         if user is not None:
             user.id = request.json.get("id")
@@ -410,34 +455,35 @@ class UserAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
-        Delete country
+        """
+        Delete user
         Response 204 NO CONTENT
-        '''
+        """
         user_service.delete(id)
         return {}, 204
 
 
 class OrganizationListAPI(Resource):
-    '''
+    """
     Organizations collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all organizations
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, organization_service.get_all(), 'organizations', 'organization')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new organization
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         organization = Organization(request.json.get("id"), request.json.get("name"))
         organization.is_part_of_id = request.json.get("is_part_of_id")
         organization.url = request.json.get("url")
@@ -448,10 +494,10 @@ class OrganizationListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
-        Update all countries given
+        """
+        Update all organizations given
         Response 204 NO CONTENT
-        '''
+        """
         organization_list = json.loads(request.data)
         organization_list = list_converter.convert(organization_list)
         organization_service.update_all(organization_list)
@@ -459,26 +505,27 @@ class OrganizationListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
-        Delete all countries
+        """
+        Delete all organizations
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        @attention: Take care of what you do, all organizations will be destroyed
+        """
         organization_service.delete_all()
         return {}, 204
 
 
 class OrganizationAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Organizations element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show country
+        """
+        Show organization
         Response 200 OK
-        '''
+        """
         organization = organization_service.get_by_code(id)
         if organization is None:
             abort(404)
@@ -486,12 +533,12 @@ class OrganizationAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
-        If exists update country
+        """
+        If exists update organization
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         organization = organization_service.get_by_code(id)
         if organization is not None:
             organization.id = request.json.get("id")
@@ -505,39 +552,42 @@ class OrganizationAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
-        Delete country
+        """
+        Delete organization
         Response 204 NO CONTENT
-        '''
+        """
         organization_service.delete(id)
         return {}, 204
 
 
 class OrganizationUserListAPI(Resource):
-    '''
+    """
     Organizations users collection URI
-    Methods: GET, POST, PUT, DELETE
-    '''
+    Methods: GET
+    """
 
+    @requires_auth
     def get(self, organization_id):
-        '''
-        List all organizations
+        """
+        List all users of a given organization
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, organization_service.get_by_code(organization_id).users, 'users', 'user')
 
 
 class OrganizationUserAPI(Resource):
-    '''
-    Countries element URI
-    Methods: GET, PUT, DELETE
-    '''
+    """
+    Organizations users element URI
+    Methods: GET
+    """
 
+    @requires_auth
     def get(self, organization_id, user_id):
-        '''
-        Show country
-        Response 200 OK
-        '''
+        """
+        Show a user by its organization id and its user id
+        If found Response 200 OK
+        Else Response 404 NOT FOUND
+        """
         selected_user = None
         for user in organization_service.get_by_code(organization_id).users:
             if user.id == user_id:
@@ -548,16 +598,17 @@ class OrganizationUserAPI(Resource):
 
 
 class CountriesIndicatorListAPI(Resource):
-    '''
+    """
     Countries Indicator collection URI
-    Methods: GET, POST, PUT, DELETE
-    '''
+    Methods: GET
+    """
 
+    @requires_auth
     def get(self, iso3):
-        '''
-        List all organizations
+        """
+        List all indicators of a given country
         Response 200 OK
-        '''
+        """
         observations = country_service.get_by_code(iso3).observations
         indicators = []
         for obs in observations:
@@ -568,16 +619,18 @@ class CountriesIndicatorListAPI(Resource):
 
 
 class CountriesIndicatorAPI(Resource):
-    '''
+    """
     Countries Indicator element URI
-    Methods: GET, PUT, DELETE
-    '''
+    Methods: GET
+    """
 
+    @requires_auth
     def get(self, iso3, indicator_id):
-        '''
-        Show country
-        Response 200 OK
-        '''
+        """
+        Show a indicators by its country id and its indicator id
+        If found Response 200 OK
+        Else Response 404 NOT FOUND
+        """
         observations = country_service.get_by_code(iso3).observations
         indicator = None
         for obs in observations:
@@ -590,25 +643,26 @@ class CountriesIndicatorAPI(Resource):
 
 
 class ObservationListAPI(Resource):
-    '''
+    """
     Observations collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @localhost_decorator
     def get(self):
-        '''
+        """
         List all observations
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, observation_service.get_all(), 'observations', 'observation')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new observation
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         observation = Observation(request.json.get("id"))
         observation.ref_time_id = request.json.get("ref_time_id")
         observation.issued_id = request.json.get("issued_id")
@@ -626,10 +680,10 @@ class ObservationListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
-        Update all countries given
+        """
+        Update all observations given
         Response 204 NO CONTENT
-        '''
+        """
         observation_list = json.loads(request.data)
         observation_list = list_converter.convert(observation_list)
         observation_service.update_all(observation_list)
@@ -637,26 +691,27 @@ class ObservationListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
-        Delete all countries
+        """
+        Delete all observations
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all observations will be destroyed
+        """
         observation_service.delete_all()
         return {}, 204
 
 
 class ObservationAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Observations element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @localhost_decorator
     def get(self, id):
-        '''
-        Show country
+        """
+        Show observations
         Response 200 OK
-        '''
+        """
         if country_service.get_by_code(id) is not None:
             country = country_service.get_by_code(id)
             return response_xml_or_json_list(request, country.observations, 'observations', 'observation')
@@ -681,12 +736,12 @@ class ObservationAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
-        If exists update country
+        """
+        If exists update observation
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         observation = observation_service.get_by_code(id)
         if observation is not None:
             observation.ref_time_id = request.json.get("ref_time_id")
@@ -704,36 +759,37 @@ class ObservationAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
-        Delete country
+        """
+        Delete observation
         Response 204 NO CONTENT
-        '''
+        """
         observation_service.delete(id)
         return {}, 204
 
 
 class RegionListAPI(Resource):
-    '''
+    """
     Regions collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all region
         Response 200 OK
-        '''
+        """
         regions = region_service.get_all()
         translate_region_list(regions)
         return response_xml_or_json_list(request, regions, 'regions', 'region')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new region
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         region = Region()
         region.id = request.json.get("name")
         region.id = request.json.get("id")
@@ -746,10 +802,10 @@ class RegionListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
+        """
         Update all regions given
         Response 204 NO CONTENT
-        '''
+        """
         region_list = json.loads(request.data)
         region_list = list_converter.convert(region_list)
         region_service.update_all(region_list)
@@ -757,26 +813,27 @@ class RegionListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
+        """
         Delete all regions
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all regions will be destroyed
+        """
         region_service.delete_all()
         return {}, 204
 
 
 class RegionAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Regions element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
+        """
         Show region
         Response 200 OK
-        '''
+        """
         region = region_service.get_by_code(id)
         if region is None:
             abort(404)
@@ -785,12 +842,12 @@ class RegionAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
+        """
         If exists update region
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         region = region_service.get_by_code(id)
         if region is not None:
             region.is_part_of_id = request.json.get("is_part_of_id")
@@ -801,25 +858,26 @@ class RegionAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
-        Delete country
+        """
+        Delete region
         Response 204 NO CONTENT
-        '''
+        """
         region_service.delete(id)
         return {}, 204
 
 
 class RegionsCountryListAPI(Resource):
-    '''
+    """
     Regions Country collection URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        List all countries
+        """
+        List all countries of a given region
         Response 200 OK
-        '''
+        """
         region = region_service.get_by_code(id)
         countries = []
         for country in country_service.get_all():
@@ -830,16 +888,17 @@ class RegionsCountryListAPI(Resource):
 
 
 class RegionsCountryAPI(Resource):
-    '''
+    """
     Countries Indicator element URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id, iso3):
-        '''
-        Show country
+        """
+        Show country by its region id and its country id
         Response 200 OK
-        '''
+        """
         region = region_service.get_by_code(id)
         selected_country = None
         for country in country_service.get_all():
@@ -852,25 +911,26 @@ class RegionsCountryAPI(Resource):
 
 
 class DataSourceListAPI(Resource):
-    '''
+    """
     DataSource collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all datasources
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, datasource_service.get_all(), 'datasources', 'datasource')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new datasource
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         datasource = DataSource(request.json.get("name"))
         datasource.id = request.json.get("id")
         datasource.organization_id = request.json.get("organization_id")
@@ -881,10 +941,10 @@ class DataSourceListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
+        """
         Update all datasources given
         Response 204 NO CONTENT
-        '''
+        """
         datasource_list = json.loads(request.data)
         datasource_list = list_converter.convert(datasource_list)
         datasource_service.update_all(datasource_list)
@@ -892,26 +952,27 @@ class DataSourceListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
+        """
         Delete all datasources
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all datasources will be destroyed
+        """
         datasource_service.delete_all()
         return {}, 204
 
 
 class DataSourceAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Datasources element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
+        """
         Show datasource
         Response 200 OK
-        '''
+        """
         datasource = datasource_service.get_by_code(id)
         if datasource is None:
             abort(404)
@@ -919,12 +980,12 @@ class DataSourceAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
+        """
         If exists update datasource
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         datasource = datasource_service.get_by_code(id)
         if datasource is not None:
             datasource.id_source = request.json.get("id_source")
@@ -937,34 +998,35 @@ class DataSourceAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
-        Delete country
+        """
+        Delete datasource
         Response 204 NO CONTENT
-        '''
+        """
         datasource_service.delete(id)
         return {}, 204
 
 
 class DatasetListAPI(Resource):
-    '''
+    """
     Dataset collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all datasets
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, dataset_service.get_all(), 'datasets', 'dataset')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new dataset
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         dataset = Dataset(request.json.get("id"))
         dataset.sdmx_frequency = request.json.get("sdmx_frequency")
         dataset.datasource_id = request.json.get("datasource_id")
@@ -977,10 +1039,10 @@ class DatasetListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
+        """
         Update all datasets given
         Response 204 NO CONTENT
-        '''
+        """
         dataset_list = json.loads(request.data)
         dataset_list = list_converter.convert(dataset_list)
         dataset_service.update_all(dataset_list)
@@ -988,26 +1050,27 @@ class DatasetListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
+        """
         Delete all datasets
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all datasets will be destroyed
+        """
         dataset_service.delete_all()
         return {}, 204
 
 
 class DatasetAPI(Resource):
-    '''
+    """
     Dataset element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
+        """
         Show dataset
         Response 200 OK
-        '''
+        """
         dataset = dataset_service.get_by_code(id)
         if dataset is None:
             abort(404)
@@ -1015,12 +1078,12 @@ class DatasetAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
+        """
         If exists update dataset
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         dataset = dataset_service.get_by_code(id)
         if dataset is not None:
             dataset.sdmx_frequency = request.json.get("sdmx_frequency")
@@ -1032,25 +1095,26 @@ class DatasetAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
-        Delete country
+        """
+        Delete dataset
         Response 204 NO CONTENT
-        '''
+        """
         dataset_service.delete(id)
         return {}, 204
 
 
 class DataSourceIndicatorListAPI(Resource):
-    '''
+    """
     DataSource Indicator collection URI
-    Methods: GET, POST, PUT, DELETE
-    '''
+    Methods: GET
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        List all indicators
+        """
+        List all indicators of a given datasource
         Response 200 OK
-        '''
+        """
         datasets = datasource_service.get_by_code(id).datasets
         indicators = []
         for dataset in datasets:
@@ -1060,16 +1124,17 @@ class DataSourceIndicatorListAPI(Resource):
 
 
 class DataSourceIndicatorAPI(Resource):
-    '''
-    Countries Indicator element URI
-    Methods: GET, PUT, DELETE
-    '''
+    """
+    Datasource Indicator element URI
+    Methods: GET
+    """
 
+    @requires_auth
     def get(self, id, indicator_id):
-        '''
-        Show indicator
+        """
+        Show indicator by its datasource id and indicator id
         Response 200 OK
-        '''
+        """
         datasets = datasource_service.get_by_code(id).datasets
         indicator = None
         for dataset in datasets:
@@ -1083,16 +1148,23 @@ class DataSourceIndicatorAPI(Resource):
 
 
 class ObservationByTwoAPI(Resource):
-    '''
-    URI
+    """
+    Observation by two collection URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id_first_filter, id_second_filter):
-        '''
-        Show observations
+        """
+        Show observations filtering by two ids.
+        It could be one of three next:
+         * Indicator id and country iso3
+         * Country iso3 and indicator id
+         * Region un_code and indicator id
+        :param id_first_filter: first filter
+        :param id_second_filter: second filter
         Response 200 OK
-        '''
+        """
 
         observations = get_observations_by_two_filters(id_first_filter, id_second_filter)
         if observations is not None:
@@ -1101,16 +1173,23 @@ class ObservationByTwoAPI(Resource):
 
 
 class ObservationByTwoAverageAPI(Resource):
-    '''
-    URI
+    """
+    Observations by two average URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id_first_filter, id_second_filter):
-        '''
-        Show observations average
+        """
+        Show observations average filtering by two ids.
+        It could be one of three next:
+         * Indicator id and country iso3
+         * Country iso3 and indicator id
+         * Region un_code and indicator id
+        :param id_first_filter: first filter
+        :param id_second_filter: second filter
         Response 200 OK
-        '''
+        """
 
         observations = get_observations_by_two_filters(id_first_filter, id_second_filter)
         if observations is not None:
@@ -1121,14 +1200,27 @@ class ObservationByTwoAverageAPI(Resource):
 
 
 def get_observations_by_two_filters(id_first_filter, id_second_filter):
+    """
+    Return observations filtering by two ids.
+    It could be one of three next:
+     * Indicator id and country iso3
+     * Country iso3 and indicator id
+     * Region un_code and indicator id
+    :param id_first_filter: id of the first filter
+    :param id_second_filter: id of the second filter
+    :return: Filtered observations
+    """
     def append_objects():
+        """
+        Appends some neested object to main object, in order to be showed on the output
+        """
         translate_region(country)
         translate_indicator(indicator)
         for observation in observations:
             observation.country = country
             observation.indicator = indicator
             observation.ref_time = observation.ref_time
-            observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
 
     observations = None
     if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
@@ -1162,28 +1254,27 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
     return observations if observations is not None else None
 
 
-
-
 class ValueListAPI(Resource):
-    '''
+    """
     Value collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all values
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, value_service.get_all(), 'values', 'value')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new value
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         value = Value()
         value.id = request.json.get("id")
         value.obs_status = request.json.get("obs_status")
@@ -1196,10 +1287,10 @@ class ValueListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
+        """
         Update all values given
         Response 204 NO CONTENT
-        '''
+        """
         value_list = json.loads(request.data)
         value_list = list_converter.convert(value_list)
         value_service.update_all(value_list)
@@ -1207,26 +1298,27 @@ class ValueListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
+        """
         Delete all value
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all values will be destroyed
-        '''
+        :attention: Take care of what you do, all values will be destroyed
+        """
         value_service.delete_all()
         return {}, 204
 
 
 class ValueAPI(Resource):
-    '''
+    """
     Value element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show dataset
+        """
+        Show value
         Response 200 OK
-        '''
+        """
         value = value_service.get_by_code(id)
         if value is None:
             abort(404)
@@ -1234,12 +1326,12 @@ class ValueAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
+        """
         If exists update value
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         value = value_service.get_by_code(id)
         if value is not None:
             value.id = request.json.get("id")
@@ -1252,36 +1344,37 @@ class ValueAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
+        """
         Delete value
         Response 204 NO CONTENT
-        '''
+        """
         value_service.delete(id)
         return {}, 204
 
 
 class TopicListAPI(Resource):
-    '''
-    Value collection URI
+    """
+    Topic collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
+        """
         List all topics
         Response 200 OK
-        '''
+        """
         topics = topic_service.get_all()
         translate_topic_list(topics)
         return response_xml_or_json_list(request, topics, 'topics', 'topic')
 
     @localhost_decorator
     def post(self):
-        '''
+        """
         Create a new topic
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         topic = Topic(request.json.get("id"))
         if topic.id is not None:
             value_service.insert(topic)
@@ -1290,10 +1383,10 @@ class TopicListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
+        """
         Update all topics given
         Response 204 NO CONTENT
-        '''
+        """
         topic_list = json.loads(request.data)
         topic_list = list_converter.convert(topic_list)
         topic_service.update_all(topic_list)
@@ -1301,26 +1394,27 @@ class TopicListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
+        """
         Delete all topics
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all values will be destroyed
-        '''
+        :attention: Take care of what you do, all topic will be destroyed
+        """
         topic_service.delete_all()
         return {}, 204
 
 
 class TopicAPI(Resource):
-    '''
+    """
     Topic element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
+        """
         Show topic
         Response 200 OK
-        '''
+        """
         topic = topic_service.get_by_code(id)
         if topic is None:
             abort(404)
@@ -1329,12 +1423,12 @@ class TopicAPI(Resource):
 
     @localhost_decorator
     def put(self, id):
-        '''
+        """
         If exists update topic
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         topic = topic_service.get_by_code(id)
         if topic is not None:
             topic.id = request.json.get("id")
@@ -1345,41 +1439,43 @@ class TopicAPI(Resource):
 
     @localhost_decorator
     def delete(self, id):
-        '''
+        """
         Delete topic
         Response 204 NO CONTENT
-        '''
+        """
         topic_service.delete(id)
         return {}, 204
 
 
 class TopicIndicatorListAPI(Resource):
-    '''
+    """
     Topics Indicator collection URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, topic_id):
-        '''
-        List all indicators
+        """
+        List all indicators by a given topic
         Response 200 OK
-        '''
+        """
         indicators = topic_service.get_by_code(topic_id).indicators
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
 
 class TopicIndicatorAPI(Resource):
-    '''
+    """
     Topics Indicator element URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, topic_id, indicator_id):
-        '''
-        Show country
+        """
+        Show indicators by its topic id and indicator id
         Response 200 OK
-        '''
+        """
         selected_indicator = None
         for indicator in topic_service.get_by_code(topic_id).indicators:
             if indicator.id == indicator_id:
@@ -1391,16 +1487,17 @@ class TopicIndicatorAPI(Resource):
 
 
 class RegionCountriesWithDataAPI(Resource):
-    '''
+    """
     Countries with data by region element URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, region_id):
-        '''
-        Show country
+        """
+        Show country that have some observations by a given region (country is_part_of region)
         Response 200 OK
-        '''
+        """
         region = region_service.get_by_code(region_id)
         countries = [country for country in country_service.get_all() if country.is_part_of_id == region.id]
         countries = [country for country in countries if len(country.observations) > 0]
@@ -1409,16 +1506,17 @@ class RegionCountriesWithDataAPI(Resource):
 
 
 class CountriesIndicatorLastUpdateAPI(Resource):
-    '''
-    More recent indicators of a country
+    """
+    More recent indicators of a country collection URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, iso3):
-        '''
-        Show indicators
+        """
+        Show indicators last_update by a given country
         Response 200 OK
-        '''
+        """
         indicators = [observation.indicator for observation in country_service.get_by_code(iso3).observations]
         indicator = max(indicators, key=lambda ind: ind.last_update)
         result = EmptyObject()
@@ -1427,16 +1525,17 @@ class CountriesIndicatorLastUpdateAPI(Resource):
 
 
 class IndicatorsCountryLastUpdateAPI(Resource):
-    '''
-
+    """
+    More recent indicator of a country element URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id, iso3):
-        '''
-        Show indicators
+        """
+        Show indicator last_update by its country id and indicator id
         Response 200 OK
-        '''
+        """
         observations = country_service.get_by_code(iso3).observations
         indicator = (observation.indicator for observation in observations if observation.indicator.id == id).next()
         result = EmptyObject()
@@ -1445,16 +1544,22 @@ class IndicatorsCountryLastUpdateAPI(Resource):
 
 
 class ObservationByPeriodAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Observations by period element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show country
+        """
+        Show observations of one of this given as parameter:
+        * Country as iso3
+        * Indicator as indicator id
+        * Region as un_code
+        Observations will be filtered between two dates, if they are not supplied
+        whole range will be returned
         Response 200 OK
-        '''
+        """
         date_from = request.args.get("from")
         date_to = request.args.get("to")
         from_date, to_date = str_date_to_date(date_from, date_to)
@@ -1463,7 +1568,6 @@ class ObservationByPeriodAPI(Resource):
             observations = filter_observations_by_date_range(country.observations, from_date, to_date)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif indicator_service.get_by_code(id) is not None:
-            indicator = indicator_service.get_by_code(id)
             observations = []
             indicator = indicator_service.get_by_code(id)
             for dataset in indicator.datasets:
@@ -1486,16 +1590,19 @@ class ObservationByPeriodAPI(Resource):
 
 
 class IndicatorByPeriodAPI(Resource):
-    '''
-    Countries element URI
-    Methods: GET, PUT, DELETE
-    '''
+    """
+    Indicator by period element URI
+    Methods: GET
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show country
+        """
+        Show observations by its given indicator
+        Observations will be filtered between two dates, if they are not supplied
+        whole range will be returned
         Response 200 OK
-        '''
+        """
         date_from = request.args.get("from")
         date_to = request.args.get("to")
         from_date, to_date = str_date_to_date(date_from, date_to)
@@ -1509,16 +1616,19 @@ class IndicatorByPeriodAPI(Resource):
 
 
 class IndicatorByCountryAndPeriodAPI(Resource):
-    '''
+    """
     Countries element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, indicator_id, iso3):
-        '''
-        Show country
+        """
+        Show observations by its indicator id and countyr id
+        Observations will be filtered between two dates, if they are not supplied
+        whole range will be returned
         Response 200 OK
-        '''
+        """
         date_from = request.args.get("from")
         date_to = request.args.get("to")
         from_date, to_date = str_date_to_date(date_from, date_to)
@@ -1534,16 +1644,19 @@ class IndicatorByCountryAndPeriodAPI(Resource):
 
 
 class IndicatorAverageByPeriodAPI(Resource):
-    '''
+    """
     Average of indicator observation by period range
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show country
+        """
+        Show average of indicator observations
+        Observations will be filtered between two dates, if they are not supplied
+        whole range will be returned
         Response 200 OK
-        '''
+        """
         date_from = request.args.get("from")
         date_to = request.args.get("to")
         from_date, to_date = str_date_to_date(date_from, date_to)
@@ -1560,16 +1673,17 @@ class IndicatorAverageByPeriodAPI(Resource):
 
 
 class IndicatorRelatedAPI(Resource):
-    '''
-    Average of indicator observation by period range
+    """
+    Indicator related collection URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, id):
-        '''
-        Show country
+        """
+        Show related indicators
         Response 200 OK
-        '''
+        """
         indicators_relation = indicator_relationship_service.get_all()
         indicators_by_id = [indicator for indicator in indicators_relation if indicator.source_id == id]
         indicators_related = [indicator.target for indicator in indicators_by_id]
@@ -1578,16 +1692,17 @@ class IndicatorRelatedAPI(Resource):
 
 
 class IndicatorCountryTendencyAPI(Resource):
-    '''
-    Average of indicator observation by period range
+    """
+    Indicator country tendency element URI
     Methods: GET
-    '''
+    """
 
+    @requires_auth
     def get(self, indicator_id, iso3):
-        '''
-        Show country
+        """
+        Show indicator tendency for a country and indicator
         Response 200 OK
-        '''
+        """
         indicator = (observation.indicator for observation in country_service.get_by_code(iso3).observations
                       if observation.indicator.id == indicator_id).next()
         response_object = EmptyObject()
@@ -1598,25 +1713,26 @@ class IndicatorCountryTendencyAPI(Resource):
 
 
 class RegionTranslationListAPI(Resource):
-    '''
-    Countries collection URI
+    """
+    Region translation collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
-        List all countries
+        """
+        List all translations of a region
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, region_translation_service.get_all(), 'translations', 'translation')
 
     @localhost_decorator
     def post(self):
-        '''
-        Create a new country
+        """
+        Create a new region translation
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         translation = RegionTranslation(request.json.get("lang_code"), request.json.get("name"),
                                         request.json.get("region_id"))
         if translation.lang_code is not None and translation.region_id is not None:
@@ -1626,10 +1742,10 @@ class RegionTranslationListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
-        Update all countries given
+        """
+        Update all region translation
         Response 204 NO CONTENT
-        '''
+        """
         translation_list = json.loads(request.data)
         translation_list = list_converter.convert(translation_list)
         region_translation_service.update_all(translation_list)
@@ -1637,26 +1753,27 @@ class RegionTranslationListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
-        Delete all countries
+        """
+        Delete all region translations
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all regions translations will be destroyed
+        """
         region_translation_service.delete_all()
         return {}, 204
 
 
 class RegionTranslationAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Region translation element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, region_id, lang_code):
-        '''
-        Show country
+        """
+        Show region translation
         Response 200 OK
-        '''
+        """
         translation = region_translation_service.get_by_codes(region_id, lang_code)
         if translation is None:
             abort(404)
@@ -1664,12 +1781,12 @@ class RegionTranslationAPI(Resource):
 
     @localhost_decorator
     def put(self, region_id, lang_code):
-        '''
-        If exists update country
+        """
+        If exists update region translation
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         translation = region_translation_service.get_by_codes(region_id, lang_code)
         if translation is not None:
             translation.name = request.json.get("name")
@@ -1680,34 +1797,35 @@ class RegionTranslationAPI(Resource):
 
     @localhost_decorator
     def delete(self, region_id, lang_code):
-        '''
-        Delete country
+        """
+        Delete region translation
         Response 204 NO CONTENT
-        '''
+        """
         region_translation_service.delete(region_id, lang_code)
         return {}, 204
 
 
 class IndicatorTranslationListAPI(Resource):
-    '''
-    Countries collection URI
+    """
+    Indicators translations collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
-        List all countries
+        """
+        List all indicators translations
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, indicator_translation_service.get_all(), 'translations', 'translation')
 
     @localhost_decorator
     def post(self):
-        '''
-        Create a new country
+        """
+        Create a new indicator translation
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         translation = IndicatorTranslation(request.json.get("lang_code"), request.json.get("name"),
                                         request.json.get("description"), request.json.get("indicator_id"))
         if translation.lang_code is not None and translation.indicator_id is not None:
@@ -1717,10 +1835,10 @@ class IndicatorTranslationListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
-        Update all countries given
+        """
+        Update all indicators translations given
         Response 204 NO CONTENT
-        '''
+        """
         translation_list = json.loads(request.data)
         translation_list = list_converter.convert(translation_list)
         indicator_translation_service.update_all(translation_list)
@@ -1728,26 +1846,27 @@ class IndicatorTranslationListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
-        Delete all countries
+        """
+        Delete all indicators translations
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all indicators translations will be destroyed
+        """
         indicator_translation_service.delete_all()
         return {}, 204
 
 
 class IndicatorTranslationAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Indicators translations element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, indicator_id, lang_code):
-        '''
-        Show country
+        """
+        Show indicator translation
         Response 200 OK
-        '''
+        """
         translation = indicator_translation_service.get_by_codes(indicator_id, lang_code)
         if translation is None:
             abort(404)
@@ -1755,12 +1874,12 @@ class IndicatorTranslationAPI(Resource):
 
     @localhost_decorator
     def put(self, indicator_id, lang_code):
-        '''
-        If exists update country
+        """
+        If exists update indicator translation
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         translation = indicator_translation_service.get_by_codes(indicator_id, lang_code)
         if translation is not None:
             translation.name = request.json.get("name")
@@ -1772,34 +1891,35 @@ class IndicatorTranslationAPI(Resource):
 
     @localhost_decorator
     def delete(self, indicator_id, lang_code):
-        '''
-        Delete country
+        """
+        Delete indicator translation
         Response 204 NO CONTENT
-        '''
+        """
         indicator_translation_service.delete(indicator_id, lang_code)
         return {}, 204
 
 
 class TopicTranslationListAPI(Resource):
-    '''
-    Countries collection URI
+    """
+    Topic translations collection URI
     Methods: GET, POST, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self):
-        '''
-        List all countries
+        """
+        List all topic translations
         Response 200 OK
-        '''
+        """
         return response_xml_or_json_list(request, topic_translation_service.get_all(), 'translations', 'translation')
 
     @localhost_decorator
     def post(self):
-        '''
-        Create a new country
+        """
+        Create a new topic translation
         Response 201 CREATED
-        @return: URI
-        '''
+        :return: URI
+        """
         translation = TopicTranslation(request.json.get("lang_code"), request.json.get("name"),
                                         request.json.get("topic_id"))
         if translation.lang_code is not None and translation.topic_id is not None:
@@ -1809,10 +1929,10 @@ class TopicTranslationListAPI(Resource):
 
     @localhost_decorator
     def put(self):
-        '''
-        Update all countries given
+        """
+        Update all topic translations given
         Response 204 NO CONTENT
-        '''
+        """
         translation_list = json.loads(request.data)
         translation_list = list_converter.convert(translation_list)
         topic_translation_service.update_all(translation_list)
@@ -1820,26 +1940,27 @@ class TopicTranslationListAPI(Resource):
 
     @localhost_decorator
     def delete(self):
-        '''
-        Delete all countries
+        """
+        Delete all topic translations
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all countries will be destroyed
-        '''
+        :attention: Take care of what you do, all topic translations will be destroyed
+        """
         topic_translation_service.delete_all()
         return {}, 204
 
 
 class TopicTranslationAPI(Resource):
-    '''
-    Countries element URI
+    """
+    Topic translations element URI
     Methods: GET, PUT, DELETE
-    '''
+    """
 
+    @requires_auth
     def get(self, topic_id, lang_code):
-        '''
-        Show country
+        """
+        Show country topic translation
         Response 200 OK
-        '''
+        """
         translation = topic_translation_service.get_by_codes(topic_id, lang_code)
         if translation is None:
             abort(404)
@@ -1847,12 +1968,12 @@ class TopicTranslationAPI(Resource):
 
     @localhost_decorator
     def put(self, topic_id, lang_code):
-        '''
-        If exists update country
+        """
+        If exists update topic translation
         Response 204 NO CONTENT
         If not
         Response 400 BAD REQUEST
-        '''
+        """
         translation = topic_translation_service.get_by_codes(topic_id, lang_code)
         if translation is not None:
             translation.name = request.json.get("name")
@@ -1863,74 +1984,88 @@ class TopicTranslationAPI(Resource):
 
     @localhost_decorator
     def delete(self, topic_id, lang_code):
-        '''
-        Delete country
+        """
+        Delete topic translation
         Response 204 NO CONTENT
-        '''
+        """
         topic_translation_service.delete(topic_id, lang_code)
         return {}, 204
 
 
 @app.route('/api/graphs/barchart')
 def barChart():
-        '''
+        """
         Visualization of barchart
-        '''
+        """
         options, title, description = get_visualization_json(request, 'bar')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/api/graphs/piechart')
 def pieChart():
-        '''
+        """
         Visualization of piechart
-        '''
+        """
         options, title, description = get_visualization_json(request, 'pie')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/api/graphs/linechart')
 def lineChart():
-        '''
+        """
         Visualization of linechart
-        '''
+        """
         options, title, description = get_visualization_json(request, 'line')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/api/graphs/areachart')
 def areaChart():
-        '''
+        """
         Visualization of areachart
-        '''
+        """
         options, title, description = get_visualization_json(request, 'area')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/api/graphs/scatterchart')
 def scatterChart():
-        '''
+        """
         Visualization of scatterchart
-        '''
+        """
         options, title, description = get_visualization_json(request, 'scatter')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/api/graphs/polarchart')
 def polarChart():
-        '''
+        """
         Visualization of polarchart
-        '''
+        """
         options, title, description = get_visualization_json(request, 'polar')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/api/graphs/table')
 def table():
-        '''
+        """
         Visualization of table
-        '''
+        """
         options, title, description = get_visualization_json(request, 'table')
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
         return render_template('table.html', options=options, title=title, description=description)
 
 
@@ -1988,12 +2123,21 @@ api.add_resource(IndicatorStarredAPI, '/indicators/starred', endpoint='indicator
 
 
 def translate_indicator_list(indicators):
+    """
+    Translate an indicator list into given language
+    :param indicators: list of indicators to be translated
+    """
     lang = get_requested_lang()
     for indicator in indicators:
         translate_indicator(indicator, lang)
 
 
 def translate_indicator(indicator, lang=None):
+    """
+    Translate an indicator object into given language
+    :param indicator: indicator object to be translated
+    :param lang: language of translation, by default en
+    """
     if lang is None:
         lang = get_requested_lang()
     translation = indicator_translation_service.get_by_codes(indicator.id, lang)
@@ -2004,12 +2148,21 @@ def translate_indicator(indicator, lang=None):
 
 
 def translate_region_list(regions):
+    """
+    Translate a region list into given language
+    :param regions: list of regions to be translated
+    """
     lang = get_requested_lang()
     for region in regions:
         translate_region(region, lang)
 
 
 def translate_region(region, lang=None):
+    """
+    Translate a region object into given language
+    :param region: region object to be translated
+    :param lang: language of translation, by default en
+    """
     if lang is None:
         lang = get_requested_lang()
     translation = region_translation_service.get_by_codes(region.id, lang)
@@ -2019,12 +2172,21 @@ def translate_region(region, lang=None):
 
 
 def translate_topic_list(topics):
+    """
+    Translate a topic list into given language
+    :param topics: list of topics to be translated
+    """
     lang = get_requested_lang()
     for topic in topics:
         translate_topic(topic, lang)
 
 
 def translate_topic(topic, lang=None):
+    """
+    Translate a topic object into given language
+    :param topic: topic object to be translated
+    :param lang: language of translation, by default en
+    """
     if lang is None:
         lang = get_requested_lang()
     translation = topic_translation_service.get_by_codes(topic.id, lang)
@@ -2034,32 +2196,51 @@ def translate_topic(topic, lang=None):
 
 
 def get_requested_lang():
+    """
+    Returns the lang request
+    :return: language requested by the client if not given *en* as default
+    """
     lang = request.args.get('lang') if request.args.get('lang') is not None else 'en'
     return lang
 
 
 def is_xml_accepted(request):
-    '''
+    """
     Returns if xml is accepted or not
-    '''
+    :return: True if xml is accepted, False otherwise
+    """
     return request.args.get('format') == "xml"
 
 
 def is_jsonp_accepted(request):
-    '''
+    """
     Returns if jsonp is accepted or not
-    '''
+    :return: True if jsonp is accepted, False otherwise
+    """
     return request.args.get('format') == "jsonp"
 
 
 def is_csv_accepted(request):
-    '''
-    Returns if jsonp is accepted or not
-    '''
+    """
+    Returns if csv is accepted or not
+    :return: True if csv is accepted, False otherwise
+    """
     return request.args.get('format') == "csv"
 
 
 def response_xml_or_json_item(request, item, item_string):
+    """
+    Return response with the content in the format requested
+    Available formats:
+    * JSON
+    * XML
+    * JSONP
+    * CSV
+    :param request: the request object
+    :param item: the object to be converted
+    :param item_string: the string text to show in the root node, only needed for xml
+    :return: response in the requested format
+    """
     if is_xml_accepted(request):
         return Response(xml_converter.object_to_xml(item,
                                                     item_string), mimetype='application/xml')
@@ -2078,6 +2259,19 @@ def response_xml_or_json_item(request, item, item_string):
 
 
 def response_xml_or_json_list(request, collection, collection_string, item_string):
+    """
+    Return response with the content in the format requested
+    Available formats:
+    * JSON
+    * XML
+    * JSONP
+    * CSV
+    :param request: the request object
+    :param collection: the collection to be converted
+    :param collection_string: the string text to show in the root node, only needed for xml
+    :param item_string: the string in the root node of the object, only needed for xml
+    :return: response in the requested format
+    """
     if is_xml_accepted(request):
         return Response(xml_converter.list_to_xml(collection,
                                                   collection_string, item_string), mimetype='application/xml')
@@ -2096,7 +2290,19 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
 
 
 def filter_observations_by_date_range(observations, from_date=None, to_date=None):
+    """
+    Filters observations by a given date range
+    :param observations: list of observations to filter
+    :param from_date: beginning of the date range
+    :param to_date: end of the date range
+    :return: filtered list of observations
+    """
     def filter_key(observation):
+        """
+        Filters a single observations
+        :param observation: observations to filter
+        :return: True if observations passes, False otherwise
+        """
         time = observation.ref_time
         return (isinstance(time, Instant) and from_date <= time.timestamp <= to_date) \
             or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)  \
@@ -2106,13 +2312,24 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
 
 
 def str_date_to_date(date_from, date_to):
-        if date_from is not None and date_to is not None:
-            from_date = datetime.strptime(date_from, "%Y%m%d").date()
-            to_date = datetime.strptime(date_to, "%Y%m%d").date()
-        return from_date, to_date
+    """
+    Convert two dates in str format to date object
+    Format: YYYYMMDD
+    :param date_from: beginning of the interval
+    :param date_to: end of the interval
+    :return: from_date and to_date equivalent of given in date objects
+    """
+    if date_from is not None and date_to is not None:
+        from_date = datetime.strptime(date_from, "%Y%m%d").date()
+        to_date = datetime.strptime(date_to, "%Y%m%d").date()
+    return from_date, to_date
 
 
 def filter_by_region_and_top(id):
+    """
+    Filter by region and a top given
+    :return: countries top and top observations
+    """
     top = int(request.args.get("top")) if request.args.get("top") is not None else 10
     region = int(request.args.get("region")) if request.args.get("region") not in (None, "global") else "global"
     if region is 'global':
@@ -2132,6 +2349,11 @@ def filter_by_region_and_top(id):
 
 
 def observations_average(observations):
+    """
+    Returns the average of observations values
+    :param observations: observations to calculate the average
+    :return: average
+    """
     if len(observations) == 1:
         average = observations[0].value.value
     else:
@@ -2142,6 +2364,12 @@ def observations_average(observations):
 
 
 def get_visualization_json(request, chartType):
+    """
+    Create json object through a dict by request parameters given
+    :param request: request object from the client
+    :param chartType: type of chart to be showed
+    :return: json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic
+    """
     indicator = indicator_service.get_by_code(request.args.get('indicator'))
     countries = request.args.get('countries').split(',')
     countries = [country for country in country_service.get_all() if country.iso3 in countries]
@@ -2183,6 +2411,11 @@ def get_visualization_json(request, chartType):
 
 
 def get_intervals(times):
+    """
+    Return intervals to xAxis on the graphic
+    :param times: times collection
+    :return: times in the format of the graphic
+    """
     if len(times) > 1:
         if isinstance(times[0], Instant):
             return [time.timestamp for time in times]
@@ -2190,10 +2423,21 @@ def get_intervals(times):
             return [time.year for time in times]
         elif isinstance(times[0], Interval):
             return [time.start_time for time in times]
+    elif len(times) == 1:
+        if isinstance(times[0], Instant):
+            return [times[0].timestamp]
+        elif isinstance(times[0], YearInterval):
+            return [times[0].year]
+        elif isinstance(times[0], Interval):
+            return [times[0].start_time]
 
 
 class EmptyObject():
-    pass
+    """
+    Class to create object without attributes, to be included dynamically
+    """
+    def __init__(self):
+        pass
 
 
 

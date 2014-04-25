@@ -14,10 +14,10 @@ json_converter = JSONConverter()
 
 
 class MyProxyHack(object):
-    '''
+    """
     Hack to proxy in testing, if not will fail because of bad ip address
     @see http://stackoverflow.com/questions/14872829/get-ip-address-when-testing-flask-application-through-nosetests
-    '''
+    """
 
     def __init__(self, app):
         self.app = app
@@ -39,6 +39,7 @@ class ApiTest(TestCase):
         return app.app
 
     def setUp(self):
+        app.db.drop_all()
         app.db.create_all()
 
     def tearDown(self):
@@ -2705,6 +2706,25 @@ class TestJSONP(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.get("/topics/translations/1/en?format=jsonp")
         self.assertEquals(response.data, "callback(" + topic_json + ");")
+
+
+class LocalhostTest(ApiTest):
+    def create_app(self):
+        app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
+        app.app.config['TESTING'] = True
+        app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
+        return app.app
+
+    def test(self):
+        spain_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP'
+        ))
+        response = self.client.get("/countries/ESP")
+        self.assert401(response)
+        response = self.client.post("/countries", data=spain_json, content_type='application/json')
+        self.assertStatus(response, 403)
 
 
 if __name__ == '__main__':
