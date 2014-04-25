@@ -2722,7 +2722,7 @@ class LocalhostTest(ApiTest):
            iso3='ESP'
         ))
         response = self.client.get("/countries/ESP")
-        self.assert404(response)
+        self.assert401(response)
         response = self.client.post("/countries", data=spain_json, content_type='application/json')
         self.assertStatus(response, 403)
 
