@@ -16,6 +16,8 @@ from app.services import CountryService, IndicatorService, UserService, Organiza
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
 from flask import request
 from datetime import datetime
+from functools import wraps
+
 
 api = Api(app)
 country_service = CountryService()
@@ -51,12 +53,42 @@ def localhost_decorator(f):
     return call
 
 
+def check_auth(username, password):
+    """
+    This function is called to check if a username /
+    password combination is valid.
+    """
+    return username == 'admin' and password == 'secret'
+
+
+def authenticate():
+    """Sends a 401 response that enables basic auth"""
+    return Response(
+    'Could not verify your access level for that URL.\n'
+    'You have to login with proper credentials', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if (not auth or not check_auth(auth.username, auth.password)) \
+                and (not request.remote_addr == '127.0.0.1' and not request.remote_addr == 'localhost'):
+            return authenticate()
+        if auth:
+            app.logger.info("Request from user: " + auth.username)
+        return f(*args, **kwargs)
+    return decorated
+
+
 class CountryListAPI(Resource):
     """
     Countries collection URI
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all countries
@@ -109,6 +141,7 @@ class CountryAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, code):
         """
         Show country
@@ -154,6 +187,7 @@ class IndicatorListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all indicators
@@ -211,6 +245,7 @@ class IndicatorAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show indicator
@@ -258,6 +293,7 @@ class IndicatorTopAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show top 10 countries with the highest value for a given indicator
@@ -279,6 +315,7 @@ class IndicatorAverageAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show the average value for a indicator of all countries
@@ -297,6 +334,7 @@ class IndicatorCompatibleAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show the compatible indicators of the given indicator
@@ -317,6 +355,7 @@ class IndicatorStarredAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self):
         """
         List starred indicators
@@ -334,6 +373,7 @@ class UserListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all users
@@ -383,6 +423,7 @@ class UserAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show user
@@ -428,6 +469,7 @@ class OrganizationListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all organizations
@@ -478,6 +520,7 @@ class OrganizationAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show organization
@@ -523,6 +566,7 @@ class OrganizationUserListAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, organization_id):
         """
         List all users of a given organization
@@ -537,6 +581,7 @@ class OrganizationUserAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, organization_id, user_id):
         """
         Show a user by its organization id and its user id
@@ -558,6 +603,7 @@ class CountriesIndicatorListAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, iso3):
         """
         List all indicators of a given country
@@ -578,6 +624,7 @@ class CountriesIndicatorAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, iso3, indicator_id):
         """
         Show a indicators by its country id and its indicator id
@@ -726,6 +773,7 @@ class RegionListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all region
@@ -780,6 +828,7 @@ class RegionAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show region
@@ -823,6 +872,7 @@ class RegionsCountryListAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         List all countries of a given region
@@ -843,6 +893,7 @@ class RegionsCountryAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id, iso3):
         """
         Show country by its region id and its country id
@@ -865,6 +916,7 @@ class DataSourceListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all datasources
@@ -915,6 +967,7 @@ class DataSourceAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show datasource
@@ -959,6 +1012,7 @@ class DatasetListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all datasets
@@ -1011,6 +1065,7 @@ class DatasetAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show dataset
@@ -1054,6 +1109,7 @@ class DataSourceIndicatorListAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         List all indicators of a given datasource
@@ -1073,6 +1129,7 @@ class DataSourceIndicatorAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id, indicator_id):
         """
         Show indicator by its datasource id and indicator id
@@ -1096,6 +1153,7 @@ class ObservationByTwoAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id_first_filter, id_second_filter):
         """
         Show observations filtering by two ids.
@@ -1120,6 +1178,7 @@ class ObservationByTwoAverageAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id_first_filter, id_second_filter):
         """
         Show observations average filtering by two ids.
@@ -1161,7 +1220,7 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
             observation.country = country
             observation.indicator = indicator
             observation.ref_time = observation.ref_time
-            observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
 
     observations = None
     if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
@@ -1201,6 +1260,7 @@ class ValueListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all values
@@ -1253,6 +1313,7 @@ class ValueAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show value
@@ -1297,6 +1358,7 @@ class TopicListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all topics
@@ -1347,6 +1409,7 @@ class TopicAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show topic
@@ -1390,6 +1453,7 @@ class TopicIndicatorListAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, topic_id):
         """
         List all indicators by a given topic
@@ -1406,6 +1470,7 @@ class TopicIndicatorAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, topic_id, indicator_id):
         """
         Show indicators by its topic id and indicator id
@@ -1427,6 +1492,7 @@ class RegionCountriesWithDataAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, region_id):
         """
         Show country that have some observations by a given region (country is_part_of region)
@@ -1445,6 +1511,7 @@ class CountriesIndicatorLastUpdateAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, iso3):
         """
         Show indicators last_update by a given country
@@ -1463,6 +1530,7 @@ class IndicatorsCountryLastUpdateAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id, iso3):
         """
         Show indicator last_update by its country id and indicator id
@@ -1481,6 +1549,7 @@ class ObservationByPeriodAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show observations of one of this given as parameter:
@@ -1526,6 +1595,7 @@ class IndicatorByPeriodAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show observations by its given indicator
@@ -1551,6 +1621,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, indicator_id, iso3):
         """
         Show observations by its indicator id and countyr id
@@ -1578,6 +1649,7 @@ class IndicatorAverageByPeriodAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show average of indicator observations
@@ -1606,6 +1678,7 @@ class IndicatorRelatedAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, id):
         """
         Show related indicators
@@ -1624,6 +1697,7 @@ class IndicatorCountryTendencyAPI(Resource):
     Methods: GET
     """
 
+    @requires_auth
     def get(self, indicator_id, iso3):
         """
         Show indicator tendency for a country and indicator
@@ -1644,6 +1718,7 @@ class RegionTranslationListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all translations of a region
@@ -1693,6 +1768,7 @@ class RegionTranslationAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, region_id, lang_code):
         """
         Show region translation
@@ -1735,6 +1811,7 @@ class IndicatorTranslationListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all indicators translations
@@ -1784,6 +1861,7 @@ class IndicatorTranslationAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, indicator_id, lang_code):
         """
         Show indicator translation
@@ -1827,6 +1905,7 @@ class TopicTranslationListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
+    @requires_auth
     def get(self):
         """
         List all topic translations
@@ -1876,6 +1955,7 @@ class TopicTranslationAPI(Resource):
     Methods: GET, PUT, DELETE
     """
 
+    @requires_auth
     def get(self, topic_id, lang_code):
         """
         Show country topic translation
