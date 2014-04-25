@@ -1249,7 +1249,7 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         translate_region(country)
                         observation.indicator = indicator
                         observation.ref_time = observation.ref_time
-                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
                         observations.append(observation)
     return observations if observations is not None else None
 
