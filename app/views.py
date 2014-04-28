@@ -880,7 +880,7 @@ class RegionsCountryListAPI(Resource):
         """
         region = region_service.get_by_code(id)
         countries = []
-        if region.id == 1:
+        if region is not None and region.id == 1:
             countries = country_service.get_all()
         else:
             for country in country_service.get_all():
