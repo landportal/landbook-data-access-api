@@ -1992,81 +1992,110 @@ class TopicTranslationAPI(Resource):
         return {}, 204
 
 
-@app.route('/api/graphs/barchart')
+@app.route('/graphs/barchart')
 def barChart():
         """
         Visualization of barchart
         """
         options, title, description = get_visualization_json(request, 'bar')
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+        return response_graphics(options, title, description)
 
 
-@app.route('/api/graphs/piechart')
+@app.route('/graphs/piechart')
 def pieChart():
         """
         Visualization of piechart
         """
         options, title, description = get_visualization_json(request, 'pie')
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+        return response_graphics(options, title, description)
 
 
-@app.route('/api/graphs/linechart')
+@app.route('/graphs/linechart')
 def lineChart():
         """
         Visualization of linechart
         """
         options, title, description = get_visualization_json(request, 'line')
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+        return response_graphics(options, title, description)
 
 
-@app.route('/api/graphs/areachart')
+@app.route('/graphs/areachart')
 def areaChart():
         """
         Visualization of areachart
         """
         options, title, description = get_visualization_json(request, 'area')
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+        return response_graphics(options, title, description)
 
 
-@app.route('/api/graphs/scatterchart')
+@app.route('/graphs/scatterchart')
 def scatterChart():
         """
         Visualization of scatterchart
         """
-        options, title, description = get_visualization_json(request, 'scatter')
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+        indicators = request.args.get('indicator').split(',')
+        indicators = [indicator_service.get_by_code(indicator) for indicator in indicators]
+        countries = request.args.get('countries')
+        if countries == 'all':
+            countries = country_service.get_all()
+        else:
+            countries = countries.split(',')
+            countries = [country for country in country_service.get_all() if country.iso3 in countries]
+        colours = request.args.get('colours').split(',')
+        colours = ['#'+colour for colour in colours]
+        title = request.args.get('title') if request.args.get('title') is not None else ''
+        description = request.args.get('description') if request.args.get('description') is not None else ''
+        xTag = request.args.get('xTag')
+        yTag = request.args.get('yTag')
+        from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
+        to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
+        series = []
+        for country in countries:
+            observations_x_indicator = filter_observations_by_date_range([observation for observation in country.observations \
+                                                          if observation.indicator_id == indicators[1].id], from_time, to_time)
+            observations_y_indicator = filter_observations_by_date_range([observation for observation in country.observations \
+                                                          if observation.indicator_id == indicators[0].id], from_time, to_time)
+            if len(observations_y_indicator) > 0 and len(observations_x_indicator) > 0:
+                observations_x_indicator.sort(key=lambda observations: observation.ref_time.value)
+                observations_y_indicator.sort(key=lambda observations: observation.ref_time.value)
+                series.append({
+                    'name': country.translations[0].name,
+                    'values': [[float(observations_x_indicator[i].value.value), float(observations_y_indicator[i].value.value)]
+                               for i in range(min(len(observations_x_indicator), len(observations_y_indicator)))]
+                })
+        json_object = {
+            'chartType': 'scatter',
+            'xAxis': {
+                'title': xTag
+            },
+            'yAxis': {
+                'title': yTag
+            },
+            'series': series,
+            'serieColours': colours,
+            'valueOnItem': {
+                'show': False
+            }
+        }
+        return response_graphics(json_object, title, description)
 
 
-@app.route('/api/graphs/polarchart')
+@app.route('/graphs/polarchart')
 def polarChart():
         """
         Visualization of polarchart
         """
         options, title, description = get_visualization_json(request, 'polar')
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+        return response_graphics(options, title, description)
 
 
-@app.route('/api/graphs/table')
+@app.route('/graphs/table')
 def table():
         """
         Visualization of table
         """
         options, title, description = get_visualization_json(request, 'table')
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        return render_template('table.html', options=options, title=title, description=description)
+        return response_graphics(options, title, description)
 
 
 api.add_resource(CountryListAPI, '/countries', endpoint='countries_list')
@@ -2430,6 +2459,14 @@ def get_intervals(times):
             return [times[0].year]
         elif isinstance(times[0], Interval):
             return [times[0].start_time]
+
+
+def response_graphics(options, title, description):
+    if request.args.get("format") == "json":
+        return Response(json.dumps(options), mimetype='application/json')
+    elif request.args.get("format") == 'jsonp':
+        return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
+    return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
 class EmptyObject():
