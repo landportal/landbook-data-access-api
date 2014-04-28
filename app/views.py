@@ -890,6 +890,27 @@ class RegionsCountryListAPI(Resource):
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
 
+class RegionsRegionListAPI(Resource):
+    """
+    Regions Region collection URI
+    Methods: GET
+    """
+
+    @requires_auth
+    def get(self, id):
+        """
+        List all regions of a given region
+        Response 200 OK
+        """
+        region = region_service.get_by_code(id)
+        regions = []
+        for selectedRegion in region_service.get_all():
+            if selectedRegion.is_part_of_id == region.id:
+                regions.append(selectedRegion)
+        translate_region_list(regions)
+        return response_xml_or_json_list(request, regions, 'regions', 'region')
+
+
 class RegionsCountryAPI(Resource):
     """
     Countries Indicator element URI
@@ -2123,6 +2144,7 @@ api.add_resource(ObservationByTwoAverageAPI, '/observations/<id_first_filter>/<i
 api.add_resource(RegionListAPI, '/regions', endpoint='regions_list')
 api.add_resource(RegionAPI, '/regions/<id>', endpoint='regions')
 api.add_resource(RegionsCountryListAPI, '/regions/<id>/countries', endpoint='regions_countries_list')
+api.add_resource(RegionsRegionListAPI, '/regions/<id>/regions', endpoint='regions_regions_list')
 api.add_resource(RegionsCountryAPI, '/regions/<id>/countries/<iso3>', endpoint='regions_countries')
 api.add_resource(DataSourceListAPI, '/datasources', endpoint='datasources_list')
 api.add_resource(DataSourceAPI, '/datasources/<id>', endpoint='datasources')
