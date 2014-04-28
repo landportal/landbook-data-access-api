@@ -880,9 +880,12 @@ class RegionsCountryListAPI(Resource):
         """
         region = region_service.get_by_code(id)
         countries = []
-        for country in country_service.get_all():
-            if country.is_part_of_id == region.id:
-                countries.append(country)
+        if region.id == 1:
+            countries = country_service.get_all()
+        else:
+            for country in country_service.get_all():
+                if country.is_part_of_id == region.id:
+                    countries.append(country)
         translate_region_list(countries)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
@@ -1241,7 +1244,7 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
         indicator = indicator_service.get_by_code(id_second_filter)
         translate_indicator(indicator)
         for country in country_service.get_all():
-            if country.is_part_of_id == region.id:
+            if country.is_part_of_id == region.id or region.id == 1:
                 country_observations = country.observations
                 for observation in country_observations:
                     if observation.indicator_id == id_second_filter:
