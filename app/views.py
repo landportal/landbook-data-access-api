@@ -902,12 +902,7 @@ class RegionsRegionListAPI(Resource):
         List all regions of a given region
         Response 200 OK
         """
-        region = region_service.get_by_code(id)
-        regions = []
-        for selectedRegion in region_service.get_all():
-            if selectedRegion.is_part_of_id == region.id:
-                regions.append(selectedRegion)
-        translate_region_list(regions)
+        regions = get_regions_of_region(id)
         return response_xml_or_json_list(request, regions, 'regions', 'region')
 
 
@@ -1639,6 +1634,50 @@ class IndicatorByPeriodAPI(Resource):
         return response_xml_or_json_list(request, observations, 'observations', 'observation')
 
 
+class IndicatorRegionsWithDataAPI(Resource):
+    """
+    Indicator by period element URI
+    Methods: GET
+    """
+    @requires_auth
+    def get(self, id):
+        """
+        Show regions with data for the given indicator
+        Response 200 OK
+        """
+        if indicator_service.get_by_code(id) is not None:
+            regions_with_data = get_regions_with_data(id)
+        else:
+            abort(404)
+        return response_xml_or_json_list(request, regions_with_data, 'regions', 'region')
+
+
+class IndicatorRegionsWihtoutDataAPI(Resource):
+    """
+    Indicator regions without data element URI
+    Methods: GET
+    """
+
+    @requires_auth
+    def get(self, id):
+        """
+        Show observations by its given indicator
+        Observations will be filtered between two dates, if they are not supplied
+        whole range will be returned
+        Response 200 OK
+        """
+        if indicator_service.get_by_code(id) is not None:
+            regions_with_data = get_regions_with_data(id)
+            regions = get_regions_of_region(1)
+            regions_without_data = filter(lambda region: region not in regions_with_data, regions)
+            if len(regions_without_data) == len(regions):
+                regions_without_data.append(region_service.get_by_code(1))
+            translate_region_list(regions_without_data)
+        else:
+            abort(404)
+        return response_xml_or_json_list(request, regions_without_data, 'regions', 'region')
+
+
 class IndicatorByCountryAndPeriodAPI(Resource):
     """
     Countries element URI
@@ -2163,6 +2202,8 @@ api.add_resource(CountriesIndicatorLastUpdateAPI, '/countries/<iso3>/last_update
 api.add_resource(IndicatorsCountryLastUpdateAPI, '/indicators/<id>/<iso3>/last_update', endpoint='indicators_countries_last_update')
 api.add_resource(ObservationByPeriodAPI, '/observations/<id>/range', endpoint='observations_by_period')
 api.add_resource(IndicatorByPeriodAPI, '/indicators/<id>/range', endpoint='indicators_by_period')
+api.add_resource(IndicatorRegionsWithDataAPI, '/indicators/<id>/regions_with_data', endpoint='indicators_regions_with_data')
+api.add_resource(IndicatorRegionsWihtoutDataAPI, '/indicators/<id>/regions_without_data', endpoint='indicators_regions_without_data')
 api.add_resource(IndicatorAverageByPeriodAPI, '/indicators/<id>/average/range', endpoint='indicators_average_by_period')
 api.add_resource(IndicatorByCountryAndPeriodAPI, '/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
 api.add_resource(IndicatorRelatedAPI, '/indicators/<id>/related', endpoint='indicators_related')
@@ -2492,6 +2533,36 @@ def response_graphics(options, title, description):
     elif request.args.get("format") == 'jsonp':
         return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
     return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
+
+
+def get_regions_of_region(id):
+    region = region_service.get_by_code(id)
+    regions = []
+    for selectedRegion in region_service.get_all():
+        if selectedRegion.is_part_of_id == region.id:
+            regions.append(selectedRegion)
+    translate_region_list(regions)
+    return regions
+
+
+def get_regions_with_data(id):
+    regions_with_data = []
+    regions = get_regions_of_region(1)
+    observations = observation_service.get_all()
+    observations = [obs for obs in observations if obs.indicator_id == id]
+    regions_observations_id = [obs.region_id for obs in observations]
+    for region in regions:
+        ids_countries = [country.id for country in country_service.get_all() if country.is_part_of_id == region.id]
+        for id in ids_countries:
+            if id in regions_observations_id:
+                try:
+                    regions_with_data.index(region)
+                except ValueError:
+                    regions_with_data.append(region)
+    if len(regions_with_data) > 0:
+        regions_with_data.append(region_service.get_by_code(1))
+    translate_region_list(regions_with_data)
+    return regions_with_data
 
 
 class EmptyObject():
