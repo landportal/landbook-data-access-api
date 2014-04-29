@@ -1212,9 +1212,22 @@ class ObservationByTwoAverageAPI(Resource):
 
         observations = get_observations_by_two_filters(id_first_filter, id_second_filter)
         if observations is not None:
-            average = EmptyObject()
-            average.value = observations_average(observations)
-            return response_xml_or_json_item(request, average, 'average')
+            averages = []
+            all_observations_average = EmptyObject()
+            all_observations_average.time = 'all'
+            all_observations_average.average = observations_average(observations)
+            averages.append(all_observations_average)
+            observations_times = [observation.ref_time.value for observation in observations]
+            observations_times = list(set(observations_times))
+            observations_times.sort()
+            for observation_time in observations_times:
+                grouped_observations = filter(lambda obs: obs.ref_time.value == observation_time, observations)
+                if len(grouped_observations) > 0:
+                    average_time = EmptyObject()
+                    average_time.time = observation_time
+                    average_time.average = reduce(lambda x, y: x + float(y.value.value), grouped_observations, 0) / len(grouped_observations)
+                    averages.append(average_time)
+            return response_xml_or_json_list(request, averages, 'averages', 'average')
         abort(400)
 
 
@@ -2451,6 +2464,8 @@ def observations_average(observations):
     """
     if len(observations) == 1:
         average = observations[0].value.value
+    elif len(observations) == 0:
+        return 0
     else:
         average = 0
         for observation in observations:
