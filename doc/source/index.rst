@@ -36,29 +36,29 @@ Entities
 ~~~~~~~~
 The entities available are the next:
 
-country
+**country**
 	Represents a country like Italy, France, Spain and so on.
-region
+**region**
 	Represents a region like Europe or America and it have other regions or countries belonging to it. There is an special region called 'global' with un_code 1, it represents all the world.
-indicator
+**indicator**
 	Represents a set of data grouped by the same criteria, e.g.: Women Holders, it contains various observations for various countries.
-observations
+**observations**
 	Represents a data observed or recollected in a moment or period of time
-user
+**user**
 	Represents a source of data
-organizations
+**organizations**
 	Represents an organization that provides data
-datasource
+**datasource**
 	To complete
-dataset
+**dataset**
 	To complete
-value
+**value**
 	Represents a value for an observation
-topic
+**topic**
 	To complete
 
 
-As said before, api is based in RESTful principles, therefore you can make a petition with your browser or curl like::
+As said before, api is based in RESTful principles, therefore you can make a petition with your browser or curl, like::
 
 	curl landportal.info/api/countries?format=json
 
@@ -66,7 +66,7 @@ Formats availabe through the format argument are: **JSON**, **XML**, **CSV** and
 In the next table you can see all the URLs defined that you can access with a short description and arguments to modify the result. Variables in the URL are surrounded by '<' and '>':
 
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| URI                                                                              | Description                                                                | Arguments                                                                        |
+| URI                                                                              | Description                                                                | Arguments                                                                       |
 +==================================================================================+============================================================================+=================================================================================+
 | landportal.info/api/countries                                                    | All countries                                                              |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -76,11 +76,11 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/indicators/<id>                                              | Indicator with the given id                                                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/indicators/<id>/top                                          | Top observations of the given indicator with highest values                                                                           | top: number of results                                                       |
+| landportal.info/api/indicators/<id>/top                                          | Top observations of the given indicator with highest values                | top: number of results                                                          |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/indicators/<id>/average                                      | Average of given indicator                                                 |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/indicators/<id>/compatible                                   | Show compatible indicators to the one given                                                                            |                                                                              |
+| landportal.info/api/indicators/<id>/compatible                                   | Show compatible indicators to the one given                                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/users                                                        | All users                                                                  |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -92,8 +92,93 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/organizations/<id>/users                                     | Users of the given organization                                            |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/users/<id>                                                   | User with the given id                                                     |                                                                                 |
+| landportal.info/api/organizations/<organization_id>/users/<user_id>              | User with the given id of the given organization                           |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/countries/<iso3>/indicators                                  | Indicators of the given country                                            |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/countries/<iso3>indicators/<indicator_id>                    | Given indicators of the given country                                      |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/observations/<id_first_filter>/<id_second_filter>            | Observations of a region and an indicator or a country and an indicator    |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/observations/<id_first_filter>/<id_second_filter>            | Average of the observations, same as above one                             |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions                                                      | All regions                                                                |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions/<un_code>                                            | Region with the given un code                                              |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions/<id>/countries                                       | Countries with that are part of the given region                           |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions/<id>/countries/<iso3>                                | Country with the given iso3 and is part of the given region                |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions/<id>/regions                                         | Regions that are part of the given region                                  |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/datasources                                                  | All datasources                                                            |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/datasources/<id>                                             | Datasource with the given id                                               |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/datasets                                                     | All datasets                                                               |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/datasets/<id>                                                | Dataset with the given id                                                  |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/datasources/<id>/indicators                                  | Indicators of the given datasource                                         |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/datasets/<id>                                                | Dataset with the given id                                                  |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/datasources/<id>/indicators/<indicator_id>                   | Indicator with the given id of the given datasource                        |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/values                                                       | All values                                                                 |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/values/<id>                                                  | Value with the given id                                                    |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/topics                                                       | All topics                                                                 |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/topics/<id>                                                  | Topic with the given id                                                    |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/topics/<topic_id>/indicators                                 | Indicators of the given topic                                              |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/topics/<topic_id>/indicators/<indicator_id>                  | Indicator with the given id of the given topic                             |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions/<region_id>/countries_with_data                      | Countries that are part of the given region and have observations          |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/countries/iso3>/last_update                                  | Date of the country last update                                            |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/<iso3>/last_update                           | Date of the country last update for the given indicator                    |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/observations/<id>                                            | Observations of a country, indicator or region                             |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/observations/<id>/range                                      | Observations of a country, indicator or region, betwenn two dates          | from: beginning date of the interval, end: final date of the interval           |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/range                                        | Observations of the given indicator between two dates                      | from: beginning date of the interval, end: final date of the interval           |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/regions_with_date                            | Regions with observations for the given indicator                          |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/regions_without_date                         | Regions without observations for the given indicator                       |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/average/range                                | Average of the given indicator between two dates                           | from: beginning date of the interval, end: final date of the interval           |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/<iso3>/average/range                         | Average of the given indicator and country between two dates               | from: beginning date of the interval, end: final date of the interval           |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/related                                      | Indicators with relation with the one given                                |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/<id>/<iso3>/tendency                              | Tendency of the given indicator in the given country                       |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions/translations                                         | All region translations                                                    |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/regions/translations/<region_id>/<lang_code>                 | Region translation of the given region in the given language               |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/translations                                      | All indicator translations                                                 |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicator/translations/<indicator_id>/<lang_code>            | Indicator translation of the given indicator in the given language         |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/topics/translations                                          | All topic translations                                                     |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/topics/translations/<topic_id>/<lang_code>                   | Topic translation of the given topic in the given language                 |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/indicators/starred                                           | Indicators that are starred, normally those which are on the main page     |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+
+
+Outputs that can change depending on the language, have another parameter available, this is: lang, so you can use lang=fr to get it on French. Translations are available for: Regions, Countries, Indicators and Topics.
 
 Graphics
 ~~~~~~~~
@@ -105,15 +190,15 @@ As you can see you can define what kind of chart you want to be showed, availabl
 
 * **barchart**: Chart with higher or lower bars for every value
 * **linechart**: Chart with dots representing the values. These dots are connected by lines.
-* **areachart**: Chart very similar to linechart, but these one colors the area below each line.
+* **areachart**: Chart very similar to linechart, but this one colors the area below each line.
 * **piechart**: Chart that shows various pies divided with a percentage according to the values in the serie.
 * **polarchart**: 
-* **scatterchart**:
+* **scatterchart**: Chart that show various points but without connecting the dots
 * **table**: Table with the data
 
 Also there are some arguments available to modify graph aspect or data. Available arguments are:
 
-* **indicator**: Id of the indicator to be showed
+* **indicator**: Id of the indicator to be showed, two indicators separated with comma in the case of scatterchart
 * **countries**: Iso3 of the countries to be included, separated by commas
 * **colours**: HTML codes without '#' and separated by commas
 * **xTag**: Name for the x axis

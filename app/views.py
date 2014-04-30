@@ -1283,6 +1283,21 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         observation.ref_time = observation.ref_time
                         observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
                         observations.append(observation)
+    if observations is not None:
+        observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
+    for observation in observations:
+        observations_country = filter(lambda obs: obs.region_id == observation.region_id, observations)
+        for j in range(len(observations_country)):
+            if observation == observations_country[j]:
+                if j == 0:
+                    observation.tendency = -2
+                elif float(observation.value.value) == float(observations_country[j-1].value.value):
+                    observation.tendency = 0
+                elif float(observations_country[j-1].value.value) > float(observation.value.value):
+                    observation.tendency = -1
+                elif float(observations_country[j-1].value.value) < float(observation.value.value):
+                    observation.tendency = 1
+                observation.other_parseable_fields.append('tendency')
     return observations if observations is not None else None
 
 
@@ -2196,8 +2211,8 @@ api.add_resource(ObservationByTwoAverageAPI, '/observations/<id_first_filter>/<i
 api.add_resource(RegionListAPI, '/regions', endpoint='regions_list')
 api.add_resource(RegionAPI, '/regions/<id>', endpoint='regions')
 api.add_resource(RegionsCountryListAPI, '/regions/<id>/countries', endpoint='regions_countries_list')
-api.add_resource(RegionsRegionListAPI, '/regions/<id>/regions', endpoint='regions_regions_list')
 api.add_resource(RegionsCountryAPI, '/regions/<id>/countries/<iso3>', endpoint='regions_countries')
+api.add_resource(RegionsRegionListAPI, '/regions/<id>/regions', endpoint='regions_regions_list')
 api.add_resource(DataSourceListAPI, '/datasources', endpoint='datasources_list')
 api.add_resource(DataSourceAPI, '/datasources/<id>', endpoint='datasources')
 api.add_resource(DatasetListAPI, '/datasets', endpoint='datasets_list')
