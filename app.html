@@ -1,0 +1,3043 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>app package &mdash; landportal-data-access-api 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="landportal-data-access-api 1 documentation" href="index.html" />
+    <link rel="next" title="model package" href="model.html" />
+    <link rel="prev" title="Welcome to landportal-data-access-api’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="model package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to landportal-data-access-api’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">landportal-data-access-api 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="app-package">
+<h1>app package<a class="headerlink" href="#app-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-app.daos">
+<span id="app-daos-module"></span><h2>app.daos module<a class="headerlink" href="#module-app.daos" title="Permalink to this headline">¶</a></h2>
+<p>Created on 03/02/2014</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Herminio</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="app.daos.CountryDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">CountryDAO</tt><a class="headerlink" href="#app.daos.CountryDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<p>Dao for country entity</p>
+<dl class="method">
+<dt id="app.daos.CountryDAO.get_by_code">
+<tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.get_by_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns a country by its given code
+:param code: iso3 of the country requested
+:return: country with given iso3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.CountryDAO.update">
+<tt class="descname">update</tt><big>(</big><em>country</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to update an existing country, its code will not be changed
+:param country: country to be updated, with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.daos.DAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">DAO</tt><big>(</big><em>cls</em><big>)</big><a class="headerlink" href="#app.daos.DAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Generic DAO for all classes, only the class is needed</p>
+<dl class="method">
+<dt id="app.daos.DAO.delete">
+<tt class="descname">delete</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.DAO.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to delete an existing element by its code
+:param code: id of the object to be deleted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.DAO.get_all">
+<tt class="descname">get_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.daos.DAO.get_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns all countries in the database
+:return: a collection of all elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.DAO.get_by_code">
+<tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.DAO.get_by_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns a element by its given code
+:param code: id of the element requested
+:return: element with the given id</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.DAO.insert">
+<tt class="descname">insert</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.daos.DAO.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that inserts a new element
+:param object: element to be inserted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.DAO.set_session">
+<tt class="descname">set_session</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#app.daos.DAO.set_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to set the database to use
+:param session: session of the database used</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.DAO.update">
+<tt class="descname">update</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.daos.DAO.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to update an existing element, its code will not be changed
+:param object: object to be updated, with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.daos.IndicatorTranslationDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">IndicatorTranslationDAO</tt><a class="headerlink" href="#app.daos.IndicatorTranslationDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<p>Dao for indicator translation entity</p>
+<dl class="method">
+<dt id="app.daos.IndicatorTranslationDAO.delete">
+<tt class="descname">delete</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorTranslationDAO.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes the indicator translation by its given code
+:param indicator_id: id of requested indicator
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.IndicatorTranslationDAO.get_by_codes">
+<tt class="descname">get_by_codes</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorTranslationDAO.get_by_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns translated indicator
+:param indicator_id: id of requested indicator
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
+:return: indicator translation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.IndicatorTranslationDAO.update">
+<tt class="descname">update</tt><big>(</big><em>indicator_translation</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorTranslationDAO.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to update an existing indicator translation, its code will not be changed
+:param indicator_translation: updated indicator translation, with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.daos.RegionDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">RegionDAO</tt><a class="headerlink" href="#app.daos.RegionDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<p>Dao for region entity</p>
+<dl class="method">
+<dt id="app.daos.RegionDAO.get_by_code">
+<tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_by_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns a region by its given code
+:param code: un_code of the region
+:return: region with given un_code</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.RegionDAO.update">
+<tt class="descname">update</tt><big>(</big><em>region</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to update an existing country, its code will not be changed
+:param region: region to be updated, with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.daos.RegionTranslationDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">RegionTranslationDAO</tt><a class="headerlink" href="#app.daos.RegionTranslationDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<p>Dao for region translation entity</p>
+<dl class="method">
+<dt id="app.daos.RegionTranslationDAO.delete">
+<tt class="descname">delete</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.RegionTranslationDAO.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes the region translation by its given code
+:param region_id: id of requested region
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.RegionTranslationDAO.get_by_codes">
+<tt class="descname">get_by_codes</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.RegionTranslationDAO.get_by_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns translated region
+:param region_id: id of requested region
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
+:return: region translation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.RegionTranslationDAO.update">
+<tt class="descname">update</tt><big>(</big><em>region_translation</em><big>)</big><a class="headerlink" href="#app.daos.RegionTranslationDAO.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to update an existing region translation, its code will not be changed
+:param region_translation: updated region translation, with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.daos.TopicTranslationDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">TopicTranslationDAO</tt><a class="headerlink" href="#app.daos.TopicTranslationDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<p>Dao for topic translation entity</p>
+<dl class="method">
+<dt id="app.daos.TopicTranslationDAO.delete">
+<tt class="descname">delete</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.TopicTranslationDAO.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes the topic translation by its given code calling the dao
+:param topic_id: id of requested indicator
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.TopicTranslationDAO.get_by_codes">
+<tt class="descname">get_by_codes</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.TopicTranslationDAO.get_by_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns translated topic
+:param topic_id: id of requested topic
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
+:return: topic translation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.TopicTranslationDAO.update">
+<tt class="descname">update</tt><big>(</big><em>topic_translation</em><big>)</big><a class="headerlink" href="#app.daos.TopicTranslationDAO.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to update an existing country, its code will not be changed
+:param topic_translation: updated topic translation, with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="app.daos.update_object_attributes">
+<tt class="descclassname">app.daos.</tt><tt class="descname">update_object_attributes</tt><big>(</big><em>object_to_update</em>, <em>object_with_new_attributes</em><big>)</big><a class="headerlink" href="#app.daos.update_object_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates all the attributes of an object with other object values
+all attributes beginning with &#8216;_&#8217; will not be updated
+:param object_to_update: object to be updated
+:param object_with_new_attributes: object with the new values</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.services">
+<span id="app-services-module"></span><h2>app.services module<a class="headerlink" href="#module-app.services" title="Permalink to this headline">¶</a></h2>
+<p>Created on 03/02/2014</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Herminio</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="app.services.CountryService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">CountryService</tt><a class="headerlink" href="#app.services.CountryService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for country dao</p>
+<dl class="method">
+<dt id="app.services.CountryService.delete_all">
+<tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.CountryService.delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes all countries by calling the dao
+:attention: Take care of what you do, all countries will be destroyed</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.DataSourceService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">DataSourceService</tt><a class="headerlink" href="#app.services.DataSourceService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for DataSource dao</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.DatasetService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">DatasetService</tt><a class="headerlink" href="#app.services.DatasetService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for Dataset dao</p>
+<dl class="method">
+<dt id="app.services.DatasetService.insert">
+<tt class="descname">insert</tt><big>(</big><em>dataset</em><big>)</big><a class="headerlink" href="#app.services.DatasetService.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that inserts a dataset calling the dao
+:param dataset: dataset to be persisted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.GenericService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">GenericService</tt><a class="headerlink" href="#app.services.GenericService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Generic Service, it provides all default methods that could be used
+with the majority of the daos</p>
+<dl class="method">
+<dt id="app.services.GenericService.delete">
+<tt class="descname">delete</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.services.GenericService.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes the element by its given code calling the dao
+:param code: id of the element to be deleted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.GenericService.delete_all">
+<tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.GenericService.delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes all elements by calling the dao
+:attention: Take care of what you do, all countries will be destroyed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.GenericService.get_all">
+<tt class="descname">get_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.GenericService.get_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns all elements given by the dao
+:return: collection of elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.GenericService.get_by_code">
+<tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.services.GenericService.get_by_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns element given by the dao
+:param code: usually the id
+:return: element that owns the given id</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.GenericService.insert">
+<tt class="descname">insert</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.services.GenericService.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that inserts a element calling the dao
+:param object: element to be persisted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.GenericService.update">
+<tt class="descname">update</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.services.GenericService.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that updates the element by calling the dao
+:param object: element to be updated with updated attributes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.GenericService.update_all">
+<tt class="descname">update_all</tt><big>(</big><em>objects</em><big>)</big><a class="headerlink" href="#app.services.GenericService.update_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that updates all the elements given by calling the dao
+:params objects: list of objects to be updated with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.IndicatorRelationshipService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">IndicatorRelationshipService</tt><a class="headerlink" href="#app.services.IndicatorRelationshipService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for IsPartOf dao</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.IndicatorService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">IndicatorService</tt><a class="headerlink" href="#app.services.IndicatorService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for indicator dao</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.IndicatorTranslationService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">IndicatorTranslationService</tt><a class="headerlink" href="#app.services.IndicatorTranslationService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for indicator translation dao</p>
+<dl class="method">
+<dt id="app.services.IndicatorTranslationService.delete">
+<tt class="descname">delete</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.IndicatorTranslationService.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes the indicator translation by its given code calling the dao
+:param indicator_id: id of requested indicator
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.IndicatorTranslationService.delete_all">
+<tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.IndicatorTranslationService.delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes all indicator translations by calling the dao
+:attention: Take care of what you do, all countries will be destroyed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.IndicatorTranslationService.get_by_codes">
+<tt class="descname">get_by_codes</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.IndicatorTranslationService.get_by_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns translated indicator given by the dao
+:param indicator_id: id of requested indicator
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
+:return: indicator translation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.ObservationService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">ObservationService</tt><a class="headerlink" href="#app.services.ObservationService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for organization dao</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.OrganizationService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">OrganizationService</tt><a class="headerlink" href="#app.services.OrganizationService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for organization dao</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.RegionService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">RegionService</tt><a class="headerlink" href="#app.services.RegionService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for region dao</p>
+<dl class="method">
+<dt id="app.services.RegionService.delete_all">
+<tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.RegionService.delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes all regions by calling the dao
+:attention: Take care of what you do, all regions will be destroyed</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.RegionTranslationService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">RegionTranslationService</tt><a class="headerlink" href="#app.services.RegionTranslationService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for region translation dao</p>
+<dl class="method">
+<dt id="app.services.RegionTranslationService.delete">
+<tt class="descname">delete</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.RegionTranslationService.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes the region translation by its given code calling the dao
+:param region_id: id of requested region
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.RegionTranslationService.delete_all">
+<tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.RegionTranslationService.delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes all region translation by calling the dao
+:attention: Take care of what you do, all countries will be destroyed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.RegionTranslationService.get_by_codes">
+<tt class="descname">get_by_codes</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.RegionTranslationService.get_by_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns translated region given by the dao
+:param region_id: id of requested region
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
+:return: region translation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.TopicService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">TopicService</tt><a class="headerlink" href="#app.services.TopicService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for Topic dao</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.TopicTranslationService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">TopicTranslationService</tt><a class="headerlink" href="#app.services.TopicTranslationService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for topic translation dao</p>
+<dl class="method">
+<dt id="app.services.TopicTranslationService.delete">
+<tt class="descname">delete</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.TopicTranslationService.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes the topic translation by its given code calling the dao
+:param topic_id: id of requested indicator
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.TopicTranslationService.delete_all">
+<tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.TopicTranslationService.delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that deletes all countries by calling the dao
+:attention: Take care of what you do, all topic translations will be destroyed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.TopicTranslationService.get_by_codes">
+<tt class="descname">get_by_codes</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.TopicTranslationService.get_by_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns translated topic given by the dao
+:param topic_id: id of requested topic
+:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
+:return: topic translation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.TransactionManager">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">TransactionManager</tt><a class="headerlink" href="#app.services.TransactionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Transaction manager that helps to abstract from the execution</p>
+<dl class="method">
+<dt id="app.services.TransactionManager.execute">
+<tt class="descname">execute</tt><big>(</big><em>dao</em>, <em>function</em>, <em>*args</em><big>)</big><a class="headerlink" href="#app.services.TransactionManager.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstraction for all calls to the dao methods, like command executor</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.UserService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">UserService</tt><a class="headerlink" href="#app.services.UserService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for user dao</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.services.ValueService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">ValueService</tt><a class="headerlink" href="#app.services.ValueService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for Value dao</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.utils">
+<span id="app-utils-module"></span><h2>app.utils module<a class="headerlink" href="#module-app.utils" title="Permalink to this headline">¶</a></h2>
+<p>Created on 03/02/2014</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Herminio</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="app.utils.CSVConverter">
+<em class="property">class </em><tt class="descclassname">app.utils.</tt><tt class="descname">CSVConverter</tt><a class="headerlink" href="#app.utils.CSVConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>CSV converter from objects and list</p>
+<dl class="method">
+<dt id="app.utils.CSVConverter.list_to_csv">
+<tt class="descname">list_to_csv</tt><big>(</big><em>elements_list</em><big>)</big><a class="headerlink" href="#app.utils.CSVConverter.list_to_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list to its csv equivalent
+:param elements_list: collection to be converted
+:return: csv string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.utils.CSVConverter.object_to_csv">
+<tt class="descname">object_to_csv</tt><big>(</big><em>element</em>, <em>header=True</em>, <em>keys=None</em><big>)</big><a class="headerlink" href="#app.utils.CSVConverter.object_to_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a object to its csv equivalent
+:param element: object to be converted
+:param header: True if headers are desired, False if not, by default True
+:param keys: Header keys to use if method used by list_to_csv, default None
+:return: csv string</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.utils.DictionaryList2ObjectList">
+<em class="property">class </em><tt class="descclassname">app.utils.</tt><tt class="descname">DictionaryList2ObjectList</tt><a class="headerlink" href="#app.utils.DictionaryList2ObjectList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Class to convert from a list of dictionaries to a list of objects</p>
+<dl class="method">
+<dt id="app.utils.DictionaryList2ObjectList.convert">
+<tt class="descname">convert</tt><big>(</big><em>given_list</em><big>)</big><a class="headerlink" href="#app.utils.DictionaryList2ObjectList.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list of dictionaries in a list of objects
+:param given_list: list of dictionaries
+:return: list of object</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.utils.JSONConverter">
+<em class="property">class </em><tt class="descclassname">app.utils.</tt><tt class="descname">JSONConverter</tt><a class="headerlink" href="#app.utils.JSONConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>JSON converter from objects and list</p>
+<dl class="method">
+<dt id="app.utils.JSONConverter.list_to_json">
+<tt class="descname">list_to_json</tt><big>(</big><em>elements_list</em><big>)</big><a class="headerlink" href="#app.utils.JSONConverter.list_to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list to its json equivalent
+:param elements_list: list of elements to be converted
+:return: json array ready be returned as string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.utils.JSONConverter.object_to_json">
+<tt class="descname">object_to_json</tt><big>(</big><em>element</em><big>)</big><a class="headerlink" href="#app.utils.JSONConverter.object_to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a object to its json equivalent
+:param element: element to be converted
+:return: json object in string format</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.utils.Struct">
+<em class="property">class </em><tt class="descclassname">app.utils.</tt><tt class="descname">Struct</tt><big>(</big><em>**entries</em><big>)</big><a class="headerlink" href="#app.utils.Struct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Class to convert from dictionary to object
+:see: <a class="reference external" href="http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663">http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663</a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.utils.XMLConverter">
+<em class="property">class </em><tt class="descclassname">app.utils.</tt><tt class="descname">XMLConverter</tt><a class="headerlink" href="#app.utils.XMLConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>XML converter from objects and list</p>
+<dl class="method">
+<dt id="app.utils.XMLConverter.list_to_xml">
+<tt class="descname">list_to_xml</tt><big>(</big><em>elements_list</em>, <em>root_node='elements'</em>, <em>child_node='element'</em><big>)</big><a class="headerlink" href="#app.utils.XMLConverter.list_to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list to its XML equivalent
+:param elements_list: list of elements to be converted
+:param root_node: name for the root tag in the xml, by default <em>elements</em>
+:param child_node: name for object tag in every element of the list, by default <em>element</em>
+:return: Xml string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.utils.XMLConverter.object_to_xml">
+<tt class="descname">object_to_xml</tt><big>(</big><em>element</em>, <em>root_node='element'</em><big>)</big><a class="headerlink" href="#app.utils.XMLConverter.object_to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a object to its XML equivalent
+:param element: element to be converted
+:param root_node: name for root tag on xml, by default <em>element</em>
+:return: Xml string</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="app.utils.check_if_date">
+<tt class="descclassname">app.utils.</tt><tt class="descname">check_if_date</tt><big>(</big><em>field_name</em>, <em>object</em>, <em>row</em><big>)</big><a class="headerlink" href="#app.utils.check_if_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a date field into long format
+:param field_name: name of the field where the date is
+:param object: object to store the date in long format
+:param row: object, usually a SQLAlchemy row where field is stored</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.utils.get_user_attrs">
+<tt class="descclassname">app.utils.</tt><tt class="descname">get_user_attrs</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.utils.get_user_attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the attributes of an object
+:param object: the object to get attributes from
+:return: list of attributes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.utils.is_primitive">
+<tt class="descclassname">app.utils.</tt><tt class="descname">is_primitive</tt><big>(</big><em>thing</em><big>)</big><a class="headerlink" href="#app.utils.is_primitive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a object is of a primitive type or not
+:param thing: object to check if its type is primitive
+:return: True if it is primitive, else False</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.utils.row2dict">
+<tt class="descclassname">app.utils.</tt><tt class="descname">row2dict</tt><big>(</big><em>row</em><big>)</big><a class="headerlink" href="#app.utils.row2dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a row of SQLAlchemy into a dictionary
+:see: <a class="reference external" href="http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict">http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict</a>
+:param row: SQLAlchemy row
+:return: dictionary</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.views">
+<span id="app-views-module"></span><h2>app.views module<a class="headerlink" href="#module-app.views" title="Permalink to this headline">¶</a></h2>
+<p>Created on 03/02/2014</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Herminio</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="app.views.CountriesIndicatorAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountriesIndicatorAPI</tt><a class="headerlink" href="#app.views.CountriesIndicatorAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Countries Indicator element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.CountriesIndicatorAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'countries_indicators'</em><a class="headerlink" href="#app.views.CountriesIndicatorAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountriesIndicatorAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountriesIndicatorAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a indicators by its country id and its indicator id
+If found Response 200 OK
+Else Response 404 NOT FOUND</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountriesIndicatorAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.CountriesIndicatorAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.CountriesIndicatorAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.CountriesIndicatorAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.CountriesIndicatorLastUpdateAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountriesIndicatorLastUpdateAPI</tt><a class="headerlink" href="#app.views.CountriesIndicatorLastUpdateAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>More recent indicators of a country collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.CountriesIndicatorLastUpdateAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'countries_indicators_last_update'</em><a class="headerlink" href="#app.views.CountriesIndicatorLastUpdateAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountriesIndicatorLastUpdateAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountriesIndicatorLastUpdateAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show indicators last_update by a given country
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountriesIndicatorLastUpdateAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.CountriesIndicatorLastUpdateAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.CountriesIndicatorLastUpdateAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.CountriesIndicatorLastUpdateAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.CountriesIndicatorListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountriesIndicatorListAPI</tt><a class="headerlink" href="#app.views.CountriesIndicatorListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Countries Indicator collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.CountriesIndicatorListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'countries_indicators_list'</em><a class="headerlink" href="#app.views.CountriesIndicatorListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountriesIndicatorListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountriesIndicatorListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all indicators of a given country
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountriesIndicatorListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.CountriesIndicatorListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.CountriesIndicatorListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.CountriesIndicatorListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.CountryAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountryAPI</tt><a class="headerlink" href="#app.views.CountryAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Countries element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.CountryAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.CountryAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'countries'</em><a class="headerlink" href="#app.views.CountryAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountryAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show country
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountryAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.CountryAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.CountryAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.CountryAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountryAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.CountryListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountryListAPI</tt><a class="headerlink" href="#app.views.CountryListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Countries collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.CountryListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.CountryListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'countries_list'</em><a class="headerlink" href="#app.views.CountryListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountryListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all countries
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountryListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.CountryListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.CountryListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.CountryListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountryListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.CountryListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.DataSourceAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceAPI</tt><a class="headerlink" href="#app.views.DataSourceAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Datasources element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.DataSourceAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DataSourceAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'datasources'</em><a class="headerlink" href="#app.views.DataSourceAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show datasource
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.DataSourceAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DataSourceAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.DataSourceAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.DataSourceIndicatorAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceIndicatorAPI</tt><a class="headerlink" href="#app.views.DataSourceIndicatorAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Datasource Indicator element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.DataSourceIndicatorAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'datasources_indicators'</em><a class="headerlink" href="#app.views.DataSourceIndicatorAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceIndicatorAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceIndicatorAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show indicator by its datasource id and indicator id
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceIndicatorAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.DataSourceIndicatorAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DataSourceIndicatorAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.DataSourceIndicatorAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.DataSourceIndicatorListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceIndicatorListAPI</tt><a class="headerlink" href="#app.views.DataSourceIndicatorListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>DataSource Indicator collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.DataSourceIndicatorListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'datasources_indicators_list'</em><a class="headerlink" href="#app.views.DataSourceIndicatorListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceIndicatorListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceIndicatorListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all indicators of a given datasource
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceIndicatorListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.DataSourceIndicatorListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DataSourceIndicatorListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.DataSourceIndicatorListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.DataSourceListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceListAPI</tt><a class="headerlink" href="#app.views.DataSourceListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>DataSource collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.DataSourceListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DataSourceListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'datasources_list'</em><a class="headerlink" href="#app.views.DataSourceListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all datasources
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.DataSourceListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DataSourceListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.DataSourceListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DataSourceListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.DatasetAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DatasetAPI</tt><a class="headerlink" href="#app.views.DatasetAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Dataset element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.DatasetAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DatasetAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'datasets'</em><a class="headerlink" href="#app.views.DatasetAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DatasetAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show dataset
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.DatasetAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.DatasetAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DatasetAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.DatasetAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DatasetAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.DatasetListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DatasetListAPI</tt><a class="headerlink" href="#app.views.DatasetListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Dataset collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.DatasetListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DatasetListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'datasets_list'</em><a class="headerlink" href="#app.views.DatasetListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DatasetListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all datasets
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.DatasetListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.DatasetListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DatasetListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.DatasetListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DatasetListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DatasetListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.EmptyObject">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">EmptyObject</tt><a class="headerlink" href="#app.views.EmptyObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to create object without attributes, to be included dynamically</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorAPI</tt><a class="headerlink" href="#app.views.IndicatorAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicators element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.IndicatorAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators'</em><a class="headerlink" href="#app.views.IndicatorAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show indicator
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.IndicatorAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorAverageAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorAverageAPI</tt><a class="headerlink" href="#app.views.IndicatorAverageAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator average api
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorAverageAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_average'</em><a class="headerlink" href="#app.views.IndicatorAverageAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorAverageAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAverageAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the average value for a indicator of all countries
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorAverageAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAverageAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorAverageAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorAverageAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorAverageByPeriodAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorAverageByPeriodAPI</tt><a class="headerlink" href="#app.views.IndicatorAverageByPeriodAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Average of indicator observation by period range
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorAverageByPeriodAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_average_by_period'</em><a class="headerlink" href="#app.views.IndicatorAverageByPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorAverageByPeriodAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAverageByPeriodAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show average of indicator observations
+Observations will be filtered between two dates, if they are not supplied
+whole range will be returned
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorAverageByPeriodAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAverageByPeriodAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorAverageByPeriodAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorAverageByPeriodAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorByCountryAndPeriodAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorByCountryAndPeriodAPI</tt><a class="headerlink" href="#app.views.IndicatorByCountryAndPeriodAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Countries element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorByCountryAndPeriodAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_by_country_and_period'</em><a class="headerlink" href="#app.views.IndicatorByCountryAndPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorByCountryAndPeriodAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorByCountryAndPeriodAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show observations by its indicator id and countyr id
+Observations will be filtered between two dates, if they are not supplied
+whole range will be returned
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorByCountryAndPeriodAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorByCountryAndPeriodAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorByCountryAndPeriodAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorByCountryAndPeriodAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorByPeriodAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorByPeriodAPI</tt><a class="headerlink" href="#app.views.IndicatorByPeriodAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator by period element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorByPeriodAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_by_period'</em><a class="headerlink" href="#app.views.IndicatorByPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorByPeriodAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorByPeriodAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show observations by its given indicator
+Observations will be filtered between two dates, if they are not supplied
+whole range will be returned
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorByPeriodAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorByPeriodAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorByPeriodAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorByPeriodAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorCompatibleAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorCompatibleAPI</tt><a class="headerlink" href="#app.views.IndicatorCompatibleAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator compatible api
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorCompatibleAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_compatible'</em><a class="headerlink" href="#app.views.IndicatorCompatibleAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorCompatibleAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorCompatibleAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the compatible indicators of the given indicator
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorCompatibleAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorCompatibleAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorCompatibleAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorCompatibleAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorCountryTendencyAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorCountryTendencyAPI</tt><a class="headerlink" href="#app.views.IndicatorCountryTendencyAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator country tendency element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorCountryTendencyAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicator_country_tendency'</em><a class="headerlink" href="#app.views.IndicatorCountryTendencyAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorCountryTendencyAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorCountryTendencyAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show indicator tendency for a country and indicator
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorCountryTendencyAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorCountryTendencyAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorCountryTendencyAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorCountryTendencyAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorListAPI</tt><a class="headerlink" href="#app.views.IndicatorListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicators collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.IndicatorListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_list'</em><a class="headerlink" href="#app.views.IndicatorListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all indicators
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.IndicatorListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorRegionsWihtoutDataAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorRegionsWihtoutDataAPI</tt><a class="headerlink" href="#app.views.IndicatorRegionsWihtoutDataAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator regions without data element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorRegionsWihtoutDataAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_regions_without_data'</em><a class="headerlink" href="#app.views.IndicatorRegionsWihtoutDataAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorRegionsWihtoutDataAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorRegionsWihtoutDataAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show observations by its given indicator
+Observations will be filtered between two dates, if they are not supplied
+whole range will be returned
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorRegionsWihtoutDataAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorRegionsWihtoutDataAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorRegionsWihtoutDataAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorRegionsWihtoutDataAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorRegionsWithDataAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorRegionsWithDataAPI</tt><a class="headerlink" href="#app.views.IndicatorRegionsWithDataAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator by period element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorRegionsWithDataAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_regions_with_data'</em><a class="headerlink" href="#app.views.IndicatorRegionsWithDataAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorRegionsWithDataAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorRegionsWithDataAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show regions with data for the given indicator
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorRegionsWithDataAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorRegionsWithDataAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorRegionsWithDataAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorRegionsWithDataAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorRelatedAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorRelatedAPI</tt><a class="headerlink" href="#app.views.IndicatorRelatedAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator related collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorRelatedAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_related'</em><a class="headerlink" href="#app.views.IndicatorRelatedAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorRelatedAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorRelatedAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show related indicators
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorRelatedAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorRelatedAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorRelatedAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorRelatedAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorStarredAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorStarredAPI</tt><a class="headerlink" href="#app.views.IndicatorStarredAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicators starred URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorStarredAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicator_starred'</em><a class="headerlink" href="#app.views.IndicatorStarredAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorStarredAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorStarredAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List starred indicators
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorStarredAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorStarredAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorStarredAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorStarredAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorTopAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorTopAPI</tt><a class="headerlink" href="#app.views.IndicatorTopAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicator top api
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorTopAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_top'</em><a class="headerlink" href="#app.views.IndicatorTopAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTopAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTopAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show top 10 countries with the highest value for a given indicator
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTopAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTopAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorTopAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorTopAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorTranslationAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorTranslationAPI</tt><a class="headerlink" href="#app.views.IndicatorTranslationAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicators translations element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.IndicatorTranslationAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorTranslationAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicator_translations'</em><a class="headerlink" href="#app.views.IndicatorTranslationAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTranslationAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show indicator translation
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTranslationAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorTranslationAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.IndicatorTranslationAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTranslationAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorTranslationListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorTranslationListAPI</tt><a class="headerlink" href="#app.views.IndicatorTranslationListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Indicators translations collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.IndicatorTranslationListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorTranslationListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicator_translation_list'</em><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTranslationListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all indicators translations
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTranslationListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorTranslationListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTranslationListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorTranslationListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.IndicatorsCountryLastUpdateAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorsCountryLastUpdateAPI</tt><a class="headerlink" href="#app.views.IndicatorsCountryLastUpdateAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>More recent indicator of a country element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.IndicatorsCountryLastUpdateAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'indicators_countries_last_update'</em><a class="headerlink" href="#app.views.IndicatorsCountryLastUpdateAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorsCountryLastUpdateAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorsCountryLastUpdateAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show indicator last_update by its country id and indicator id
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.IndicatorsCountryLastUpdateAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.IndicatorsCountryLastUpdateAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.IndicatorsCountryLastUpdateAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.IndicatorsCountryLastUpdateAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ObservationAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationAPI</tt><a class="headerlink" href="#app.views.ObservationAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Observations element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.ObservationAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'observations'</em><a class="headerlink" href="#app.views.ObservationAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ObservationAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.ObservationAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ObservationByPeriodAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByPeriodAPI</tt><a class="headerlink" href="#app.views.ObservationByPeriodAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Observations by period element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="attribute">
+<dt id="app.views.ObservationByPeriodAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'observations_by_period'</em><a class="headerlink" href="#app.views.ObservationByPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByPeriodAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationByPeriodAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show observations of one of this given as parameter:
+* Country as iso3
+* Indicator as indicator id
+* Region as un_code
+Observations will be filtered between two dates, if they are not supplied
+whole range will be returned
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByPeriodAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ObservationByPeriodAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationByPeriodAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.ObservationByPeriodAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ObservationByTwoAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByTwoAPI</tt><a class="headerlink" href="#app.views.ObservationByTwoAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Observation by two collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.ObservationByTwoAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'observations_by_two'</em><a class="headerlink" href="#app.views.ObservationByTwoAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByTwoAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationByTwoAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show observations filtering by two ids.
+It could be one of three next:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Indicator id and country iso3</li>
+<li>Country iso3 and indicator id</li>
+<li>Region un_code and indicator id</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id_first_filter</strong> &#8211; first filter</li>
+<li><strong>id_second_filter</strong> &#8211; second filter</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByTwoAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ObservationByTwoAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationByTwoAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.ObservationByTwoAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ObservationByTwoAverageAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByTwoAverageAPI</tt><a class="headerlink" href="#app.views.ObservationByTwoAverageAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Observations by two average URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.ObservationByTwoAverageAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'observations_by_two_average'</em><a class="headerlink" href="#app.views.ObservationByTwoAverageAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByTwoAverageAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationByTwoAverageAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show observations average filtering by two ids.
+It could be one of three next:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Indicator id and country iso3</li>
+<li>Country iso3 and indicator id</li>
+<li>Region un_code and indicator id</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id_first_filter</strong> &#8211; first filter</li>
+<li><strong>id_second_filter</strong> &#8211; second filter</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByTwoAverageAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ObservationByTwoAverageAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationByTwoAverageAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.ObservationByTwoAverageAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ObservationListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationListAPI</tt><a class="headerlink" href="#app.views.ObservationListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Observations collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.ObservationListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'observations_list'</em><a class="headerlink" href="#app.views.ObservationListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ObservationListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.ObservationListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.OrganizationAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationAPI</tt><a class="headerlink" href="#app.views.OrganizationAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Organizations element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.OrganizationAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.OrganizationAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'organizations'</em><a class="headerlink" href="#app.views.OrganizationAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show organization
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.OrganizationAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.OrganizationAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.OrganizationAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.OrganizationListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationListAPI</tt><a class="headerlink" href="#app.views.OrganizationListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Organizations collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.OrganizationListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.OrganizationListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'organizations_list'</em><a class="headerlink" href="#app.views.OrganizationListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all organizations
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.OrganizationListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.OrganizationListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.OrganizationListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.OrganizationUserAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationUserAPI</tt><a class="headerlink" href="#app.views.OrganizationUserAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Organizations users element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.OrganizationUserAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'organizations_users'</em><a class="headerlink" href="#app.views.OrganizationUserAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationUserAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationUserAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a user by its organization id and its user id
+If found Response 200 OK
+Else Response 404 NOT FOUND</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationUserAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.OrganizationUserAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.OrganizationUserAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.OrganizationUserAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.OrganizationUserListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationUserListAPI</tt><a class="headerlink" href="#app.views.OrganizationUserListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Organizations users collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.OrganizationUserListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'organizations_users_list'</em><a class="headerlink" href="#app.views.OrganizationUserListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationUserListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationUserListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all users of a given organization
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.OrganizationUserListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.OrganizationUserListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.OrganizationUserListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.OrganizationUserListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionAPI</tt><a class="headerlink" href="#app.views.RegionAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Regions element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.RegionAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'regions'</em><a class="headerlink" href="#app.views.RegionAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show region
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.RegionAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionCountriesWithDataAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionCountriesWithDataAPI</tt><a class="headerlink" href="#app.views.RegionCountriesWithDataAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Countries with data by region element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.RegionCountriesWithDataAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'regions_countries_with_data'</em><a class="headerlink" href="#app.views.RegionCountriesWithDataAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionCountriesWithDataAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionCountriesWithDataAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show country that have some observations by a given region (country is_part_of region)
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionCountriesWithDataAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionCountriesWithDataAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionCountriesWithDataAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.RegionCountriesWithDataAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionListAPI</tt><a class="headerlink" href="#app.views.RegionListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Regions collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.RegionListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'regions_list'</em><a class="headerlink" href="#app.views.RegionListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all region
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.RegionListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionTranslationAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionTranslationAPI</tt><a class="headerlink" href="#app.views.RegionTranslationAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Region translation element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.RegionTranslationAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionTranslationAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'region_translations'</em><a class="headerlink" href="#app.views.RegionTranslationAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionTranslationAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show region translation
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionTranslationAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionTranslationAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.RegionTranslationAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionTranslationAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionTranslationListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionTranslationListAPI</tt><a class="headerlink" href="#app.views.RegionTranslationListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Region translation collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.RegionTranslationListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionTranslationListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'region_translation_list'</em><a class="headerlink" href="#app.views.RegionTranslationListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionTranslationListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all translations of a region
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionTranslationListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionTranslationListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.RegionTranslationListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionTranslationListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionTranslationListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionsCountryAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionsCountryAPI</tt><a class="headerlink" href="#app.views.RegionsCountryAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Countries Indicator element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.RegionsCountryAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'regions_countries'</em><a class="headerlink" href="#app.views.RegionsCountryAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionsCountryAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionsCountryAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show country by its region id and its country id
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionsCountryAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionsCountryAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionsCountryAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.RegionsCountryAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionsCountryListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionsCountryListAPI</tt><a class="headerlink" href="#app.views.RegionsCountryListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Regions Country collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.RegionsCountryListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'regions_countries_list'</em><a class="headerlink" href="#app.views.RegionsCountryListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionsCountryListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionsCountryListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all countries of a given region
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionsCountryListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionsCountryListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionsCountryListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.RegionsCountryListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.RegionsRegionListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionsRegionListAPI</tt><a class="headerlink" href="#app.views.RegionsRegionListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Regions Region collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.RegionsRegionListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'regions_regions_list'</em><a class="headerlink" href="#app.views.RegionsRegionListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionsRegionListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionsRegionListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all regions of a given region
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.RegionsRegionListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.RegionsRegionListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.RegionsRegionListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.RegionsRegionListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.TopicAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicAPI</tt><a class="headerlink" href="#app.views.TopicAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Topic element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.TopicAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'topics'</em><a class="headerlink" href="#app.views.TopicAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show topic
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.TopicAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.TopicAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.TopicIndicatorAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicIndicatorAPI</tt><a class="headerlink" href="#app.views.TopicIndicatorAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Topics Indicator element URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.TopicIndicatorAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'topics_indicators'</em><a class="headerlink" href="#app.views.TopicIndicatorAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicIndicatorAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicIndicatorAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show indicators by its topic id and indicator id
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicIndicatorAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.TopicIndicatorAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicIndicatorAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.TopicIndicatorAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.TopicIndicatorListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicIndicatorListAPI</tt><a class="headerlink" href="#app.views.TopicIndicatorListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Topics Indicator collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.TopicIndicatorListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'topics_indicators_list'</em><a class="headerlink" href="#app.views.TopicIndicatorListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicIndicatorListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicIndicatorListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all indicators by a given topic
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicIndicatorListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.TopicIndicatorListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicIndicatorListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.TopicIndicatorListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.TopicListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicListAPI</tt><a class="headerlink" href="#app.views.TopicListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Topic collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.TopicListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'topic_list'</em><a class="headerlink" href="#app.views.TopicListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all topics
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.TopicListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.TopicListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.TopicTranslationAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicTranslationAPI</tt><a class="headerlink" href="#app.views.TopicTranslationAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Topic translations element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.TopicTranslationAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicTranslationAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'topic_translations'</em><a class="headerlink" href="#app.views.TopicTranslationAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicTranslationAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show country topic translation
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicTranslationAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicTranslationAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.TopicTranslationAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicTranslationAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.TopicTranslationListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicTranslationListAPI</tt><a class="headerlink" href="#app.views.TopicTranslationListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Topic translations collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.TopicTranslationListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicTranslationListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'topic_translation_list'</em><a class="headerlink" href="#app.views.TopicTranslationListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicTranslationListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all topic translations
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicTranslationListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.TopicTranslationListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.TopicTranslationListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicTranslationListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.TopicTranslationListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.UserAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">UserAPI</tt><a class="headerlink" href="#app.views.UserAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Users element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.UserAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.UserAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'users'</em><a class="headerlink" href="#app.views.UserAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.UserAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show user
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.UserAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.UserAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.UserAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.UserAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.UserAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.UserListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">UserListAPI</tt><a class="headerlink" href="#app.views.UserListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Users collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.UserListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.UserListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'users_list'</em><a class="headerlink" href="#app.views.UserListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.UserListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all users
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.UserListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.UserListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.UserListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.UserListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.UserListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.UserListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ValueAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ValueAPI</tt><a class="headerlink" href="#app.views.ValueAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Value element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.ValueAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ValueAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'values'</em><a class="headerlink" href="#app.views.ValueAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ValueAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show value
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.ValueAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ValueAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ValueAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.ValueAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ValueAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ValueListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ValueListAPI</tt><a class="headerlink" href="#app.views.ValueListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Value collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.ValueListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ValueListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'value_list'</em><a class="headerlink" href="#app.views.ValueListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ValueListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all values
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.ValueListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ValueListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ValueListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.ValueListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ValueListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ValueListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.areaChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">areaChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.areaChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of areachart</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.authenticate">
+<tt class="descclassname">app.views.</tt><tt class="descname">authenticate</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a 401 response that enables basic auth</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.barChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">barChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.barChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of barchart</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.check_auth">
+<tt class="descclassname">app.views.</tt><tt class="descname">check_auth</tt><big>(</big><em>username</em>, <em>password</em><big>)</big><a class="headerlink" href="#app.views.check_auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is called to check if a username /
+password combination is valid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.filter_by_region_and_top">
+<tt class="descclassname">app.views.</tt><tt class="descname">filter_by_region_and_top</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.views.filter_by_region_and_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter by region and a top given
+:return: countries top and top observations</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.filter_observations_by_date_range">
+<tt class="descclassname">app.views.</tt><tt class="descname">filter_observations_by_date_range</tt><big>(</big><em>observations</em>, <em>from_date=None</em>, <em>to_date=None</em><big>)</big><a class="headerlink" href="#app.views.filter_observations_by_date_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters observations by a given date range
+:param observations: list of observations to filter
+:param from_date: beginning of the date range
+:param to_date: end of the date range
+:return: filtered list of observations</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.get_intervals">
+<tt class="descclassname">app.views.</tt><tt class="descname">get_intervals</tt><big>(</big><em>times</em><big>)</big><a class="headerlink" href="#app.views.get_intervals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return intervals to xAxis on the graphic
+:param times: times collection
+:return: times in the format of the graphic</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.get_observations_by_two_filters">
+<tt class="descclassname">app.views.</tt><tt class="descname">get_observations_by_two_filters</tt><big>(</big><em>id_first_filter</em>, <em>id_second_filter</em><big>)</big><a class="headerlink" href="#app.views.get_observations_by_two_filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return observations filtering by two ids.
+It could be one of three next:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Indicator id and country iso3</li>
+<li>Country iso3 and indicator id</li>
+<li>Region un_code and indicator id</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id_first_filter</strong> &#8211; id of the first filter</li>
+<li><strong>id_second_filter</strong> &#8211; id of the second filter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Filtered observations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.get_regions_of_region">
+<tt class="descclassname">app.views.</tt><tt class="descname">get_regions_of_region</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.views.get_regions_of_region" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="app.views.get_regions_with_data">
+<tt class="descclassname">app.views.</tt><tt class="descname">get_regions_with_data</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.views.get_regions_with_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="app.views.get_requested_lang">
+<tt class="descclassname">app.views.</tt><tt class="descname">get_requested_lang</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.get_requested_lang" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the lang request
+:return: language requested by the client if not given <em>en</em> as default</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.get_visualization_json">
+<tt class="descclassname">app.views.</tt><tt class="descname">get_visualization_json</tt><big>(</big><em>request</em>, <em>chartType</em><big>)</big><a class="headerlink" href="#app.views.get_visualization_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create json object through a dict by request parameters given
+:param request: request object from the client
+:param chartType: type of chart to be showed
+:return: json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.is_csv_accepted">
+<tt class="descclassname">app.views.</tt><tt class="descname">is_csv_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#app.views.is_csv_accepted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if csv is accepted or not
+:return: True if csv is accepted, False otherwise</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.is_jsonp_accepted">
+<tt class="descclassname">app.views.</tt><tt class="descname">is_jsonp_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#app.views.is_jsonp_accepted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if jsonp is accepted or not
+:return: True if jsonp is accepted, False otherwise</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.is_xml_accepted">
+<tt class="descclassname">app.views.</tt><tt class="descname">is_xml_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#app.views.is_xml_accepted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns if xml is accepted or not
+:return: True if xml is accepted, False otherwise</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.lineChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">lineChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.lineChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of linechart</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.localhost_decorator">
+<tt class="descclassname">app.views.</tt><tt class="descname">localhost_decorator</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#app.views.localhost_decorator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator that allows connections only from localhost if not
+it will return a 403 FORBIDDEN error code</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.observations_average">
+<tt class="descclassname">app.views.</tt><tt class="descname">observations_average</tt><big>(</big><em>observations</em><big>)</big><a class="headerlink" href="#app.views.observations_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the average of observations values
+:param observations: observations to calculate the average
+:return: average</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.pieChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">pieChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.pieChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of piechart</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.polarChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">polarChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.polarChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of polarchart</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.requires_auth">
+<tt class="descclassname">app.views.</tt><tt class="descname">requires_auth</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#app.views.requires_auth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="app.views.response_graphics">
+<tt class="descclassname">app.views.</tt><tt class="descname">response_graphics</tt><big>(</big><em>options</em>, <em>title</em>, <em>description</em><big>)</big><a class="headerlink" href="#app.views.response_graphics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="app.views.response_xml_or_json_item">
+<tt class="descclassname">app.views.</tt><tt class="descname">response_xml_or_json_item</tt><big>(</big><em>request</em>, <em>item</em>, <em>item_string</em><big>)</big><a class="headerlink" href="#app.views.response_xml_or_json_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return response with the content in the format requested
+Available formats:
+* JSON
+* XML
+* JSONP
+* CSV
+:param request: the request object
+:param item: the object to be converted
+:param item_string: the string text to show in the root node, only needed for xml
+:return: response in the requested format</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.response_xml_or_json_list">
+<tt class="descclassname">app.views.</tt><tt class="descname">response_xml_or_json_list</tt><big>(</big><em>request</em>, <em>collection</em>, <em>collection_string</em>, <em>item_string</em><big>)</big><a class="headerlink" href="#app.views.response_xml_or_json_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return response with the content in the format requested
+Available formats:
+* JSON
+* XML
+* JSONP
+* CSV
+:param request: the request object
+:param collection: the collection to be converted
+:param collection_string: the string text to show in the root node, only needed for xml
+:param item_string: the string in the root node of the object, only needed for xml
+:return: response in the requested format</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.scatterChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">scatterChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.scatterChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of scatterchart</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.str_date_to_date">
+<tt class="descclassname">app.views.</tt><tt class="descname">str_date_to_date</tt><big>(</big><em>date_from</em>, <em>date_to</em><big>)</big><a class="headerlink" href="#app.views.str_date_to_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert two dates in str format to date object
+Format: YYYYMMDD
+:param date_from: beginning of the interval
+:param date_to: end of the interval
+:return: from_date and to_date equivalent of given in date objects</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.table">
+<tt class="descclassname">app.views.</tt><tt class="descname">table</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of table</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.translate_indicator">
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator</tt><big>(</big><em>indicator</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate an indicator object into given language
+:param indicator: indicator object to be translated
+:param lang: language of translation, by default en</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.translate_indicator_list">
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator_list</tt><big>(</big><em>indicators</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate an indicator list into given language
+:param indicators: list of indicators to be translated</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.translate_region">
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_region</tt><big>(</big><em>region</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate a region object into given language
+:param region: region object to be translated
+:param lang: language of translation, by default en</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.translate_region_list">
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_region_list</tt><big>(</big><em>regions</em><big>)</big><a class="headerlink" href="#app.views.translate_region_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate a region list into given language
+:param regions: list of regions to be translated</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.translate_topic">
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_topic</tt><big>(</big><em>topic</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate a topic object into given language
+:param topic: topic object to be translated
+:param lang: language of translation, by default en</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.translate_topic_list">
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_topic_list</tt><big>(</big><em>topics</em><big>)</big><a class="headerlink" href="#app.views.translate_topic_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate a topic list into given language
+:param topics: list of topics to be translated</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app" title="Permalink to this headline">¶</a></h2>
+<p>Created on 03/02/2014</p>
+<p>&#64;author: Herminio</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">app package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.daos">app.daos module</a></li>
+<li><a class="reference internal" href="#module-app.services">app.services module</a></li>
+<li><a class="reference internal" href="#module-app.utils">app.utils module</a></li>
+<li><a class="reference internal" href="#module-app.views">app.views module</a></li>
+<li><a class="reference internal" href="#module-app">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to landportal-data-access-api&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="next chapter">model package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/app.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="model package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to landportal-data-access-api’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">landportal-data-access-api 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Weso.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
