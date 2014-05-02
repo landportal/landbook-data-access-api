@@ -778,6 +778,7 @@ class TestOrganization(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/users", data=user2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/organizations/1/users")
         user = response.json[0]
         user2 = response.json[1]
@@ -787,12 +788,14 @@ class TestOrganization(ApiTest):
         self.assertEquals(user2['ip'], "192.168.1.2")
         response = self.client.delete("/users")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/users")
         self.assert200(response)
         users = response.json
         self.assertEquals(len(users), 0)
         response = self.client.delete("/organizations")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/organizations")
         self.assert200(response)
         organizations = response.json
