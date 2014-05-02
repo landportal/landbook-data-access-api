@@ -329,3 +329,6 @@ epub_exclude_files = ['search.html']
 
 # If false, no index is generated.
 #epub_use_index = True
+
+path = os.path.abspath('../../')
+sys.path.insert(0, path)
