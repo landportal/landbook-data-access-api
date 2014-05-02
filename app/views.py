@@ -14,7 +14,7 @@ from model.models import Country, Indicator, User, Organization, Observation, Re
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
-from flask import request
+from flask import request, redirect
 from datetime import datetime
 from functools import wraps
 
@@ -82,13 +82,22 @@ def requires_auth(f):
     return decorated
 
 
+def make_cache_key(*args, **kwargs):
+    """
+    Function that allows creating a unique id for every request
+    There was a problem caching and changing arguments of the URL, so this is one possible solution
+    :see: http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well
+    """
+    return request.url
+
+
 class CountryListAPI(Resource):
     """
     Countries collection URI
     Methods: GET, POST, PUT, DELETE
     """
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all countries
@@ -142,7 +151,7 @@ class CountryAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, code):
         """
         Show country
@@ -189,7 +198,7 @@ class IndicatorListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all indicators
@@ -248,7 +257,7 @@ class IndicatorAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show indicator
@@ -297,7 +306,7 @@ class IndicatorTopAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show top 10 countries with the highest value for a given indicator
@@ -320,7 +329,7 @@ class IndicatorAverageAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show the average value for a indicator of all countries
@@ -340,7 +349,7 @@ class IndicatorCompatibleAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show the compatible indicators of the given indicator
@@ -362,7 +371,7 @@ class IndicatorStarredAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List starred indicators
@@ -381,7 +390,7 @@ class UserListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all users
@@ -432,7 +441,7 @@ class UserAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show user
@@ -479,7 +488,7 @@ class OrganizationListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all organizations
@@ -531,7 +540,7 @@ class OrganizationAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show organization
@@ -578,7 +587,7 @@ class OrganizationUserListAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, organization_id):
         """
         List all users of a given organization
@@ -594,7 +603,7 @@ class OrganizationUserAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, organization_id, user_id):
         """
         Show a user by its organization id and its user id
@@ -617,7 +626,7 @@ class CountriesIndicatorListAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, iso3):
         """
         List all indicators of a given country
@@ -639,7 +648,7 @@ class CountriesIndicatorAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, iso3, indicator_id):
         """
         Show a indicators by its country id and its indicator id
@@ -664,7 +673,7 @@ class ObservationListAPI(Resource):
     """
 
     @localhost_decorator
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all observations
@@ -723,7 +732,7 @@ class ObservationAPI(Resource):
     """
 
     @localhost_decorator
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show observations
@@ -791,7 +800,7 @@ class RegionListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all region
@@ -847,7 +856,7 @@ class RegionAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show region
@@ -892,7 +901,7 @@ class RegionsCountryListAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         List all countries of a given region
@@ -917,7 +926,7 @@ class RegionsRegionListAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         List all regions of a given region
@@ -934,7 +943,7 @@ class RegionsCountryAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id, iso3):
         """
         Show country by its region id and its country id
@@ -958,7 +967,7 @@ class DataSourceListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all datasources
@@ -1010,7 +1019,7 @@ class DataSourceAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show datasource
@@ -1056,7 +1065,7 @@ class DatasetListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all datasets
@@ -1110,7 +1119,7 @@ class DatasetAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show dataset
@@ -1155,7 +1164,7 @@ class DataSourceIndicatorListAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         List all indicators of a given datasource
@@ -1176,7 +1185,7 @@ class DataSourceIndicatorAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id, indicator_id):
         """
         Show indicator by its datasource id and indicator id
@@ -1201,7 +1210,7 @@ class ObservationByTwoAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id_first_filter, id_second_filter):
         """
         Show observations filtering by two ids.
@@ -1227,7 +1236,7 @@ class ObservationByTwoAverageAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id_first_filter, id_second_filter):
         """
         Show observations average filtering by two ids.
@@ -1338,7 +1347,7 @@ class ValueListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all values
@@ -1392,7 +1401,7 @@ class ValueAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show value
@@ -1438,7 +1447,7 @@ class TopicListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all topics
@@ -1490,7 +1499,7 @@ class TopicAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show topic
@@ -1535,7 +1544,7 @@ class TopicIndicatorListAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, topic_id):
         """
         List all indicators by a given topic
@@ -1553,7 +1562,7 @@ class TopicIndicatorAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, topic_id, indicator_id):
         """
         Show indicators by its topic id and indicator id
@@ -1576,7 +1585,7 @@ class RegionCountriesWithDataAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, region_id):
         """
         Show country that have some observations by a given region (country is_part_of region)
@@ -1596,7 +1605,7 @@ class CountriesIndicatorLastUpdateAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, iso3):
         """
         Show indicators last_update by a given country
@@ -1616,7 +1625,7 @@ class IndicatorsCountryLastUpdateAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id, iso3):
         """
         Show indicator last_update by its country id and indicator id
@@ -1636,7 +1645,7 @@ class ObservationByPeriodAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show observations of one of this given as parameter:
@@ -1683,7 +1692,7 @@ class IndicatorByPeriodAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show observations by its given indicator
@@ -1709,7 +1718,7 @@ class IndicatorRegionsWithDataAPI(Resource):
     Methods: GET
     """
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show regions with data for the given indicator
@@ -1729,7 +1738,7 @@ class IndicatorRegionsWihtoutDataAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show observations by its given indicator
@@ -1756,7 +1765,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, indicator_id, iso3):
         """
         Show observations by its indicator id and countyr id
@@ -1785,7 +1794,7 @@ class IndicatorAverageByPeriodAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show average of indicator observations
@@ -1815,7 +1824,7 @@ class IndicatorRelatedAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
         Show related indicators
@@ -1835,7 +1844,7 @@ class IndicatorCountryTendencyAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, indicator_id, iso3):
         """
         Show indicator tendency for a country and indicator
@@ -1857,7 +1866,7 @@ class RegionTranslationListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all translations of a region
@@ -1908,7 +1917,7 @@ class RegionTranslationAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, region_id, lang_code):
         """
         Show region translation
@@ -1952,7 +1961,7 @@ class IndicatorTranslationListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all indicators translations
@@ -2003,7 +2012,7 @@ class IndicatorTranslationAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, indicator_id, lang_code):
         """
         Show indicator translation
@@ -2048,7 +2057,7 @@ class TopicTranslationListAPI(Resource):
     """
 
     @requires_auth
-    @cache.cached()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
         List all topic translations
@@ -2099,7 +2108,7 @@ class TopicTranslationAPI(Resource):
     """
 
     @requires_auth
-    @cache.memoize()
+    @cache.cached(key_prefix=make_cache_key)
     def get(self, topic_id, lang_code):
         """
         Show country topic translation
@@ -2133,6 +2142,22 @@ class TopicTranslationAPI(Resource):
         Response 204 NO CONTENT
         """
         topic_translation_service.delete(topic_id, lang_code)
+        return {}, 204
+
+
+class DeleteCacheAPI(Resource):
+    """
+    Delete cache URI
+    Methods: DELETE
+    """
+
+    @localhost_decorator
+    def delete(self):
+        """
+        Delete cache
+        Response 204 NO CONTENT
+        """
+        cache.clear()
         return {}, 204
 
 
@@ -2242,6 +2267,14 @@ def table():
         return response_graphics(options, title, description)
 
 
+@app.route('/')
+def help():
+    """
+    Main URI with the documentation redirection
+    """
+    return redirect('http://weso.github.io/landportal-data-access-api/', code=302)
+
+
 api.add_resource(CountryListAPI, '/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/indicators', endpoint='indicators_list')
@@ -2296,6 +2329,7 @@ api.add_resource(IndicatorTranslationAPI, '/indicators/translations/<indicator_i
 api.add_resource(TopicTranslationListAPI, '/topics/translations', endpoint='topic_translation_list')
 api.add_resource(TopicTranslationAPI, '/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
 api.add_resource(IndicatorStarredAPI, '/indicators/starred', endpoint='indicator_starred')
+api.add_resource(DeleteCacheAPI, '/cache', endpoint='delete_cache')
 
 
 def translate_indicator_list(indicators):
@@ -2654,6 +2688,3 @@ class EmptyObject():
     """
     def __init__(self):
         pass
-
-
-
