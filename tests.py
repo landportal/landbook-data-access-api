@@ -2205,6 +2205,7 @@ class TestObservationByPeriod(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/regions", data=region_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/observations/200/range?from=20120611&to=20140402")
         observation = response.json[0]
         self.assertEquals(observation['id'], "1")
@@ -2352,6 +2353,7 @@ class TestIndicatorByPeriod(ApiTest):
         app.cache.clear()
         response = self.client.get("/indicators/HDI/average/range?from=20120611&to=20140402")
         self.assertEquals(response.json['value'], 75)
+        app.cache.clear()
         response = self.client.get("/indicators/HDI/average/range?from=20140402&to=20140403")
         self.assert404(response)
         response = self.client.get("/indicators/HDI/average/range?from=20120609&to=20120610")
