@@ -7,10 +7,10 @@ from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
 from flask.helpers import url_for
 from flask import json, render_template
-from app import app
+from app import app, cache
 from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
-    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval
+    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval, Time
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService
@@ -87,8 +87,8 @@ class CountryListAPI(Resource):
     Countries collection URI
     Methods: GET, POST, PUT, DELETE
     """
-
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all countries
@@ -142,6 +142,7 @@ class CountryAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, code):
         """
         Show country
@@ -188,6 +189,7 @@ class IndicatorListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all indicators
@@ -246,6 +248,7 @@ class IndicatorAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show indicator
@@ -294,6 +297,7 @@ class IndicatorTopAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show top 10 countries with the highest value for a given indicator
@@ -316,6 +320,7 @@ class IndicatorAverageAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show the average value for a indicator of all countries
@@ -335,6 +340,7 @@ class IndicatorCompatibleAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show the compatible indicators of the given indicator
@@ -356,6 +362,7 @@ class IndicatorStarredAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self):
         """
         List starred indicators
@@ -374,6 +381,7 @@ class UserListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all users
@@ -424,6 +432,7 @@ class UserAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show user
@@ -470,6 +479,7 @@ class OrganizationListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all organizations
@@ -521,6 +531,7 @@ class OrganizationAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show organization
@@ -567,6 +578,7 @@ class OrganizationUserListAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, organization_id):
         """
         List all users of a given organization
@@ -582,6 +594,7 @@ class OrganizationUserAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, organization_id, user_id):
         """
         Show a user by its organization id and its user id
@@ -604,6 +617,7 @@ class CountriesIndicatorListAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, iso3):
         """
         List all indicators of a given country
@@ -625,6 +639,7 @@ class CountriesIndicatorAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, iso3, indicator_id):
         """
         Show a indicators by its country id and its indicator id
@@ -649,6 +664,7 @@ class ObservationListAPI(Resource):
     """
 
     @localhost_decorator
+    @cache.cached()
     def get(self):
         """
         List all observations
@@ -707,6 +723,7 @@ class ObservationAPI(Resource):
     """
 
     @localhost_decorator
+    @cache.memoize()
     def get(self, id):
         """
         Show observations
@@ -774,6 +791,7 @@ class RegionListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all region
@@ -829,6 +847,7 @@ class RegionAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show region
@@ -873,6 +892,7 @@ class RegionsCountryListAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         List all countries of a given region
@@ -897,6 +917,7 @@ class RegionsRegionListAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         List all regions of a given region
@@ -913,6 +934,7 @@ class RegionsCountryAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id, iso3):
         """
         Show country by its region id and its country id
@@ -936,6 +958,7 @@ class DataSourceListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all datasources
@@ -987,6 +1010,7 @@ class DataSourceAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show datasource
@@ -1032,6 +1056,7 @@ class DatasetListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all datasets
@@ -1085,6 +1110,7 @@ class DatasetAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show dataset
@@ -1129,6 +1155,7 @@ class DataSourceIndicatorListAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         List all indicators of a given datasource
@@ -1149,6 +1176,7 @@ class DataSourceIndicatorAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id, indicator_id):
         """
         Show indicator by its datasource id and indicator id
@@ -1173,6 +1201,7 @@ class ObservationByTwoAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id_first_filter, id_second_filter):
         """
         Show observations filtering by two ids.
@@ -1198,6 +1227,7 @@ class ObservationByTwoAverageAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id_first_filter, id_second_filter):
         """
         Show observations average filtering by two ids.
@@ -1283,21 +1313,21 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         observation.ref_time = observation.ref_time
                         observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
                         observations.append(observation)
-    if observations is not None:
+    if observations is not None and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
-    for observation in observations:
-        observations_country = filter(lambda obs: obs.region_id == observation.region_id, observations)
-        for j in range(len(observations_country)):
-            if observation == observations_country[j]:
-                if j == 0:
-                    observation.tendency = -2
-                elif float(observation.value.value) == float(observations_country[j-1].value.value):
-                    observation.tendency = 0
-                elif float(observations_country[j-1].value.value) > float(observation.value.value):
-                    observation.tendency = -1
-                elif float(observations_country[j-1].value.value) < float(observation.value.value):
-                    observation.tendency = 1
-                observation.other_parseable_fields.append('tendency')
+        for observation in observations:
+            observations_country = filter(lambda obs: obs.region_id == observation.region_id, observations)
+            for j in range(len(observations_country)):
+                if observation == observations_country[j]:
+                    if j == 0:
+                        observation.tendency = -2
+                    elif float(observation.value.value) == float(observations_country[j-1].value.value):
+                        observation.tendency = 0
+                    elif float(observations_country[j-1].value.value) > float(observation.value.value):
+                        observation.tendency = -1
+                    elif float(observations_country[j-1].value.value) < float(observation.value.value):
+                        observation.tendency = 1
+                    observation.other_parseable_fields.append('tendency')
     return observations if observations is not None else None
 
 
@@ -1308,6 +1338,7 @@ class ValueListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all values
@@ -1361,6 +1392,7 @@ class ValueAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show value
@@ -1406,6 +1438,7 @@ class TopicListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all topics
@@ -1457,6 +1490,7 @@ class TopicAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show topic
@@ -1501,6 +1535,7 @@ class TopicIndicatorListAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, topic_id):
         """
         List all indicators by a given topic
@@ -1518,6 +1553,7 @@ class TopicIndicatorAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, topic_id, indicator_id):
         """
         Show indicators by its topic id and indicator id
@@ -1540,6 +1576,7 @@ class RegionCountriesWithDataAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, region_id):
         """
         Show country that have some observations by a given region (country is_part_of region)
@@ -1559,6 +1596,7 @@ class CountriesIndicatorLastUpdateAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, iso3):
         """
         Show indicators last_update by a given country
@@ -1578,6 +1616,7 @@ class IndicatorsCountryLastUpdateAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id, iso3):
         """
         Show indicator last_update by its country id and indicator id
@@ -1597,6 +1636,7 @@ class ObservationByPeriodAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show observations of one of this given as parameter:
@@ -1643,6 +1683,7 @@ class IndicatorByPeriodAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show observations by its given indicator
@@ -1668,6 +1709,7 @@ class IndicatorRegionsWithDataAPI(Resource):
     Methods: GET
     """
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show regions with data for the given indicator
@@ -1687,6 +1729,7 @@ class IndicatorRegionsWihtoutDataAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show observations by its given indicator
@@ -1713,6 +1756,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, indicator_id, iso3):
         """
         Show observations by its indicator id and countyr id
@@ -1741,6 +1785,7 @@ class IndicatorAverageByPeriodAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show average of indicator observations
@@ -1770,6 +1815,7 @@ class IndicatorRelatedAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, id):
         """
         Show related indicators
@@ -1789,6 +1835,7 @@ class IndicatorCountryTendencyAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, indicator_id, iso3):
         """
         Show indicator tendency for a country and indicator
@@ -1810,6 +1857,7 @@ class RegionTranslationListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all translations of a region
@@ -1860,6 +1908,7 @@ class RegionTranslationAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, region_id, lang_code):
         """
         Show region translation
@@ -1903,6 +1952,7 @@ class IndicatorTranslationListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all indicators translations
@@ -1953,6 +2003,7 @@ class IndicatorTranslationAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, indicator_id, lang_code):
         """
         Show indicator translation
@@ -1997,6 +2048,7 @@ class TopicTranslationListAPI(Resource):
     """
 
     @requires_auth
+    @cache.cached()
     def get(self):
         """
         List all topic translations
@@ -2047,6 +2099,7 @@ class TopicTranslationAPI(Resource):
     """
 
     @requires_auth
+    @cache.memoize()
     def get(self, topic_id, lang_code):
         """
         Show country topic translation

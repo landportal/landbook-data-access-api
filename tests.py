@@ -97,6 +97,7 @@ class TestCountry(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/countries", data=france_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/countries")
         spain = response.json[0]
         france = response.json[1]
@@ -106,6 +107,7 @@ class TestCountry(ApiTest):
         self.assertEquals(france['iso3'], "FRA")
         response = self.client.put("/countries", data=countries_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/countries")
         spain = response.json[0]
         france = response.json[1]
@@ -113,6 +115,7 @@ class TestCountry(ApiTest):
         self.assertEquals(france['iso2'], "FR")
         response = self.client.delete("/countries")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/countries")
         self.assert200(response)
         countries = response.json
@@ -205,6 +208,7 @@ class TestCountry(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/indicators", data=indicator2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/countries/ESP/indicators")
         indicator = response.json[0]
         indicator2 = response.json[1]
@@ -212,12 +216,14 @@ class TestCountry(ApiTest):
         self.assertEquals(indicator2['id'], "2")
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/indicators")
         self.assert200(response)
         indicators = response.json
         self.assertEquals(len(indicators), 0)
         response = self.client.delete("/countries")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/countries")
         self.assert200(response)
         organizations = response.json
@@ -274,6 +280,7 @@ class TestIndicator(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/indicators", data=receiver_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/indicators")
         donation = response.json[0]
         receiver = response.json[1]
@@ -281,10 +288,12 @@ class TestIndicator(ApiTest):
         self.assertEquals(receiver['id'], "2")
         response = self.client.put("/indicators", data=indicators_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/indicators")
         self.assertEquals(len(response.json), 2)
         response = self.client.delete("/indicators")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/indicators")
         self.assert200(response)
         indicators = response.json
@@ -571,6 +580,7 @@ class TestUser(ApiTest):
         self.assertEquals(response.json.get('ip'), "192.168.1.2")
         response = self.client.delete("/users/1")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/users/1")
         self.assert404(response)
 
@@ -595,6 +605,7 @@ class TestUser(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/users", data=user2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/users")
         user = response.json[0]
         user2 = response.json[1]
@@ -604,6 +615,7 @@ class TestUser(ApiTest):
         self.assertEquals(user2['ip'], "192.168.1.2")
         response = self.client.put("/users", data=users_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/users")
         user = response.json[0]
         user2 = response.json[1]
@@ -611,6 +623,7 @@ class TestUser(ApiTest):
         self.assertEquals(user2['ip'], "192.168.1.4")
         response = self.client.delete("/users")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/users")
         self.assert200(response)
         users = response.json
@@ -670,6 +683,7 @@ class TestOrganization(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/organizations", data=organization2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/organizations")
         organization = response.json[0]
         organization2 = response.json[1]
@@ -681,6 +695,7 @@ class TestOrganization(ApiTest):
         self.assertEquals(organization2['url'], "http://www.organizationB.com")
         response = self.client.put("/organizations", data=organizations_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/organizations")
         organization = response.json[0]
         organization2 = response.json[1]
@@ -690,6 +705,7 @@ class TestOrganization(ApiTest):
         self.assertEquals(organization2['url'], "http://www.organizationD.com")
         response = self.client.delete("/organizations")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/organizations")
         self.assert200(response)
         organizations = response.json
@@ -831,6 +847,7 @@ class TestObservation(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/observations", data=observation2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/observations")
         observation = response.json[0]
         observation2 = response.json[1]
@@ -840,6 +857,7 @@ class TestObservation(ApiTest):
         self.assertEquals(observation2['dataset_id'], 2)
         response = self.client.put("/observations", data=observation_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/observations")
         observation = response.json[0]
         observation2 = response.json[1]
@@ -849,6 +867,7 @@ class TestObservation(ApiTest):
         self.assertEquals(observation2['dataset_id'], 1)
         response = self.client.delete("/observations")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/observations")
         self.assert200(response)
         organizations = response.json
@@ -893,6 +912,7 @@ class TestRegion(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/regions", data=region2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/regions")
         region = response.json[0]
         region2 = response.json[1]
@@ -902,6 +922,7 @@ class TestRegion(ApiTest):
         #self.assertEquals(region2['is_part_of_id'], 2)
         response = self.client.delete("/regions")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/regions")
         self.assert200(response)
         organizations = response.json
@@ -1103,6 +1124,7 @@ class TestDataSource(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/datasources", data=datasource2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/datasources")
         datasource = response.json[0]
         datasource2 = response.json[1]
@@ -1112,11 +1134,13 @@ class TestDataSource(ApiTest):
         self.assertEquals(datasource2['organization_id'], "1")
         response = self.client.put("/datasources", data=datasources_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/datasources")
         datasource = response.json[0]
         datasource2 = response.json[1]
         response = self.client.delete("/datasources")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/datasources")
         self.assert200(response)
         datasources = response.json
@@ -1303,6 +1327,7 @@ class TestDataset(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/datasets", data=dataset2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/datasets")
         dataset = response.json[0]
         dataset2 = response.json[1]
@@ -1316,6 +1341,7 @@ class TestDataset(ApiTest):
         self.assertEquals(dataset2['license_id'], 2)
         response = self.client.put("/datasets", data=datasets_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/datasets")
         dataset = response.json[0]
         dataset2 = response.json[1]
@@ -1327,6 +1353,7 @@ class TestDataset(ApiTest):
         self.assertEquals(dataset2['license_id'], 4)
         response = self.client.delete("/datasets")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/datasets")
         self.assert200(response)
         datasources = response.json
@@ -1725,6 +1752,7 @@ class TestValue(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/values", data=value2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/values")
         value1 = response.json[0]
         value2 = response.json[1]
@@ -1734,6 +1762,7 @@ class TestValue(ApiTest):
         self.assertEquals(value2['value'], "2000")
         response = self.client.put("/values", data=values_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/values")
         value1 = response.json[0]
         value2 = response.json[1]
@@ -1741,6 +1770,7 @@ class TestValue(ApiTest):
         self.assertEquals(value2['value'], "200")
         response = self.client.delete("/values")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/values")
         self.assert200(response)
         values = response.json
@@ -1793,6 +1823,7 @@ class TestTopic(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/topics", data=topic2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/topics")
         self.assertEquals(len(response.json), 2)
         response = self.client.put("/topics", data=topics_updated, content_type='application/json')
@@ -1801,6 +1832,7 @@ class TestTopic(ApiTest):
         self.assertEquals(len(response.json), 2)
         response = self.client.delete("/topics")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/topics")
         self.assert200(response)
         countries = response.json
@@ -2314,6 +2346,7 @@ class TestIndicatorByPeriod(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/values", data=value2_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/indicators/HDI/average/range?from=20120611&to=20140402")
         self.assertEquals(response.json['value'], 75)
         response = self.client.get("/indicators/HDI/average/range?from=20140402&to=20140403")
@@ -2467,6 +2500,7 @@ class TestTranslations(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/regions/translations", data=france_translation_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/regions/translations")
         spain = response.json[0]
         france = response.json[1]
@@ -2478,6 +2512,7 @@ class TestTranslations(ApiTest):
         self.assertEqual(response.json.get('name'), 'Spain')
         response = self.client.put("/regions/translations", data=countries_translation_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/regions/translations")
         spain = response.json[0]
         france = response.json[1]
@@ -2485,6 +2520,7 @@ class TestTranslations(ApiTest):
         self.assertEquals(france['name'], "FRA")
         response = self.client.delete("/regions/translations")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/regions/translations")
         self.assert200(response)
         countries = response.json
@@ -2548,6 +2584,7 @@ class TestTranslations(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/indicators/translations", data=nrp_translation_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/indicators/translations")
         spain = response.json[0]
         france = response.json[1]
@@ -2557,6 +2594,7 @@ class TestTranslations(ApiTest):
         self.assertEquals(france['description'], "Anything")
         response = self.client.put("/indicators/translations", data=indicators_translation_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/indicators/translations")
         spain = response.json[0]
         france = response.json[1]
@@ -2564,6 +2602,7 @@ class TestTranslations(ApiTest):
         self.assertEquals(france['description'], "Non Rural")
         response = self.client.delete("/indicators/translations")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/indicators/translations")
         self.assert200(response)
         countries = response.json
@@ -2627,6 +2666,7 @@ class TestTranslations(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/topics/translations", data=topic2_translation_json, content_type='application/json')
         self.assertStatus(response, 201)
+        app.cache.clear()
         response = self.client.get("/topics/translations")
         spain = response.json[0]
         france = response.json[1]
@@ -2634,6 +2674,7 @@ class TestTranslations(ApiTest):
         self.assertEquals(france['name'], "Topic2")
         response = self.client.put("/topics/translations", data=topics_translation_updated, content_type='application/json')
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/topics/translations")
         spain = response.json[0]
         france = response.json[1]
@@ -2641,6 +2682,7 @@ class TestTranslations(ApiTest):
         self.assertEquals(france['name'], "TopicB")
         response = self.client.delete("/topics/translations")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/topics/translations")
         self.assert200(response)
         countries = response.json
@@ -2674,6 +2716,7 @@ class TestTranslations(ApiTest):
         self.assertEquals(response.json.get('name'), "TopicA")
         response = self.client.delete("/topics/translations/1/en")
         self.assertStatus(response, 204)
+        app.cache.clear()
         response = self.client.get("/topics/translations/1/en")
         self.assert404(response)
 
