@@ -156,6 +156,9 @@ class RegionService(GenericService):
         super(RegionService, self).__init__()
         self.dao = RegionDAO()
 
+    def get_by_artificial_code(self, code):
+        return self.tm.execute(self.dao, self.dao.get_by_artificial_code, code)
+
     def delete_all(self):
         """
         Method that deletes all regions by calling the dao

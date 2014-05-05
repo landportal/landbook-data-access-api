@@ -109,6 +109,15 @@ class RegionDAO(DAO):
         """
         return self.session.query(self.cls).filter_by(un_code=code).first()
 
+
+    def get_by_artificial_code(self, code):
+        """
+        Method that returns a region by its given code
+        :param code: id of the region
+        :return: region with given id
+        """
+        return self.session.query(self.cls).filter_by(id=code).first()
+
     def update(self, region):
         """
         Method to update an existing country, its code will not be changed

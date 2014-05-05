@@ -161,6 +161,9 @@ class CountryAPI(Resource):
         if country is None:
             abort(404)
         translate_region(country)
+        country.region = region_service.get_by_artificial_code(country.is_part_of_id)
+        country.other_parseable_fields.append('region')
+        translate_region(country.region)
         return response_xml_or_json_item(request, country, 'country')
 
     @localhost_decorator
