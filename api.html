@@ -61,7 +61,7 @@
 <div class="section" id="api-security">
 <h2>API Security<a class="headerlink" href="#api-security" title="Permalink to this headline">¶</a></h2>
 <p>For security, a basic realm authentication is required, except graphics. Graphics are covered in the next section.</p>
-<p>You need to obtain a token in: these token then is used...</p>
+<p>You need to obtain a token in: these token then is used to authentica, so you have to authenticate with your username of landportal.info and with the generated token as the password.</p>
 </div>
 <div class="section" id="api-structure">
 <h2>API Structure<a class="headerlink" href="#api-structure" title="Permalink to this headline">¶</a></h2>
@@ -90,13 +90,13 @@
 <dt><strong>organizations</strong></dt>
 <dd>Represents an organization that provides data</dd>
 <dt><strong>datasource</strong></dt>
-<dd>To complete</dd>
+<dd>Represents a collection of datasets</dd>
 <dt><strong>dataset</strong></dt>
-<dd>To complete</dd>
+<dd>Represents a set of indicators with observations</dd>
 <dt><strong>value</strong></dt>
 <dd>Represents a value for an observation</dd>
 <dt><strong>topic</strong></dt>
-<dd>To complete</dd>
+<dd>Represents a common topic among various indicators</dd>
 </dl>
 <p>As said before, api is based in RESTful principles, therefore you can make a petition with your browser or curl, like:</p>
 <div class="highlight-python"><div class="highlight"><pre>curl landportal.info/api/countries?format=json
@@ -181,155 +181,167 @@ In the next table you can see all the URLs defined that you can access with a sh
 <td>Observations of a region and an indicator or a country and an indicator</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/observations/&lt;id_first_filter&gt;/&lt;id_second_filter&gt;</td>
+<tr class="row-even"><td>landportal.info/api/observations/&lt;id_first_filter&gt;/&lt;id_second_filter&gt;/average</td>
 <td>Average of the observations, same as above one</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/regions</td>
+<tr class="row-odd"><td>landportal.info/api/observations/&lt;iso3&gt;/starred</td>
+<td>Observations of a country if the indicator is starred</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>landportal.info/api/regions</td>
 <td>All regions</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/regions/&lt;un_code&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/regions/&lt;un_code&gt;</td>
 <td>Region with the given un code</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/regions/&lt;id&gt;/countries</td>
+<tr class="row-even"><td>landportal.info/api/regions/&lt;id&gt;/countries</td>
 <td>Countries with that are part of the given region</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/regions/&lt;id&gt;/countries/&lt;iso3&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/regions/&lt;id&gt;/countries/&lt;iso3&gt;</td>
 <td>Country with the given iso3 and is part of the given region</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/regions/&lt;id&gt;/regions</td>
+<tr class="row-even"><td>landportal.info/api/regions/&lt;id&gt;/regions</td>
 <td>Regions that are part of the given region</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/datasources</td>
+<tr class="row-odd"><td>landportal.info/api/datasources</td>
 <td>All datasources</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/datasources/&lt;id&gt;</td>
+<tr class="row-even"><td>landportal.info/api/datasources/&lt;id&gt;</td>
 <td>Datasource with the given id</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/datasets</td>
+<tr class="row-odd"><td>landportal.info/api/datasets</td>
 <td>All datasets</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/datasets/&lt;id&gt;</td>
+<tr class="row-even"><td>landportal.info/api/datasets/&lt;id&gt;</td>
 <td>Dataset with the given id</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/datasources/&lt;id&gt;/indicators</td>
+<tr class="row-odd"><td>landportal.info/api/datasources/&lt;id&gt;/indicators</td>
 <td>Indicators of the given datasource</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/datasets/&lt;id&gt;</td>
+<tr class="row-even"><td>landportal.info/api/datasets/&lt;id&gt;</td>
 <td>Dataset with the given id</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/datasources/&lt;id&gt;/indicators/&lt;indicator_id&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/datasources/&lt;id&gt;/indicators/&lt;indicator_id&gt;</td>
 <td>Indicator with the given id of the given datasource</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/values</td>
+<tr class="row-even"><td>landportal.info/api/values</td>
 <td>All values</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/values/&lt;id&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/values/&lt;id&gt;</td>
 <td>Value with the given id</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/topics</td>
+<tr class="row-even"><td>landportal.info/api/measurement_units</td>
+<td>All measurement units</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>landportal.info/api/measurement_units/&lt;id&gt;</td>
+<td>Measurement unit with the given id</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>landportal.info/api/topics</td>
 <td>All topics</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/topics/&lt;id&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/topics/&lt;id&gt;</td>
 <td>Topic with the given id</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/topics/&lt;topic_id&gt;/indicators</td>
+<tr class="row-even"><td>landportal.info/api/topics/&lt;topic_id&gt;/indicators</td>
 <td>Indicators of the given topic</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/topics/&lt;topic_id&gt;/indicators/&lt;indicator_id&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/topics/&lt;topic_id&gt;/indicators/&lt;indicator_id&gt;</td>
 <td>Indicator with the given id of the given topic</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/regions/&lt;region_id&gt;/countries_with_data</td>
+<tr class="row-even"><td>landportal.info/api/regions/&lt;region_id&gt;/countries_with_data</td>
 <td>Countries that are part of the given region and have observations</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/countries/iso3&gt;/last_update</td>
+<tr class="row-odd"><td>landportal.info/api/countries/iso3&gt;/last_update</td>
 <td>Date of the country last update</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/&lt;iso3&gt;/last_update</td>
+<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/&lt;iso3&gt;/last_update</td>
 <td>Date of the country last update for the given indicator</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/observations/&lt;id&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/observations/&lt;id&gt;</td>
 <td>Observations of a country, indicator or region</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/observations/&lt;id&gt;/range</td>
+<tr class="row-even"><td>landportal.info/api/observations/&lt;id&gt;/range</td>
 <td>Observations of a country, indicator or region, betwenn two dates</td>
 <td>from: beginning date of the interval, end: final date of the interval</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/range</td>
+<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/range</td>
 <td>Observations of the given indicator between two dates</td>
 <td>from: beginning date of the interval, end: final date of the interval</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/regions_with_date</td>
+<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/regions_with_date</td>
 <td>Regions with observations for the given indicator</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/regions_without_date</td>
+<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/regions_without_date</td>
 <td>Regions without observations for the given indicator</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/average/range</td>
+<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/average/range</td>
 <td>Average of the given indicator between two dates</td>
 <td>from: beginning date of the interval, end: final date of the interval</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/&lt;iso3&gt;/average/range</td>
+<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/&lt;iso3&gt;/average/range</td>
 <td>Average of the given indicator and country between two dates</td>
 <td>from: beginning date of the interval, end: final date of the interval</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/related</td>
+<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/related</td>
 <td>Indicators with relation with the one given</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/&lt;iso3&gt;/tendency</td>
+<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/&lt;iso3&gt;/tendency</td>
 <td>Tendency of the given indicator in the given country</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/regions/translations</td>
+<tr class="row-even"><td>landportal.info/api/regions/translations</td>
 <td>All region translations</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/regions/translations/&lt;region_id&gt;/&lt;lang_code&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/regions/translations/&lt;region_id&gt;/&lt;lang_code&gt;</td>
 <td>Region translation of the given region in the given language</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/translations</td>
+<tr class="row-even"><td>landportal.info/api/indicators/translations</td>
 <td>All indicator translations</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/indicator/translations/&lt;indicator_id&gt;/&lt;lang_code&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/indicator/translations/&lt;indicator_id&gt;/&lt;lang_code&gt;</td>
 <td>Indicator translation of the given indicator in the given language</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/topics/translations</td>
+<tr class="row-even"><td>landportal.info/api/topics/translations</td>
 <td>All topic translations</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/topics/translations/&lt;topic_id&gt;/&lt;lang_code&gt;</td>
+<tr class="row-odd"><td>landportal.info/api/topics/translations/&lt;topic_id&gt;/&lt;lang_code&gt;</td>
 <td>Topic translation of the given topic in the given language</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/starred</td>
+<tr class="row-even"><td>landportal.info/api/indicators/starred</td>
 <td>Indicators that are starred, normally those which are on the main page</td>
 <td>&nbsp;</td>
 </tr>
@@ -341,8 +353,8 @@ In the next table you can see all the URLs defined that you can access with a sh
 <span class="n">landportal</span><span class="o">.</span><span class="n">info</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">countries</span><span class="o">/</span><span class="n">ESP</span>
 </pre></div>
 </div>
-<img alt="images/indicator.PNG" src="images/indicator.PNG" />
-<img alt="images/country.PNG" src="images/country.PNG" />
+<img alt="_images/indicator.PNG" src="_images/indicator.PNG" />
+<img alt="_images/country.PNG" src="_images/country.PNG" />
 </div>
 <div class="section" id="graphics">
 <h3>Graphics<a class="headerlink" href="#graphics" title="Permalink to this headline">¶</a></h3>
@@ -356,7 +368,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 <li><strong>linechart</strong>: Chart with dots representing the values. These dots are connected by lines.</li>
 <li><strong>areachart</strong>: Chart very similar to linechart, but this one colors the area below each line.</li>
 <li><strong>piechart</strong>: Chart that shows various pies divided with a percentage according to the values in the serie.</li>
-<li><strong>polarchart</strong>:</li>
+<li><strong>polarchart</strong>: Chart that shows three or more variables represented on axes starting from the same point.</li>
 <li><strong>scatterchart</strong>: Chart that show various points but without connecting the dots</li>
 <li><strong>table</strong>: Table with the data</li>
 </ul>
@@ -373,8 +385,8 @@ In the next table you can see all the URLs defined that you can access with a sh
 <li><strong>to_time</strong>: End date for the date range to filter data. Format required: &#8216;YYYYMMDD&#8217;</li>
 </ul>
 <p>You can see below examples for barchart and piechart:</p>
-<img alt="images/bar.PNG" src="images/bar.PNG" />
-<img alt="images/pie.PNG" src="images/pie.PNG" />
+<img alt="_images/bar.PNG" src="_images/bar.PNG" />
+<img alt="_images/pie.PNG" src="_images/pie.PNG" />
 </div>
 </div>
 </div>

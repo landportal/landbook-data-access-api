@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="landportal-data-access-api 1 documentation" href="index.html" />
     <link rel="next" title="model package" href="model.html" />
-    <link rel="prev" title="Welcome to landportal-data-access-api’s documentation!" href="index.html" /> 
+    <link rel="prev" title="API" href="api.html" /> 
   </head>
   <body>
     <div class="related">
@@ -41,7 +41,7 @@
           <a href="model.html" title="model package"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to landportal-data-access-api’s documentation!"
+          <a href="api.html" title="API"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">landportal-data-access-api 1 documentation</a> &raquo;</li> 
       </ul>
@@ -68,6 +68,28 @@
 </tr>
 </tbody>
 </table>
+<dl class="class">
+<dt id="app.daos.AuthDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">AuthDAO</tt><a class="headerlink" href="#app.daos.AuthDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<p>Dao for auth user entity</p>
+<dl class="method">
+<dt id="app.daos.AuthDAO.get_by_code">
+<tt class="descname">get_by_code</tt><big>(</big><em>username</em><big>)</big><a class="headerlink" href="#app.daos.AuthDAO.get_by_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns a country by its given code
+:param username: name of the username requested
+:return: user with given username</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.AuthDAO.update">
+<tt class="descname">update</tt><big>(</big><em>auth</em><big>)</big><a class="headerlink" href="#app.daos.AuthDAO.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to update an existing auth user, its username will not be changed
+:param auth: user auth to be updated, with updated attributes</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="app.daos.CountryDAO">
 <em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">CountryDAO</tt><a class="headerlink" href="#app.daos.CountryDAO" title="Permalink to this definition">¶</a></dt>
@@ -177,6 +199,14 @@
 <dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
 <p>Dao for region entity</p>
 <dl class="method">
+<dt id="app.daos.RegionDAO.get_by_artificial_code">
+<tt class="descname">get_by_artificial_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_by_artificial_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns a region by its given code
+:param code: id of the region
+:return: region with given id</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="app.daos.RegionDAO.get_by_code">
 <tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_by_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method that returns a region by its given code
@@ -276,6 +306,13 @@ all attributes beginning with &#8216;_&#8217; will not be updated
 </tr>
 </tbody>
 </table>
+<dl class="class">
+<dt id="app.services.AuthService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">AuthService</tt><a class="headerlink" href="#app.services.AuthService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for auth user dao</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="app.services.CountryService">
 <em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">CountryService</tt><a class="headerlink" href="#app.services.CountryService" title="Permalink to this definition">¶</a></dt>
@@ -415,6 +452,13 @@ with the majority of the daos</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="app.services.MeasurementUnitService">
+<em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">MeasurementUnitService</tt><a class="headerlink" href="#app.services.MeasurementUnitService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
+<p>Service for measurement unit dao</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="app.services.ObservationService">
 <em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">ObservationService</tt><a class="headerlink" href="#app.services.ObservationService" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
@@ -439,6 +483,11 @@ with the majority of the daos</p>
 <dd><p>Method that deletes all regions by calling the dao
 :attention: Take care of what you do, all regions will be destroyed</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="app.services.RegionService.get_by_artificial_code">
+<tt class="descname">get_by_artificial_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.services.RegionService.get_by_artificial_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -693,6 +742,39 @@ with the majority of the daos</p>
 </tr>
 </tbody>
 </table>
+<dl class="class">
+<dt id="app.views.AuthAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">AuthAPI</tt><a class="headerlink" href="#app.views.AuthAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Auth URI
+Methods: POST, PUT</p>
+<dl class="attribute">
+<dt id="app.views.AuthAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'auth'</em><a class="headerlink" href="#app.views.AuthAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.AuthAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.AuthAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.AuthAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['POST', 'PUT']</em><a class="headerlink" href="#app.views.AuthAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.AuthAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.AuthAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.AuthAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.AuthAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="app.views.CountriesIndicatorAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountriesIndicatorAPI</tt><a class="headerlink" href="#app.views.CountriesIndicatorAPI" title="Permalink to this definition">¶</a></dt>
@@ -1095,6 +1177,34 @@ Response 200 OK</p>
 <dl class="method">
 <dt id="app.views.DatasetListAPI.put">
 <tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.DeleteCacheAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DeleteCacheAPI</tt><a class="headerlink" href="#app.views.DeleteCacheAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Delete cache URI
+Methods: DELETE</p>
+<dl class="method">
+<dt id="app.views.DeleteCacheAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DeleteCacheAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DeleteCacheAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'delete_cache'</em><a class="headerlink" href="#app.views.DeleteCacheAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.DeleteCacheAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.DeleteCacheAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.DeleteCacheAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE']</em><a class="headerlink" href="#app.views.DeleteCacheAPI.methods" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1644,6 +1754,91 @@ Response 200 OK</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="app.views.MeasurementUnitAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">MeasurementUnitAPI</tt><a class="headerlink" href="#app.views.MeasurementUnitAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Measurement unit element URI
+Methods: GET, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.MeasurementUnitAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.MeasurementUnitAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'measurement_unit'</em><a class="headerlink" href="#app.views.MeasurementUnitAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.MeasurementUnitAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show measurement unit
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.MeasurementUnitAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.MeasurementUnitAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'PUT']</em><a class="headerlink" href="#app.views.MeasurementUnitAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.MeasurementUnitAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.MeasurementUnitListAPI">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">MeasurementUnitListAPI</tt><a class="headerlink" href="#app.views.MeasurementUnitListAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Measurement unit collection URI
+Methods: GET, POST, PUT, DELETE</p>
+<dl class="method">
+<dt id="app.views.MeasurementUnitListAPI.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitListAPI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.MeasurementUnitListAPI.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'measurement_units_list'</em><a class="headerlink" href="#app.views.MeasurementUnitListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.MeasurementUnitListAPI.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitListAPI.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all measurement untis
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.MeasurementUnitListAPI.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitListAPI.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.MeasurementUnitListAPI.methods">
+<tt class="descname">methods</tt><em class="property"> = ['DELETE', 'GET', 'POST', 'PUT']</em><a class="headerlink" href="#app.views.MeasurementUnitListAPI.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.MeasurementUnitListAPI.post">
+<tt class="descname">post</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitListAPI.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.MeasurementUnitListAPI.put">
+<tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitListAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="app.views.ObservationAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationAPI</tt><a class="headerlink" href="#app.views.ObservationAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
@@ -1677,6 +1872,37 @@ Methods: GET, PUT, DELETE</p>
 <dl class="method">
 <dt id="app.views.ObservationAPI.put">
 <tt class="descname">put</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationAPI.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.views.ObservationByCountryStarred">
+<em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByCountryStarred</tt><a class="headerlink" href="#app.views.ObservationByCountryStarred" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
+<p>Observation by country and starred indicator collection URI
+Methods: GET</p>
+<dl class="attribute">
+<dt id="app.views.ObservationByCountryStarred.endpoint">
+<tt class="descname">endpoint</tt><em class="property"> = 'observations_by_country_starred'</em><a class="headerlink" href="#app.views.ObservationByCountryStarred.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByCountryStarred.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationByCountryStarred.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show observations filtering by country and showed if the indicator is starred.
+:param iso3: iso3 of the country to filter
+Response 200 OK</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.views.ObservationByCountryStarred.mediatypes">
+<tt class="descname">mediatypes</tt><big>(</big><em>resource_cls</em><big>)</big><a class="headerlink" href="#app.views.ObservationByCountryStarred.mediatypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.views.ObservationByCountryStarred.methods">
+<tt class="descname">methods</tt><em class="property"> = ['GET']</em><a class="headerlink" href="#app.views.ObservationByCountryStarred.methods" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2801,6 +3027,12 @@ It could be one of three next:</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="app.views.help">
+<tt class="descclassname">app.views.</tt><tt class="descname">help</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main URI with the documentation redirection</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="app.views.is_csv_accepted">
 <tt class="descclassname">app.views.</tt><tt class="descname">is_csv_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#app.views.is_csv_accepted" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns if csv is accepted or not
@@ -2832,6 +3064,14 @@ It could be one of three next:</p>
 <tt class="descclassname">app.views.</tt><tt class="descname">localhost_decorator</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#app.views.localhost_decorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator that allows connections only from localhost if not
 it will return a 403 FORBIDDEN error code</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.make_cache_key">
+<tt class="descclassname">app.views.</tt><tt class="descname">make_cache_key</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.make_cache_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that allows creating a unique id for every request
+There was a problem caching and changing arguments of the URL, so this is one possible solution
+:see: <a class="reference external" href="http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well">http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well</a></p>
 </dd></dl>
 
 <dl class="function">
@@ -2990,8 +3230,8 @@ Format: YYYYMMDD
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to landportal-data-access-api&#8217;s documentation!</a></p>
+  <p class="topless"><a href="api.html"
+                        title="previous chapter">API</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="model.html"
                         title="next chapter">model package</a></p>
@@ -3030,7 +3270,7 @@ Format: YYYYMMDD
           <a href="model.html" title="model package"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to landportal-data-access-api’s documentation!"
+          <a href="api.html" title="API"
              >previous</a> |</li>
         <li><a href="index.html">landportal-data-access-api 1 documentation</a> &raquo;</li> 
       </ul>

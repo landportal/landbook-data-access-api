@@ -58,6 +58,22 @@
 <p>Created on 03/02/2014</p>
 <p>&#64;author: Herminio</p>
 <dl class="class">
+<dt id="model.models.Auth">
+<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">Auth</tt><big>(</big><em>user</em>, <em>token</em><big>)</big><a class="headerlink" href="#model.models.Auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></tt></p>
+<dl class="attribute">
+<dt id="model.models.Auth.token">
+<tt class="descname">token</tt><a class="headerlink" href="#model.models.Auth.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.models.Auth.user">
+<tt class="descname">user</tt><a class="headerlink" href="#model.models.Auth.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="model.models.Becomes">
 <em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">Becomes</tt><big>(</big><em>source=None</em>, <em>target=None</em><big>)</big><a class="headerlink" href="#model.models.Becomes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#model.models.IndicatorRelationship" title="model.models.IndicatorRelationship"><tt class="xref py py-class docutils literal"><span class="pre">model.models.IndicatorRelationship</span></tt></a></p>
@@ -661,9 +677,19 @@
 
 <dl class="class">
 <dt id="model.models.MeasurementUnit">
-<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">MeasurementUnit</tt><big>(</big><em>id=None</em>, <em>name=None</em><big>)</big><a class="headerlink" href="#model.models.MeasurementUnit" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">MeasurementUnit</tt><big>(</big><em>id=None</em>, <em>name=None</em>, <em>convertible_to=None</em>, <em>factor=None</em><big>)</big><a class="headerlink" href="#model.models.MeasurementUnit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></tt></p>
 <p>classdocs</p>
+<dl class="attribute">
+<dt id="model.models.MeasurementUnit.convertible_to">
+<tt class="descname">convertible_to</tt><a class="headerlink" href="#model.models.MeasurementUnit.convertible_to" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.models.MeasurementUnit.factor">
+<tt class="descname">factor</tt><a class="headerlink" href="#model.models.MeasurementUnit.factor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="model.models.MeasurementUnit.id">
 <tt class="descname">id</tt><a class="headerlink" href="#model.models.MeasurementUnit.id" title="Permalink to this definition">¶</a></dt>

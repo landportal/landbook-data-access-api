@@ -56,6 +56,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -123,8 +124,6 @@
   <dt><a href="app.html#module-app">app (module)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="app.html#module-app.daos">app.daos (module)</a>
   </dt>
@@ -133,6 +132,8 @@
   <dt><a href="app.html#module-app.services">app.services (module)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="app.html#module-app.utils">app.utils (module)</a>
   </dt>
@@ -146,7 +147,23 @@
   </dt>
 
       
+  <dt><a href="model.html#model.models.Auth">Auth (class in model.models)</a>
+  </dt>
+
+      
+  <dt><a href="app.html#app.views.AuthAPI">AuthAPI (class in app.views)</a>
+  </dt>
+
+      
+  <dt><a href="app.html#app.daos.AuthDAO">AuthDAO (class in app.daos)</a>
+  </dt>
+
+      
   <dt><a href="app.html#app.views.authenticate">authenticate() (in module app.views)</a>
+  </dt>
+
+      
+  <dt><a href="app.html#app.services.AuthService">AuthService (class in app.services)</a>
   </dt>
 
   </dl></td>
@@ -210,11 +227,15 @@
   </dt>
 
       
-  <dt><a href="app.html#app.views.CountriesIndicatorAPI">CountriesIndicatorAPI (class in app.views)</a>
+  <dt><a href="model.html#model.models.MeasurementUnit.convertible_to">convertible_to (model.models.MeasurementUnit attribute)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="app.html#app.views.CountriesIndicatorAPI">CountriesIndicatorAPI (class in app.views)</a>
+  </dt>
+
       
   <dt><a href="app.html#app.views.CountriesIndicatorLastUpdateAPI">CountriesIndicatorLastUpdateAPI (class in app.views)</a>
   </dt>
@@ -313,12 +334,12 @@
   <dt><a href="app.html#app.views.DataSourceAPI">DataSourceAPI (class in app.views)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="app.html#app.views.DataSourceIndicatorAPI">DataSourceIndicatorAPI (class in app.views)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="app.html#app.views.DataSourceIndicatorListAPI">DataSourceIndicatorListAPI (class in app.views)</a>
   </dt>
@@ -389,6 +410,10 @@
   </dt>
 
         
+  <dt><a href="app.html#app.views.DeleteCacheAPI.delete">(app.views.DeleteCacheAPI method)</a>
+  </dt>
+
+        
   <dt><a href="app.html#app.views.IndicatorAPI.delete">(app.views.IndicatorAPI method)</a>
   </dt>
 
@@ -402,6 +427,14 @@
 
         
   <dt><a href="app.html#app.views.IndicatorTranslationListAPI.delete">(app.views.IndicatorTranslationListAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitAPI.delete">(app.views.MeasurementUnitAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI.delete">(app.views.MeasurementUnitListAPI method)</a>
   </dt>
 
         
@@ -496,6 +529,10 @@
 
       </dl></dd>
       
+  <dt><a href="app.html#app.views.DeleteCacheAPI">DeleteCacheAPI (class in app.views)</a>
+  </dt>
+
+      
   <dt><a href="model.html#model.models.IndicatorTranslation.description">description (model.models.IndicatorTranslation attribute)</a>
   </dt>
 
@@ -548,10 +585,14 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="app.html#app.views.CountriesIndicatorAPI.endpoint">endpoint (app.views.CountriesIndicatorAPI attribute)</a>
+  <dt><a href="app.html#app.views.AuthAPI.endpoint">endpoint (app.views.AuthAPI attribute)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="app.html#app.views.CountriesIndicatorAPI.endpoint">(app.views.CountriesIndicatorAPI attribute)</a>
+  </dt>
+
         
   <dt><a href="app.html#app.views.CountriesIndicatorLastUpdateAPI.endpoint">(app.views.CountriesIndicatorLastUpdateAPI attribute)</a>
   </dt>
@@ -590,6 +631,10 @@
 
         
   <dt><a href="app.html#app.views.DatasetListAPI.endpoint">(app.views.DatasetListAPI attribute)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.DeleteCacheAPI.endpoint">(app.views.DeleteCacheAPI attribute)</a>
   </dt>
 
         
@@ -657,7 +702,19 @@
   </dt>
 
         
+  <dt><a href="app.html#app.views.MeasurementUnitAPI.endpoint">(app.views.MeasurementUnitAPI attribute)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI.endpoint">(app.views.MeasurementUnitListAPI attribute)</a>
+  </dt>
+
+        
   <dt><a href="app.html#app.views.ObservationAPI.endpoint">(app.views.ObservationAPI attribute)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.ObservationByCountryStarred.endpoint">(app.views.ObservationByCountryStarred attribute)</a>
   </dt>
 
         
@@ -776,15 +833,19 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="model.html#model.models.Country.faoURI">faoURI (model.models.Country attribute)</a>
+  <dt><a href="model.html#model.models.MeasurementUnit.factor">factor (model.models.MeasurementUnit attribute)</a>
   </dt>
 
       
-  <dt><a href="app.html#app.views.filter_by_region_and_top">filter_by_region_and_top() (in module app.views)</a>
+  <dt><a href="model.html#model.models.Country.faoURI">faoURI (model.models.Country attribute)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="app.html#app.views.filter_by_region_and_top">filter_by_region_and_top() (in module app.views)</a>
+  </dt>
+
       
   <dt><a href="app.html#app.views.filter_observations_by_date_range">filter_observations_by_date_range() (in module app.views)</a>
   </dt>
@@ -909,7 +970,19 @@
   </dt>
 
         
+  <dt><a href="app.html#app.views.MeasurementUnitAPI.get">(app.views.MeasurementUnitAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI.get">(app.views.MeasurementUnitListAPI method)</a>
+  </dt>
+
+        
   <dt><a href="app.html#app.views.ObservationAPI.get">(app.views.ObservationAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.ObservationByCountryStarred.get">(app.views.ObservationByCountryStarred method)</a>
   </dt>
 
         
@@ -1028,10 +1101,24 @@
 
       </dl></dd>
       
-  <dt><a href="app.html#app.daos.CountryDAO.get_by_code">get_by_code() (app.daos.CountryDAO method)</a>
+  <dt><a href="app.html#app.daos.RegionDAO.get_by_artificial_code">get_by_artificial_code() (app.daos.RegionDAO method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="app.html#app.services.RegionService.get_by_artificial_code">(app.services.RegionService method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="app.html#app.daos.AuthDAO.get_by_code">get_by_code() (app.daos.AuthDAO method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="app.html#app.daos.CountryDAO.get_by_code">(app.daos.CountryDAO method)</a>
+  </dt>
+
         
   <dt><a href="app.html#app.daos.DAO.get_by_code">(app.daos.DAO method)</a>
   </dt>
@@ -1139,6 +1226,16 @@
 
       
   <dt><a href="app.html#app.views.get_visualization_json">get_visualization_json() (in module app.views)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="app.html#app.views.help">help() (in module app.views)</a>
   </dt>
 
   </dl></td>
@@ -1584,6 +1681,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="app.html#app.views.make_cache_key">make_cache_key() (in module app.views)</a>
+  </dt>
+
+      
   <dt><a href="model.html#model.models.CompoundIndicator.measurement_unit">measurement_unit (model.models.CompoundIndicator attribute)</a>
   </dt>
 
@@ -1608,10 +1709,28 @@
   </dt>
 
       
-  <dt><a href="app.html#app.views.CountriesIndicatorAPI.mediatypes">mediatypes() (app.views.CountriesIndicatorAPI method)</a>
+  <dt><a href="app.html#app.views.MeasurementUnitAPI">MeasurementUnitAPI (class in app.views)</a>
+  </dt>
+
+      
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI">MeasurementUnitListAPI (class in app.views)</a>
+  </dt>
+
+      
+  <dt><a href="app.html#app.services.MeasurementUnitService">MeasurementUnitService (class in app.services)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="app.html#app.views.AuthAPI.mediatypes">mediatypes() (app.views.AuthAPI method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="app.html#app.views.CountriesIndicatorAPI.mediatypes">(app.views.CountriesIndicatorAPI method)</a>
+  </dt>
+
         
   <dt><a href="app.html#app.views.CountriesIndicatorLastUpdateAPI.mediatypes">(app.views.CountriesIndicatorLastUpdateAPI method)</a>
   </dt>
@@ -1650,6 +1769,10 @@
 
         
   <dt><a href="app.html#app.views.DatasetListAPI.mediatypes">(app.views.DatasetListAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.DeleteCacheAPI.mediatypes">(app.views.DeleteCacheAPI method)</a>
   </dt>
 
         
@@ -1717,7 +1840,19 @@
   </dt>
 
         
+  <dt><a href="app.html#app.views.MeasurementUnitAPI.mediatypes">(app.views.MeasurementUnitAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI.mediatypes">(app.views.MeasurementUnitListAPI method)</a>
+  </dt>
+
+        
   <dt><a href="app.html#app.views.ObservationAPI.mediatypes">(app.views.ObservationAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.ObservationByCountryStarred.mediatypes">(app.views.ObservationByCountryStarred method)</a>
   </dt>
 
         
@@ -1826,10 +1961,14 @@
 
       </dl></dd>
       
-  <dt><a href="app.html#app.views.CountriesIndicatorAPI.methods">methods (app.views.CountriesIndicatorAPI attribute)</a>
+  <dt><a href="app.html#app.views.AuthAPI.methods">methods (app.views.AuthAPI attribute)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="app.html#app.views.CountriesIndicatorAPI.methods">(app.views.CountriesIndicatorAPI attribute)</a>
+  </dt>
+
         
   <dt><a href="app.html#app.views.CountriesIndicatorLastUpdateAPI.methods">(app.views.CountriesIndicatorLastUpdateAPI attribute)</a>
   </dt>
@@ -1868,6 +2007,10 @@
 
         
   <dt><a href="app.html#app.views.DatasetListAPI.methods">(app.views.DatasetListAPI attribute)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.DeleteCacheAPI.methods">(app.views.DeleteCacheAPI attribute)</a>
   </dt>
 
         
@@ -1935,7 +2078,19 @@
   </dt>
 
         
+  <dt><a href="app.html#app.views.MeasurementUnitAPI.methods">(app.views.MeasurementUnitAPI attribute)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI.methods">(app.views.MeasurementUnitListAPI attribute)</a>
+  </dt>
+
+        
   <dt><a href="app.html#app.views.ObservationAPI.methods">(app.views.ObservationAPI attribute)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.ObservationByCountryStarred.methods">(app.views.ObservationByCountryStarred attribute)</a>
   </dt>
 
         
@@ -2043,8 +2198,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="model.html#module-model">model (module)</a>
   </dt>
@@ -2132,6 +2285,10 @@
   </dt>
 
       
+  <dt><a href="app.html#app.views.ObservationByCountryStarred">ObservationByCountryStarred (class in app.views)</a>
+  </dt>
+
+      
   <dt><a href="app.html#app.views.ObservationByPeriodAPI">ObservationByPeriodAPI (class in app.views)</a>
   </dt>
 
@@ -2147,6 +2304,8 @@
   <dt><a href="app.html#app.views.ObservationListAPI">ObservationListAPI (class in app.views)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="model.html#model.models.Country.observations">observations (model.models.Country attribute)</a>
   </dt>
@@ -2165,8 +2324,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="app.html#app.views.observations_average">observations_average() (in module app.views)</a>
   </dt>
@@ -2234,10 +2391,14 @@
   </dt>
 
       
-  <dt><a href="app.html#app.views.CountryListAPI.post">post() (app.views.CountryListAPI method)</a>
+  <dt><a href="app.html#app.views.AuthAPI.post">post() (app.views.AuthAPI method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="app.html#app.views.CountryListAPI.post">(app.views.CountryListAPI method)</a>
+  </dt>
+
         
   <dt><a href="app.html#app.views.DataSourceListAPI.post">(app.views.DataSourceListAPI method)</a>
   </dt>
@@ -2252,6 +2413,10 @@
 
         
   <dt><a href="app.html#app.views.IndicatorTranslationListAPI.post">(app.views.IndicatorTranslationListAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI.post">(app.views.MeasurementUnitListAPI method)</a>
   </dt>
 
         
@@ -2300,10 +2465,14 @@
 
       </dl></dd>
       
-  <dt><a href="app.html#app.views.CountryAPI.put">put() (app.views.CountryAPI method)</a>
+  <dt><a href="app.html#app.views.AuthAPI.put">put() (app.views.AuthAPI method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="app.html#app.views.CountryAPI.put">(app.views.CountryAPI method)</a>
+  </dt>
+
         
   <dt><a href="app.html#app.views.CountryListAPI.put">(app.views.CountryListAPI method)</a>
   </dt>
@@ -2338,6 +2507,14 @@
 
         
   <dt><a href="app.html#app.views.IndicatorTranslationListAPI.put">(app.views.IndicatorTranslationListAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitAPI.put">(app.views.MeasurementUnitAPI method)</a>
+  </dt>
+
+        
+  <dt><a href="app.html#app.views.MeasurementUnitListAPI.put">(app.views.MeasurementUnitListAPI method)</a>
   </dt>
 
         
@@ -2656,6 +2833,10 @@
 
       </dl></dd>
       
+  <dt><a href="model.html#model.models.Auth.token">token (model.models.Auth attribute)</a>
+  </dt>
+
+      
   <dt><a href="model.html#model.models.Topic">Topic (class in model.models)</a>
   </dt>
 
@@ -2836,10 +3017,14 @@
 
       </dl></dd>
       
-  <dt><a href="app.html#app.daos.CountryDAO.update">update() (app.daos.CountryDAO method)</a>
+  <dt><a href="app.html#app.daos.AuthDAO.update">update() (app.daos.AuthDAO method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="app.html#app.daos.CountryDAO.update">(app.daos.CountryDAO method)</a>
+  </dt>
+
         
   <dt><a href="app.html#app.daos.DAO.update">(app.daos.DAO method)</a>
   </dt>
@@ -2877,8 +3062,6 @@
   <dt><a href="model.html#model.models.Computation.uri">uri (model.models.Computation attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="model.html#model.models.License.url">url (model.models.License attribute)</a>
   </dt>
@@ -2889,8 +3072,14 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="model.html#model.models.User">User (class in model.models)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#model.models.Auth.user">user (model.models.Auth attribute)</a>
   </dt>
 
       
