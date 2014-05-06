@@ -2182,6 +2182,107 @@ class TestLastUpdate(ApiTest):
         self.assertEquals(len(indicators), 0)
 
 
+class TestMeasurementUnit(ApiTest):
+    def test_item(self):
+        measurement_unit_json = json.dumps(dict(
+           id=1,
+           name='Km',
+           convertible_to='m',
+           factor=1000
+        ))
+        measurement_unit_updated = json.dumps(dict(
+           id=1,
+           name='Km2',
+           convertible_to='m2',
+           factor=1000000
+        ))
+        response = self.client.get("/measurement_units/1")
+        self.assert404(response)
+        response = self.client.post("/measurement_units", data=measurement_unit_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.delete("/cache")
+        self.assertStatus(response, 204)
+        response = self.client.get("/measurement_units/1")
+        self.assertEquals(response.json.get('id'), 1)
+        self.assertEquals(response.json.get('name'), "Km")
+        self.assertEquals(response.json.get('convertible_to'), "m")
+        self.assertEquals(response.json.get('factor'), 1000)
+        response = self.client.put("/measurement_units/1", data=measurement_unit_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.delete("/cache")
+        self.assertStatus(response, 204)
+        response = self.client.get("/measurement_units/1")
+        self.assertEquals(response.json.get('name'), "Km2")
+        self.assertEquals(response.json.get('convertible_to'), "m2")
+        self.assertEquals(response.json.get('factor'), 1000000)
+        response = self.client.delete("/measurement_units/1")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/cache")
+        self.assertStatus(response, 204)
+        response = self.client.get("/measurement_units/1")
+        self.assert404(response)
+
+    def test_collection(self):
+        measurement_unit_json = json.dumps(dict(
+           id=1,
+           name='Km',
+           convertible_to='m',
+           factor=1000
+        ))
+        measurement_unit2_json = json.dumps(dict(
+           id=2,
+           name='m',
+           convertible_to='cm',
+           factor=100
+        ))
+        users_updated = json.dumps([
+            dict(id=1, name='Km2', convertible_to='m2', factor=1000000),
+            dict(id=2, name='m2', convertible_to='cm2', factor=10000)
+        ])
+        response = self.client.get("/measurement_units")
+        self.assert200(response)
+        users = response.json
+        self.assertEquals(len(users), 0)
+        response = self.client.post("/measurement_units", data=measurement_unit_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/measurement_units", data=measurement_unit2_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.delete("/cache")
+        self.assertStatus(response, 204)
+        response = self.client.get("/measurement_units")
+        user = response.json[0]
+        user2 = response.json[1]
+        self.assertEquals(user['id'], 1)
+        self.assertEquals(user['name'], "Km")
+        self.assertEquals(user['convertible_to'], "m")
+        self.assertEquals(user['factor'], 1000)
+        self.assertEquals(user2['id'], 2)
+        self.assertEquals(user2['name'], "m")
+        self.assertEquals(user2['convertible_to'], "cm")
+        self.assertEquals(user2['factor'], 100)
+        response = self.client.put("/measurement_units", data=users_updated, content_type='application/json')
+        self.assertStatus(response, 204)
+        response = self.client.delete("/cache")
+        self.assertStatus(response, 204)
+        response = self.client.get("/measurement_units")
+        user = response.json[0]
+        user2 = response.json[1]
+        self.assertEquals(user['name'], "Km2")
+        self.assertEquals(user['convertible_to'], "m2")
+        self.assertEquals(user['factor'], 1000000)
+        self.assertEquals(user2['name'], "m2")
+        self.assertEquals(user2['convertible_to'], "cm2")
+        self.assertEquals(user2['factor'], 10000)
+        response = self.client.delete("/measurement_units")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/cache")
+        self.assertStatus(response, 204)
+        response = self.client.get("/measurement_units")
+        self.assert200(response)
+        users = response.json
+        self.assertEquals(len(users), 0)
+
+
 class TestObservationByPeriod(ApiTest):
     def test_get_by_country(self):
         observation_json = json.dumps(dict(
@@ -2920,7 +3021,7 @@ class TestCSV(ApiTest):
         response = self.client.post("/countries", data=spain_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/countries/ESP?format=csv")
-        self.assertEquals(response.data, "is_part_of_id;type;faoURI;iso3;iso2;un_code;id\nNone;countries;None;ESP;ES;None;1;\n")
+        self.assertEquals(response.data, "is_part_of_id;type;faoURI;iso3;iso2;region;un_code;id\nNone;countries;None;ESP;ES;None;None;1;\n")
 
 
 class TestJSONP(ApiTest):

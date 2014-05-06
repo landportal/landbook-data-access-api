@@ -6,7 +6,7 @@ Created on 03/02/2014
 from app import db
 from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO, RegionDAO
 from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
-    IndicatorRelationship
+    IndicatorRelationship, MeasurementUnit
 
 
 class GenericService(object):
@@ -230,6 +230,17 @@ class TopicService(GenericService):
         super(TopicService, self).__init__()
         self.dao = DAO(Topic)
 
+
+class MeasurementUnitService(GenericService):
+    """
+    Service for measurement unit dao
+    """
+    def __init__(self):
+        """
+        Constructor for measurement unit service
+        """
+        super(MeasurementUnitService, self).__init__()
+        self.dao = DAO(MeasurementUnit)
 
 class IndicatorRelationshipService(GenericService):
     """

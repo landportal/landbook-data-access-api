@@ -8,7 +8,7 @@ API Security
 ------------
 For security, a basic realm authentication is required, except graphics. Graphics are covered in the next section.
 
-You need to obtain a token in: these token then is used...
+You need to obtain a token in: these token then is used to authentica, so you have to authenticate with your username of landportal.info and with the generated token as the password.
 
 API Structure
 -------------
@@ -36,13 +36,13 @@ The entities available are the next:
 **organizations**
 	Represents an organization that provides data
 **datasource**
-	To complete
+	Represents a collection of datasets
 **dataset**
-	To complete
+	Represents a set of indicators with observations
 **value**
 	Represents a value for an observation
 **topic**
-	To complete
+	Represents a common topic among various indicators
 
 
 As said before, api is based in RESTful principles, therefore you can make a petition with your browser or curl, like::
@@ -87,7 +87,9 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/observations/<id_first_filter>/<id_second_filter>            | Observations of a region and an indicator or a country and an indicator    |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/observations/<id_first_filter>/<id_second_filter>            | Average of the observations, same as above one                             |                                                                                 |
+| landportal.info/api/observations/<id_first_filter>/<id_second_filter>/average    | Average of the observations, same as above one                             |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/observations/<iso3>/starred                                  | Observations of a country if the indicator is starred                      |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/regions                                                      | All regions                                                                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -116,6 +118,10 @@ In the next table you can see all the URLs defined that you can access with a sh
 | landportal.info/api/values                                                       | All values                                                                 |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/values/<id>                                                  | Value with the given id                                                    |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/measurement_units                                            | All measurement units                                                      |                                                                                 |
++----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
+| landportal.info/api/measurement_units/<id>                                       | Measurement unit with the given id                                         |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/topics                                                       | All topics                                                                 |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -188,7 +194,7 @@ As you can see you can define what kind of chart you want to be showed, availabl
 * **linechart**: Chart with dots representing the values. These dots are connected by lines.
 * **areachart**: Chart very similar to linechart, but this one colors the area below each line.
 * **piechart**: Chart that shows various pies divided with a percentage according to the values in the serie.
-* **polarchart**: 
+* **polarchart**: Chart that shows three or more variables represented on axes starting from the same point.
 * **scatterchart**: Chart that show various points but without connecting the dots
 * **table**: Table with the data
 

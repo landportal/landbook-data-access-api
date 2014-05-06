@@ -1,0 +1,1 @@
+make html SPHINXBUILD="path_to_Sphinx_virtualenv"
