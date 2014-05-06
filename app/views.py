@@ -1263,7 +1263,7 @@ class ObservationByCountryStarred(Resource):
             indicator = indicator_service.get_by_code(observation.indicator.id)
             translate_indicator(indicator)
             observation.indicator = indicator
-            observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
         if observations is not None:
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         abort(400)
@@ -1360,7 +1360,7 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         translate_region(country)
                         observation.indicator = indicator
                         observation.ref_time = observation.ref_time
-                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
+                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
                         observations.append(observation)
     if observations is not None and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
