@@ -11,10 +11,10 @@ from app import app, cache
 from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
     Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval, Time, \
-    MeasurementUnit
+    MeasurementUnit, Auth
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
-    RegionTranslationService, IndicatorTranslationService, TopicTranslationService, MeasurementUnitService
+    RegionTranslationService, IndicatorTranslationService, TopicTranslationService, MeasurementUnitService, AuthService
 from flask import request, redirect
 from datetime import datetime
 from functools import wraps
@@ -35,6 +35,7 @@ indicator_relationship_service = IndicatorRelationshipService()
 region_translation_service = RegionTranslationService()
 indicator_translation_service = IndicatorTranslationService()
 topic_translation_service = TopicTranslationService()
+auth_service = AuthService()
 measurement_unit_service = MeasurementUnitService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
@@ -60,7 +61,8 @@ def check_auth(username, password):
     This function is called to check if a username /
     password combination is valid.
     """
-    return username == 'admin' and password == 'secret'
+    auth = auth_service.get_by_code(username)
+    return password == auth.token
 
 
 def authenticate():
@@ -1252,11 +1254,15 @@ class ObservationByCountryStarred(Resource):
         Response 200 OK
         """
         country = country_service.get_by_code(iso3)
+        translate_region(country)
         if country is None:
             abort(404)
         observations = [obs for obs in country.observations if obs.indicator.starred]
         for observation in observations:
             observation.country = country
+            indicator = indicator_service.get_by_code(observation.indicator.id)
+            translate_indicator(indicator)
+            observation.indicator = indicator
             observation.other_parseable_fields = ['country', 'indicator', 'ref_time']
         if observations is not None:
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
@@ -2407,6 +2413,41 @@ def help():
     return redirect('http://weso.github.io/landportal-data-access-api/', code=302)
 
 
+class AuthAPI(Resource):
+    """
+    Auth URI
+    Methods: POST, PUT
+    """
+
+    @localhost_decorator
+    def post(self):
+        """
+        Create a new auth user
+        Response 201 CREATED
+        """
+        auth = Auth(request.json.get('user'), request.json.get('token'))
+        if auth.user is not None and auth.token is not None:
+            auth_service.insert(auth)
+            return 201
+        abort(400)  # in case something is wrong
+
+    @localhost_decorator
+    def put(self, username):
+        """
+        If exists update auth user
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        """
+        auth = auth_service.get_by_code(username)
+        if auth is not None:
+            auth.token = request.json.get("token")
+            auth_service.update(auth)
+            return {}, 204
+        else:
+            abort(400)
+
+
 api.add_resource(CountryListAPI, '/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/indicators', endpoint='indicators_list')
@@ -2465,6 +2506,7 @@ api.add_resource(TopicTranslationListAPI, '/topics/translations', endpoint='topi
 api.add_resource(TopicTranslationAPI, '/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
 api.add_resource(IndicatorStarredAPI, '/indicators/starred', endpoint='indicator_starred')
 api.add_resource(DeleteCacheAPI, '/cache', endpoint='delete_cache')
+api.add_resource(AuthAPI, '/auth', endpoint='auth')
 
 
 def translate_indicator_list(indicators):
