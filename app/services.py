@@ -4,6 +4,7 @@ Created on 03/02/2014
 :author: Herminio
 """
 from app import db
+from app.daos import AuthDAO
 from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO, RegionDAO
 from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
     IndicatorRelationship, MeasurementUnit
@@ -242,6 +243,7 @@ class MeasurementUnitService(GenericService):
         super(MeasurementUnitService, self).__init__()
         self.dao = DAO(MeasurementUnit)
 
+
 class IndicatorRelationshipService(GenericService):
     """
     Service for IsPartOf dao
@@ -366,6 +368,18 @@ class TopicTranslationService(GenericService):
         objects = self.tm.execute(self.dao, self.dao.get_all)
         for object in objects:
             self.tm.execute(self.dao, self.dao.delete, object.topic_id, object.lang_code)
+
+
+class AuthService(GenericService):
+    """
+    Service for auth user dao
+    """
+    def __init__(self):
+        """
+        Constructor for auth user service
+        """
+        super(AuthService, self).__init__()
+        self.dao = AuthDAO()
 
 
 class TransactionManager(object):
