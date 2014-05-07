@@ -647,6 +647,8 @@ class CountriesIndicatorListAPI(Resource):
         for obs in observations:
             if obs.indicator is not None:
                 indicators.append(obs.indicator)
+        set_indicators = set(indicators)
+        indicators = list(set_indicators)
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
@@ -1263,7 +1265,8 @@ class ObservationByCountryStarred(Resource):
             indicator = indicator_service.get_by_code(observation.indicator.id)
             translate_indicator(indicator)
             observation.indicator = indicator
-            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
+            observation.measurement_unit = indicator.measurement_unit
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
         if observations is not None:
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         abort(400)
@@ -1331,7 +1334,8 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
             observation.country = country
             observation.indicator = indicator
             observation.ref_time = observation.ref_time
-            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
+            observation.measurement_unit = indicator.measurement_unit
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
 
     observations = None
     if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
@@ -1360,7 +1364,8 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         translate_region(country)
                         observation.indicator = indicator
                         observation.ref_time = observation.ref_time
-                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
+                        observation.measurement_unit = indicator.measurement_unit
+                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
                         observations.append(observation)
     if observations is not None and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
