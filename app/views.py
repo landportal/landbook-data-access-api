@@ -62,6 +62,8 @@ def check_auth(username, password):
     password combination is valid.
     """
     auth = auth_service.get_by_code(username)
+    if auth is None:
+        return False
     return password == auth.token
 
 
@@ -1367,13 +1369,13 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         observation.measurement_unit = indicator.measurement_unit
                         observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
                         observations.append(observation)
-    if observations is not None and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
+    if len(observations) > 0 and observations is not None and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
         for observation in observations:
             observations_country = filter(lambda obs: obs.region_id == observation.region_id, observations)
             for j in range(len(observations_country)):
                 if observation == observations_country[j]:
-                    if j == 0:
+                    if j == 0 or observation.value.value is None:
                         observation.tendency = -2
                     elif float(observation.value.value) == float(observations_country[j-1].value.value):
                         observation.tendency = 0
@@ -2372,7 +2374,8 @@ def scatterChart():
                 observations_y_indicator.sort(key=lambda observations: observation.ref_time.value)
                 series.append({
                     'name': country.translations[0].name,
-                    'values': [[float(observations_x_indicator[i].value.value), float(observations_y_indicator[i].value.value)]
+                    'values': [[float(observations_x_indicator[i].value.value) if observations_x_indicator[i].value.value is not None else 0,
+                                float(observations_y_indicator[i].value.value) if observations_y_indicator[i].value.value is not None else 0]
                                for i in range(min(len(observations_x_indicator), len(observations_y_indicator)))]
                 })
         json_object = {
@@ -2784,7 +2787,8 @@ def get_visualization_json(request, chartType):
         times = [observation.ref_time for observation in observations]
         series.append({
             'name': country.translations[0].name,
-            'values': [float(observation.value.value) for observation in observations]
+            'values': [float(observation.value.value) if observation.value.value is not None
+                       else 0 for observation in observations]
         })
     json_object = {
         'chartType': chartType,
