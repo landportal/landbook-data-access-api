@@ -1306,6 +1306,7 @@ class ObservationByTwoAverageAPI(Resource):
             observations_times.sort()
             for observation_time in observations_times:
                 grouped_observations = filter(lambda obs: obs.ref_time.value == observation_time, observations)
+                grouped_observations = [observation for observation in grouped_observations if observation.value.value is not None]
                 if len(grouped_observations) > 0:
                     average_time = EmptyObject()
                     average_time.time = observation_time
@@ -1369,7 +1370,7 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         observation.measurement_unit = indicator.measurement_unit
                         observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
                         observations.append(observation)
-    if len(observations) > 0 and observations is not None and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
+    if observations is not None and len(observations) > 0  and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
         for observation in observations:
             observations_country = filter(lambda obs: obs.region_id == observation.region_id, observations)
@@ -2749,6 +2750,7 @@ def observations_average(observations):
     :param observations: observations to calculate the average
     :return: average
     """
+    observations = [observation for observation in observations if observation.value.value is not None]
     if len(observations) == 1:
         average = observations[0].value.value
     elif len(observations) == 0:
