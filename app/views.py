@@ -10,10 +10,11 @@ from flask import json, render_template
 from app import app, cache
 from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
-    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval, Time
+    Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval, Time, \
+    MeasurementUnit, Auth
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
-    RegionTranslationService, IndicatorTranslationService, TopicTranslationService
+    RegionTranslationService, IndicatorTranslationService, TopicTranslationService, MeasurementUnitService, AuthService
 from flask import request, redirect
 from datetime import datetime
 from functools import wraps
@@ -34,6 +35,8 @@ indicator_relationship_service = IndicatorRelationshipService()
 region_translation_service = RegionTranslationService()
 indicator_translation_service = IndicatorTranslationService()
 topic_translation_service = TopicTranslationService()
+auth_service = AuthService()
+measurement_unit_service = MeasurementUnitService()
 json_converter = JSONConverter()
 xml_converter = XMLConverter()
 csv_converter = CSVConverter()
@@ -58,7 +61,10 @@ def check_auth(username, password):
     This function is called to check if a username /
     password combination is valid.
     """
-    return username == 'admin' and password == 'secret'
+    auth = auth_service.get_by_code(username)
+    if auth is None:
+        return False
+    return password == auth.token
 
 
 def authenticate():
@@ -161,6 +167,12 @@ class CountryAPI(Resource):
         if country is None:
             abort(404)
         translate_region(country)
+        country.region = region_service.get_by_artificial_code(country.is_part_of_id)
+        if not hasattr(country, 'other_parseable_fields'):
+            country.other_parseable_fields = []
+        country.other_parseable_fields.append('region')
+        if country.region is not None:
+            translate_region(country.region)
         return response_xml_or_json_item(request, country, 'country')
 
     @localhost_decorator
@@ -637,6 +649,8 @@ class CountriesIndicatorListAPI(Resource):
         for obs in observations:
             if obs.indicator is not None:
                 indicators.append(obs.indicator)
+        set_indicators = set(indicators)
+        indicators = list(set_indicators)
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
@@ -1229,6 +1243,37 @@ class ObservationByTwoAPI(Resource):
         abort(400)
 
 
+class ObservationByCountryStarred(Resource):
+    """
+    Observation by country and starred indicator collection URI
+    Methods: GET
+    """
+
+    @requires_auth
+    @cache.cached(key_prefix=make_cache_key)
+    def get(self, iso3):
+        """
+        Show observations filtering by country and showed if the indicator is starred.
+        :param iso3: iso3 of the country to filter
+        Response 200 OK
+        """
+        country = country_service.get_by_code(iso3)
+        translate_region(country)
+        if country is None:
+            abort(404)
+        observations = [obs for obs in country.observations if obs.indicator.starred]
+        for observation in observations:
+            observation.country = country
+            indicator = indicator_service.get_by_code(observation.indicator.id)
+            translate_indicator(indicator)
+            observation.indicator = indicator
+            observation.measurement_unit = indicator.measurement_unit
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
+        if observations is not None:
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
+        abort(400)
+
+
 class ObservationByTwoAverageAPI(Resource):
     """
     Observations by two average URI
@@ -1261,6 +1306,7 @@ class ObservationByTwoAverageAPI(Resource):
             observations_times.sort()
             for observation_time in observations_times:
                 grouped_observations = filter(lambda obs: obs.ref_time.value == observation_time, observations)
+                grouped_observations = [observation for observation in grouped_observations if observation.value.value is not None]
                 if len(grouped_observations) > 0:
                     average_time = EmptyObject()
                     average_time.time = observation_time
@@ -1291,7 +1337,8 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
             observation.country = country
             observation.indicator = indicator
             observation.ref_time = observation.ref_time
-            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
+            observation.measurement_unit = indicator.measurement_unit
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
 
     observations = None
     if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
@@ -1320,15 +1367,16 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         translate_region(country)
                         observation.indicator = indicator
                         observation.ref_time = observation.ref_time
-                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value']
+                        observation.measurement_unit = indicator.measurement_unit
+                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
                         observations.append(observation)
-    if observations is not None and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
+    if observations is not None and len(observations) > 0  and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
         for observation in observations:
             observations_country = filter(lambda obs: obs.region_id == observation.region_id, observations)
             for j in range(len(observations_country)):
                 if observation == observations_country[j]:
-                    if j == 0:
+                    if j == 0 or observation.value.value is None:
                         observation.tendency = -2
                     elif float(observation.value.value) == float(observations_country[j-1].value.value):
                         observation.tendency = 0
@@ -1466,7 +1514,7 @@ class TopicListAPI(Resource):
         """
         topic = Topic(request.json.get("id"))
         if topic.id is not None:
-            value_service.insert(topic)
+            topic_service.insert(topic)
             return {'URI': url_for('topics', id=topic.id)}, 201  # returns the URI for the new dataset
         abort(400)  # in case something is wrong
 
@@ -1534,6 +1582,104 @@ class TopicAPI(Resource):
         Response 204 NO CONTENT
         """
         topic_service.delete(id)
+        return {}, 204
+
+
+class MeasurementUnitListAPI(Resource):
+    """
+    Measurement unit collection URI
+    Methods: GET, POST, PUT, DELETE
+    """
+
+    @requires_auth
+    @cache.cached(key_prefix=make_cache_key)
+    def get(self):
+        """
+        List all measurement untis
+        Response 200 OK
+        """
+        measurement_units = measurement_unit_service.get_all()
+        return response_xml_or_json_list(request, measurement_units, 'measurement_units', 'measurement_unit')
+
+    @localhost_decorator
+    def post(self):
+        """
+        Create a new measurement_unit
+        Response 201 CREATED
+        :return: URI
+        """
+        measurement_unit = MeasurementUnit(request.json.get('id'), request.json.get('name'),
+                                           request.json.get('convertible_to'), request.json.get('factor'))
+        if measurement_unit.id is not None:
+            measurement_unit_service.insert(measurement_unit)
+            return {'URI': url_for('measurement_unit', id=measurement_unit.id)}, 201  # returns the URI for the new dataset
+        abort(400)  # in case something is wrong
+
+    @localhost_decorator
+    def put(self):
+        """
+        Update all measurement_units given
+        Response 204 NO CONTENT
+        """
+        measurement_unit_list = json.loads(request.data)
+        measurement_unit_list = list_converter.convert(measurement_unit_list)
+        measurement_unit_service.update_all(measurement_unit_list)
+        return {}, 204
+
+    @localhost_decorator
+    def delete(self):
+        """
+        Delete all measurement_untis
+        Response 204 NO CONTENT
+        :attention: Take care of what you do, all measurement_units will be destroyed
+        """
+        measurement_unit_service.delete_all()
+        return {}, 204
+
+
+class MeasurementUnitAPI(Resource):
+    """
+    Measurement unit element URI
+    Methods: GET, PUT, DELETE
+    """
+
+    @requires_auth
+    @cache.cached(key_prefix=make_cache_key)
+    def get(self, id):
+        """
+        Show measurement unit
+        Response 200 OK
+        """
+        measurement_unit = measurement_unit_service.get_by_code(id)
+        if measurement_unit is None:
+            abort(404)
+        return response_xml_or_json_item(request, measurement_unit, 'measurement_unit')
+
+    @localhost_decorator
+    def put(self, id):
+        """
+        If exists update measurement_unit
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        """
+        measurement_unit = measurement_unit_service.get_by_code(id)
+        if measurement_unit is not None:
+            measurement_unit.id = request.json.get("id")
+            measurement_unit.name = request.json.get("name")
+            measurement_unit.convertible_to = request.json.get("convertible_to")
+            measurement_unit.factor = request.json.get("factor")
+            return {}, 204
+        else:
+            abort(400)
+
+    @localhost_decorator
+    def delete(self, id):
+        """
+        Delete measurement_unit
+        Response 204 NO CONTENT
+        """
+        measurement_unit_service.delete(id)
         return {}, 204
 
 
@@ -2229,7 +2375,8 @@ def scatterChart():
                 observations_y_indicator.sort(key=lambda observations: observation.ref_time.value)
                 series.append({
                     'name': country.translations[0].name,
-                    'values': [[float(observations_x_indicator[i].value.value), float(observations_y_indicator[i].value.value)]
+                    'values': [[float(observations_x_indicator[i].value.value) if observations_x_indicator[i].value.value is not None else 0,
+                                float(observations_y_indicator[i].value.value) if observations_y_indicator[i].value.value is not None else 0]
                                for i in range(min(len(observations_x_indicator), len(observations_y_indicator)))]
                 })
         json_object = {
@@ -2275,6 +2422,41 @@ def help():
     return redirect('http://weso.github.io/landportal-data-access-api/', code=302)
 
 
+class AuthAPI(Resource):
+    """
+    Auth URI
+    Methods: POST, PUT
+    """
+
+    @localhost_decorator
+    def post(self):
+        """
+        Create a new auth user
+        Response 201 CREATED
+        """
+        auth = Auth(request.json.get('user'), request.json.get('token'))
+        if auth.user is not None and auth.token is not None:
+            auth_service.insert(auth)
+            return 201
+        abort(400)  # in case something is wrong
+
+    @localhost_decorator
+    def put(self, username):
+        """
+        If exists update auth user
+        Response 204 NO CONTENT
+        If not
+        Response 400 BAD REQUEST
+        """
+        auth = auth_service.get_by_code(username)
+        if auth is not None:
+            auth.token = request.json.get("token")
+            auth_service.update(auth)
+            return {}, 204
+        else:
+            abort(400)
+
+
 api.add_resource(CountryListAPI, '/countries', endpoint='countries_list')
 api.add_resource(CountryAPI, '/countries/<code>', endpoint='countries')
 api.add_resource(IndicatorListAPI, '/indicators', endpoint='indicators_list')
@@ -2293,6 +2475,7 @@ api.add_resource(CountriesIndicatorAPI, '/countries/<iso3>/indicators/<indicator
 api.add_resource(ObservationListAPI, '/observations', endpoint='observations_list')
 api.add_resource(ObservationAPI, '/observations/<id>', endpoint='observations')
 api.add_resource(ObservationByTwoAPI, '/observations/<id_first_filter>/<id_second_filter>', endpoint='observations_by_two')
+api.add_resource(ObservationByCountryStarred, '/observations/<iso3>/starred', endpoint='observations_by_country_starred')
 api.add_resource(ObservationByTwoAverageAPI, '/observations/<id_first_filter>/<id_second_filter>/average', endpoint='observations_by_two_average')
 api.add_resource(RegionListAPI, '/regions', endpoint='regions_list')
 api.add_resource(RegionAPI, '/regions/<id>', endpoint='regions')
@@ -2311,6 +2494,8 @@ api.add_resource(TopicListAPI, '/topics', endpoint='topic_list')
 api.add_resource(TopicAPI, '/topics/<id>', endpoint='topics')
 api.add_resource(TopicIndicatorListAPI, '/topics/<topic_id>/indicators', endpoint='topics_indicators_list')
 api.add_resource(TopicIndicatorAPI, '/topics/<topic_id>/indicators/<indicator_id>', endpoint='topics_indicators')
+api.add_resource(MeasurementUnitListAPI, '/measurement_units', endpoint='measurement_units_list')
+api.add_resource(MeasurementUnitAPI, '/measurement_units/<id>', endpoint='measurement_unit')
 api.add_resource(RegionCountriesWithDataAPI, '/regions/<region_id>/countries_with_data', endpoint='regions_countries_with_data')
 api.add_resource(CountriesIndicatorLastUpdateAPI, '/countries/<iso3>/last_update', endpoint='countries_indicators_last_update')
 api.add_resource(IndicatorsCountryLastUpdateAPI, '/indicators/<id>/<iso3>/last_update', endpoint='indicators_countries_last_update')
@@ -2330,6 +2515,7 @@ api.add_resource(TopicTranslationListAPI, '/topics/translations', endpoint='topi
 api.add_resource(TopicTranslationAPI, '/topics/translations/<topic_id>/<lang_code>', endpoint='topic_translations')
 api.add_resource(IndicatorStarredAPI, '/indicators/starred', endpoint='indicator_starred')
 api.add_resource(DeleteCacheAPI, '/cache', endpoint='delete_cache')
+api.add_resource(AuthAPI, '/auth', endpoint='auth')
 
 
 def translate_indicator_list(indicators):
@@ -2461,7 +2647,7 @@ def response_xml_or_json_item(request, item, item_string):
     elif is_csv_accepted(request):
         response = Response(csv_converter.object_to_csv(item
                                                     ), mimetype='text/csv', content_type='application/octet-stream')
-        response.headers["Content-Disposition"] = 'attachment; filename="' + item_string + '".csv'
+        response.headers["Content-Disposition"] = 'attachment; filename=' + item_string + '.csv'
         return response
     else:
         return Response(json_converter.object_to_json(item
@@ -2564,6 +2750,7 @@ def observations_average(observations):
     :param observations: observations to calculate the average
     :return: average
     """
+    observations = [observation for observation in observations if observation.value.value is not None]
     if len(observations) == 1:
         average = observations[0].value.value
     elif len(observations) == 0:
@@ -2602,7 +2789,8 @@ def get_visualization_json(request, chartType):
         times = [observation.ref_time for observation in observations]
         series.append({
             'name': country.translations[0].name,
-            'values': [float(observation.value.value) for observation in observations]
+            'values': [float(observation.value.value) if observation.value.value is not None
+                       else 0 for observation in observations]
         })
     json_object = {
         'chartType': chartType,

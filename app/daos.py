@@ -4,7 +4,7 @@ Created on 03/02/2014
 :author: Herminio
 """
 
-from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region
+from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region, Auth
 
 
 class DAO(object):
@@ -108,6 +108,15 @@ class RegionDAO(DAO):
         :return: region with given un_code
         """
         return self.session.query(self.cls).filter_by(un_code=code).first()
+
+
+    def get_by_artificial_code(self, code):
+        """
+        Method that returns a region by its given code
+        :param code: id of the region
+        :return: region with given id
+        """
+        return self.session.query(self.cls).filter_by(id=code).first()
 
     def update(self, region):
         """
@@ -230,6 +239,33 @@ class TopicTranslationDAO(DAO):
         """
         persisted_object = self.get_by_codes(topic_translation.topic_id, topic_translation.lang_code)
         update_object_attributes(persisted_object, topic_translation)
+
+
+class AuthDAO(DAO):
+    """
+    Dao for auth user entity
+    """
+    def __init__(self):
+        """
+        Constructor for auth user dao
+        """
+        super(AuthDAO, self).__init__(Auth)
+
+    def get_by_code(self, username):
+        """
+        Method that returns a country by its given code
+        :param username: name of the username requested
+        :return: user with given username
+        """
+        return self.session.query(self.cls).filter_by(user=username).first()
+
+    def update(self, auth):
+        """
+        Method to update an existing auth user, its username will not be changed
+        :param auth: user auth to be updated, with updated attributes
+        """
+        persisted_object = self.get_by_code(auth.user)
+        update_object_attributes(persisted_object, auth)
 
 
 def update_object_attributes(object_to_update, object_with_new_attributes):

@@ -4,9 +4,10 @@ Created on 03/02/2014
 :author: Herminio
 """
 from app import db
+from app.daos import AuthDAO
 from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO, RegionDAO
 from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
-    IndicatorRelationship
+    IndicatorRelationship, MeasurementUnit
 
 
 class GenericService(object):
@@ -156,6 +157,9 @@ class RegionService(GenericService):
         super(RegionService, self).__init__()
         self.dao = RegionDAO()
 
+    def get_by_artificial_code(self, code):
+        return self.tm.execute(self.dao, self.dao.get_by_artificial_code, code)
+
     def delete_all(self):
         """
         Method that deletes all regions by calling the dao
@@ -226,6 +230,18 @@ class TopicService(GenericService):
         """
         super(TopicService, self).__init__()
         self.dao = DAO(Topic)
+
+
+class MeasurementUnitService(GenericService):
+    """
+    Service for measurement unit dao
+    """
+    def __init__(self):
+        """
+        Constructor for measurement unit service
+        """
+        super(MeasurementUnitService, self).__init__()
+        self.dao = DAO(MeasurementUnit)
 
 
 class IndicatorRelationshipService(GenericService):
@@ -352,6 +368,18 @@ class TopicTranslationService(GenericService):
         objects = self.tm.execute(self.dao, self.dao.get_all)
         for object in objects:
             self.tm.execute(self.dao, self.dao.delete, object.topic_id, object.lang_code)
+
+
+class AuthService(GenericService):
+    """
+    Service for auth user dao
+    """
+    def __init__(self):
+        """
+        Constructor for auth user service
+        """
+        super(AuthService, self).__init__()
+        self.dao = AuthDAO()
 
 
 class TransactionManager(object):
