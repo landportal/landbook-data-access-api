@@ -1370,13 +1370,13 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                         observation.measurement_unit = indicator.measurement_unit
                         observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
                         observations.append(observation)
-    if observations is not None and len(observations) > 0  and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
+    if observations is not None and len(observations) > 0 and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
         for observation in observations:
             observations_country = filter(lambda obs: obs.region_id == observation.region_id, observations)
             for j in range(len(observations_country)):
                 if observation == observations_country[j]:
-                    if j == 0 or observation.value.value is None:
+                    if j == 0 or observation.value.value is None or observations_country[j-1].value.value:
                         observation.tendency = -2
                     elif float(observation.value.value) == float(observations_country[j-1].value.value):
                         observation.tendency = 0
@@ -2816,20 +2816,21 @@ def get_intervals(times):
     :param times: times collection
     :return: times in the format of the graphic
     """
-    if len(times) > 1:
-        if isinstance(times[0], Instant):
-            return [time.timestamp for time in times]
-        elif isinstance(times[0], YearInterval):
-            return [time.year for time in times]
-        elif isinstance(times[0], Interval):
-            return [time.start_time for time in times]
-    elif len(times) == 1:
-        if isinstance(times[0], Instant):
-            return [times[0].timestamp]
-        elif isinstance(times[0], YearInterval):
-            return [times[0].year]
-        elif isinstance(times[0], Interval):
-            return [times[0].start_time]
+    # if len(times) > 1:
+    #     if isinstance(times[0], Instant):
+    #         return [time.timestamp for time in times]
+    #     elif isinstance(times[0], YearInterval):
+    #         return [time.year for time in times]
+    #     elif isinstance(times[0], Interval):
+    #         return [time.start_time for time in times]
+    # elif len(times) == 1:
+    #     if isinstance(times[0], Instant):
+    #         return [times[0].timestamp]
+    #     elif isinstance(times[0], YearInterval):
+    #         return [times[0].year]
+    #     elif isinstance(times[0], Interval):
+    #         return [times[0].start_time]
+    return [time.value for time in times]
 
 
 def response_graphics(options, title, description):
