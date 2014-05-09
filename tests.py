@@ -1656,13 +1656,15 @@ class TestObservationBy(ApiTest):
            dataset_id=1
         ))
         response = self.client.get("/observations/ESP/1")
-        self.assert400(response)
+        self.assert200(response)
         response = self.client.post("/observations", data=observation_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/countries", data=country_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/indicators", data=indicator_json, content_type='application/json')
         self.assertStatus(response, 201)
+        response = self.client.delete("/cache")
+        self.assertStatus(response, 204)
         response = self.client.get("/observations/ESP/1")
         observation = response.json[0]
         self.assertEquals(observation['id'], "1")
@@ -1692,7 +1694,7 @@ class TestObservationBy(ApiTest):
         response = self.client.delete("/cache")
         self.assertStatus(response, 204)
         response = self.client.get("/observations/ESP/1")
-        self.assert400(response)
+        self.assert200(response)
 
     def test_get_by_indicator_and_country(self):
         observation_json = json.dumps(dict(
@@ -1719,7 +1721,7 @@ class TestObservationBy(ApiTest):
            dataset_id=1
         ))
         response = self.client.get("/observations/1/ESP")
-        self.assert400(response)
+        self.assert200(response)
         response = self.client.post("/observations", data=observation_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/countries", data=country_json, content_type='application/json')
@@ -1755,7 +1757,7 @@ class TestObservationBy(ApiTest):
         response = self.client.delete("/cache")
         self.assertStatus(response, 204)
         response = self.client.get("/observations/1/ESP")
-        self.assert400(response)
+        self.assert200(response)
 
     def test_get_by_region_and_indicator(self):
         observation_json = json.dumps(dict(
@@ -1789,7 +1791,7 @@ class TestObservationBy(ApiTest):
            dataset_id=1
         ))
         response = self.client.get("/observations/200/1")
-        self.assert400(response)
+        self.assert200(response)
         response = self.client.post("/observations", data=observation_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/countries", data=country_json, content_type='application/json')
@@ -1825,7 +1827,7 @@ class TestObservationBy(ApiTest):
         observations = response.json
         self.assertEquals(len(observations), 0)
         response = self.client.get("/observations/200/1")
-        self.assert400(response)
+        self.assert200(response)
 
 
 class TestValue(ApiTest):

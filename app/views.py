@@ -1385,7 +1385,7 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
                     elif float(observations_country[j-1].value.value) < float(observation.value.value):
                         observation.tendency = 1
                     observation.other_parseable_fields.append('tendency')
-    return observations if observations is not None else None
+    return observations if observations is not None else []
 
 
 class ValueListAPI(Resource):
@@ -2731,7 +2731,8 @@ def filter_by_region_and_top(id):
     if region is 'global':
         observations = observation_service.get_all()
         observations = [obs for obs in observations if obs.indicator_id == id]
-        observations = sorted(observations, key=lambda obs: long(obs.value.value), reverse=True)
+        observations = sorted(observations, key=lambda obs: float(obs.value.value)
+                              if obs.value.value is not None else 0, reverse=True)
     else:
         countries = country_service.get_all()
         countries = [country for country in countries if country.is_part_of_id == region]
@@ -2790,7 +2791,7 @@ def get_visualization_json(request, chartType):
         series.append({
             'name': country.translations[0].name,
             'values': [float(observation.value.value) if observation.value.value is not None
-                       else 0 for observation in observations]
+                       else None for observation in observations]
         })
     json_object = {
         'chartType': chartType,
