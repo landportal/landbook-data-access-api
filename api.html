@@ -61,7 +61,7 @@
 <div class="section" id="api-security">
 <h2>API Security<a class="headerlink" href="#api-security" title="Permalink to this headline">¶</a></h2>
 <p>For security, a basic realm authentication is required, except graphics. Graphics are covered in the next section.</p>
-<p>You need to obtain a token in: these token then is used to authentica, so you have to authenticate with your username of landportal.info and with the generated token as the password.</p>
+<p>You need to obtain a token: these token then is used to authentication, so you have to authenticate with your username of landportal.info and with the generated token as the password. This token is generated when yoy register yourself in the landportal website, so you can access this token in your account info.</p>
 </div>
 <div class="section" id="api-structure">
 <h2>API Structure<a class="headerlink" href="#api-structure" title="Permalink to this headline">¶</a></h2>
@@ -80,7 +80,7 @@
 <dt><strong>country</strong></dt>
 <dd>Represents a country like Italy, France, Spain and so on.</dd>
 <dt><strong>region</strong></dt>
-<dd>Represents a region like Europe or America and it have other regions or countries belonging to it. There is an special region called &#8216;global&#8217; with un_code 1, it represents all the world.</dd>
+<dd>Represents a region like Europe or America and it has other regions or countries belonging to it. There is an special region called &#8216;global&#8217; with un_code 1, it represents all the world.</dd>
 <dt><strong>indicator</strong></dt>
 <dd>Represents a set of data grouped by the same criteria, e.g.: Women Holders, it contains various observations for various countries.</dd>
 <dt><strong>observations</strong></dt>
@@ -293,11 +293,11 @@ In the next table you can see all the URLs defined that you can access with a sh
 <td>Observations of the given indicator between two dates</td>
 <td>from: beginning date of the interval, end: final date of the interval</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/regions_with_date</td>
+<tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/regions_with_data</td>
 <td>Regions with observations for the given indicator</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/regions_without_date</td>
+<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/regions_without_data</td>
 <td>Regions without observations for the given indicator</td>
 <td>&nbsp;</td>
 </tr>
@@ -369,7 +369,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 <li><strong>areachart</strong>: Chart very similar to linechart, but this one colors the area below each line.</li>
 <li><strong>piechart</strong>: Chart that shows various pies divided with a percentage according to the values in the serie.</li>
 <li><strong>polarchart</strong>: Chart that shows three or more variables represented on axes starting from the same point.</li>
-<li><strong>scatterchart</strong>: Chart that show various points but without connecting the dots</li>
+<li><strong>scatterchart</strong>: Chart that shows various points but without connecting the dots</li>
 <li><strong>table</strong>: Table with the data</li>
 </ul>
 <p>Also there are some arguments available to modify graph aspect or data. Available arguments are:</p>
