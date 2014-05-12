@@ -6,7 +6,7 @@
 Welcome to landportal-data-access-api's documentation!
 ======================================================
 
-Welcome to the documentacion of landportal-data-access-api, in the next sections you can see how to use the api. This api allows users to reuse data. The license...
+Welcome to the documentacion of landportal-data-access-api, in the next sections you can see how to use the api. This api allows users to reuse data that is showed on landportal.info
 
 Contents:
 
