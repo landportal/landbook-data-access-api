@@ -1358,18 +1358,15 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
         region = region_service.get_by_code(id_first_filter)
         indicator = indicator_service.get_by_code(id_second_filter)
         translate_indicator(indicator)
-        for country in country_service.get_all():
-            if country.is_part_of_id == region.id or region.id == 1:
-                country_observations = country.observations
-                for observation in country_observations:
-                    if observation.indicator_id == id_second_filter:
-                        observation.country = country
-                        translate_region(country)
-                        observation.indicator = indicator
-                        observation.ref_time = observation.ref_time
-                        observation.measurement_unit = indicator.measurement_unit
-                        observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
-                        observations.append(observation)
+        for observation in observation_service.get_by_region_and_indicator(region.id, id_second_filter):
+            country = country_service.get_by_id(observation.region_id)
+            observation.country = country
+            translate_region(country)
+            observation.indicator = indicator
+            observation.ref_time = observation.ref_time
+            observation.measurement_unit = indicator.measurement_unit
+            observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
+            observations.append(observation)
     if observations is not None and len(observations) > 0 and observations[0].ref_time is not None and isinstance(observations[0].ref_time, Time):
         observations.sort(key=lambda obs: get_intervals([obs.ref_time])[0])
         for observation in observations:
