@@ -4,7 +4,7 @@ Created on 03/02/2014
 :author: Weso
 """
 
-from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region, Auth
+from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region, Auth, Observation
 
 
 class DAO(object):
@@ -81,6 +81,14 @@ class CountryDAO(DAO):
         :return: country with given iso3
         """
         return self.session.query(self.cls).filter_by(iso3=code).first()
+
+    def get_by_id(self, code):
+        """
+        Method that returns a country by its given id
+        :param code: id of the country requested
+        :return: country with given id
+        """
+        return self.session.query(self.cls).filter_by(id=code).first()
 
     def update(self, country):
         """
@@ -239,6 +247,23 @@ class TopicTranslationDAO(DAO):
         """
         persisted_object = self.get_by_codes(topic_translation.topic_id, topic_translation.lang_code)
         update_object_attributes(persisted_object, topic_translation)
+
+
+class ObservationDAO(DAO):
+    def __init__(self):
+        """
+        Constructor for observation translation dao
+        """
+        super(ObservationDAO, self).__init__(Observation)
+
+    def get_by_region_and_indicator(self, region_id, indicator_id):
+        if region_id == 1:
+            return self.session.query(Observation).join(Region).filter(Observation.indicator_id == indicator_id)\
+                .filter((Region.is_part_of_id == '2') | (Region.is_part_of_id == '3') | (Region.is_part_of_id == '4')
+                        | (Region.is_part_of_id == '5') | (Region.is_part_of_id == '6')).all()
+        else:
+            return self.session.query(Observation).join(Region).filter(Observation.indicator_id == indicator_id)\
+                .filter(Region.is_part_of_id == region_id).all()
 
 
 class AuthDAO(DAO):

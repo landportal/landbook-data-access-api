@@ -4,7 +4,7 @@ Created on 03/02/2014
 :author: Weso
 """
 from app import db
-from app.daos import AuthDAO
+from app.daos import AuthDAO, ObservationDAO
 from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO, RegionDAO
 from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
     IndicatorRelationship, MeasurementUnit
@@ -97,6 +97,9 @@ class CountryService(GenericService):
         for object in objects:
             self.tm.execute(self.dao, self.dao.delete, object.iso3)
 
+    def get_by_id(self, id):
+        return self.tm.execute(self.dao, self.dao.get_by_id, id)
+
 
 class IndicatorService(GenericService):
     """
@@ -143,7 +146,10 @@ class ObservationService(GenericService):
         Constructor for organization service
         """
         super(ObservationService, self).__init__()
-        self.dao = DAO(Observation)
+        self.dao = ObservationDAO()
+
+    def get_by_region_and_indicator(self, region_id, indicator_id):
+        return self.tm.execute(self.dao, self.dao.get_by_region_and_indicator, region_id, indicator_id)
 
 
 class RegionService(GenericService):
