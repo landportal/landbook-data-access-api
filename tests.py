@@ -128,51 +128,6 @@ class TestCountry(ApiTest):
         countries = response.json
         self.assertEquals(len(countries), 0)
 
-    def test_indicator_subcolecction_item(self):
-        country_json = json.dumps(dict(
-           name='Spain',
-           iso2='ES',
-           iso3='ESP',
-           id=1
-        ))
-        indicator_json = json.dumps(dict(
-           id=1,
-           name='donation',
-           description='A gives a donation to B'
-        ))
-        observation_json = json.dumps(dict(
-           id=1,
-           id_source=1,
-           indicator_id=1,
-           region_id=1
-        ))
-        response = self.client.post("/countries", data=country_json, content_type='application/json')
-        self.assertStatus(response, 201)
-        response = self.client.post("/observations", data=observation_json, content_type='application/json')
-        self.assertStatus(response, 201)
-        response = self.client.get("/countries/ESP/indicators/1")
-        self.assert404(response)
-        response = self.client.post("/indicators", data=indicator_json, content_type='application/json')
-        self.assertStatus(response, 201)
-        response = self.client.get("/countries/ESP/indicators/1")
-        self.assertEquals(response.json.get('id'), "1")
-        response = self.client.delete("/countries/ESP")
-        self.assertStatus(response, 204)
-        response = self.client.delete("/indicators")
-        self.assertStatus(response, 204)
-        response = self.client.get("/countries/ESP")
-        self.assert404(response)
-        response = self.client.get("/indicators")
-        self.assert200(response)
-        indicators = response.json
-        self.assertEquals(len(indicators), 0)
-        response = self.client.delete("/countries")
-        self.assertStatus(response, 204)
-        response = self.client.get("/countries")
-        self.assert200(response)
-        organizations = response.json
-        self.assertEquals(len(organizations), 0)
-
     def test_indicator_subcolecction_collection(self):
         country_json = json.dumps(dict(
            name='Spain',
@@ -238,6 +193,53 @@ class TestCountry(ApiTest):
         self.assert200(response)
         organizations = response.json
         self.assertEquals(len(organizations), 0)
+
+    def test_indicator_subcolecction_item(self):
+        country_json = json.dumps(dict(
+           name='Spain',
+           iso2='ES',
+           iso3='ESP',
+           id=1
+        ))
+        indicator_json = json.dumps(dict(
+           id=1,
+           name='donation',
+           description='A gives a donation to B'
+        ))
+        observation_json = json.dumps(dict(
+           id=1,
+           id_source=1,
+           indicator_id=1,
+           region_id=1
+        ))
+        response = self.client.post("/countries", data=country_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.post("/observations", data=observation_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/countries/ESP/indicators/1")
+        self.assert404(response)
+        response = self.client.post("/indicators", data=indicator_json, content_type='application/json')
+        self.assertStatus(response, 201)
+        response = self.client.get("/countries/ESP/indicators/1")
+        self.assertEquals(response.json.get('id'), "1")
+        response = self.client.delete("/countries/ESP")
+        self.assertStatus(response, 204)
+        response = self.client.delete("/indicators")
+        self.assertStatus(response, 204)
+        response = self.client.get("/countries/ESP")
+        self.assert404(response)
+        response = self.client.get("/indicators")
+        self.assert200(response)
+        indicators = response.json
+        self.assertEquals(len(indicators), 0)
+        response = self.client.delete("/countries")
+        self.assertStatus(response, 204)
+        response = self.client.get("/countries")
+        self.assert200(response)
+        organizations = response.json
+        self.assertEquals(len(organizations), 0)
+
+
 
 
 class TestIndicator(ApiTest):
