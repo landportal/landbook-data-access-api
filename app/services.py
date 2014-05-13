@@ -1,7 +1,7 @@
 """
 Created on 03/02/2014
 
-:author: Herminio
+:author: Weso
 """
 from app import db
 from app.daos import AuthDAO

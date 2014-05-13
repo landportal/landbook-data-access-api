@@ -1,7 +1,7 @@
 """
 Created on 10/02/2014
 
-:author: Herminio
+:author: Weso
 """
 from app import db
 

@@ -15,7 +15,7 @@ API Structure
 Api is divided in two main sections: entities and graphics.
 
 * **Entities** are normal elements that make sense alone in Landportal context. Also they can be mixed up in order to give more complex data.
-* **Graphics** are visual representations of the data e.g., bar chart of women holders in different countries. They can be customized by the user and even sended to another user that will see the customized graph.
+* **Graphics** are visual representations of the data e.g., bar chart of women holders in different countries. They can be customized by the user and even sent to another user that will see the customized graph.
 
 API Usage
 ---------
@@ -200,7 +200,7 @@ As you can see you can define what kind of chart you want to be showed, availabl
 
 Also there are some arguments available to modify graph aspect or data. Available arguments are:
 
-* **indicator**: Id of the indicator to be showed, two indicators separated with comma in the case of scatterchart
+* **indicator**: Id of the indicator to be showed, two indicators separated by comma in the case of scatterchart
 * **countries**: Iso3 of the countries to be included, separated by commas
 * **colours**: HTML codes without '#' and separated by commas
 * **xTag**: Name for the x axis

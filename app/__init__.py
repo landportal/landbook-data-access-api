@@ -1,8 +1,8 @@
-'''
+"""
 Created on 03/02/2014
 
-@author: Herminio
-'''
+:author: Weso
+"""
 from flask.app import Flask
 from flask.ext.cache import Cache
 from flask_sqlalchemy import SQLAlchemy

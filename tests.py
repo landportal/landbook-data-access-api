@@ -1,5 +1,5 @@
 
-__author__ = 'Herminio'
+__author__ = 'Weso'
 
 import unittest
 import app
