@@ -1,7 +1,7 @@
 """
 Created on 03/02/2014
 
-:author: Herminio
+:author: Weso
 """
 from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
@@ -45,7 +45,7 @@ list_converter = DictionaryList2ObjectList()
 
 def localhost_decorator(f):
     """
-    Decorator that allows connections only from localhost if not
+    Decorator that allows connections only from localhost, if not
     it will return a 403 FORBIDDEN error code
     """
     def call(*args, **kwargs):
@@ -2835,6 +2835,12 @@ def get_intervals(times):
 
 
 def response_graphics(options, title, description):
+    """
+    Reponses with a page containing the requested graphic
+    :param options: options dict
+    :param title: title for the graphic
+    :param description: description for the graphic
+    """
     if request.args.get("format") == "json":
         return Response(json.dumps(options), mimetype='application/json')
     elif request.args.get("format") == 'jsonp':
@@ -2843,6 +2849,11 @@ def response_graphics(options, title, description):
 
 
 def get_regions_of_region(id):
+    """
+    Returns the regions that belong to another region
+    :param id: id of the region
+    :return: list of regions
+    """
     region = region_service.get_by_code(id)
     regions = []
     for selectedRegion in region_service.get_all():
@@ -2853,6 +2864,11 @@ def get_regions_of_region(id):
 
 
 def get_regions_with_data(id):
+    """
+    Return all the regions with data for a given indicator
+    :param id: id of the given indicator
+    :return: list of regions with data
+    """
     regions_with_data = []
     regions = get_regions_of_region(1)
     observations = observation_service.get_all()

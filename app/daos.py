@@ -1,7 +1,7 @@
 """
 Created on 03/02/2014
 
-:author: Herminio
+:author: Weso
 """
 
 from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region, Auth
