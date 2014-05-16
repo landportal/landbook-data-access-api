@@ -4,7 +4,7 @@ Created on 03/02/2014
 :author: Weso
 """
 from app import db
-from app.daos import AuthDAO, ObservationDAO
+from app.daos import AuthDAO, ObservationDAO, IndicatorDAO
 from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO, RegionDAO
 from model.models import Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, Topic, \
     IndicatorRelationship, MeasurementUnit
@@ -100,6 +100,18 @@ class CountryService(GenericService):
     def get_by_id(self, id):
         return self.tm.execute(self.dao, self.dao.get_by_id, id)
 
+    def get_countries_by_regions(self, un_code):
+        region = RegionService().get_by_code(un_code)
+        return self.tm.execute(self.dao, self.dao.get_countries_by_region, region.id)
+
+    def get_country_by_region(self, un_code, iso3):
+        region = RegionService().get_by_code(un_code)
+        return self.tm.execute(self.dao, self.dao.get_country_by_region, region.id, iso3)
+
+    def get_countries_with_data_by_region(self, un_code):
+        region = RegionService().get_by_code(un_code)
+        return self.tm.execute(self.dao, self.dao.get_countries_with_data_by_region, region.id)
+
 
 class IndicatorService(GenericService):
     """
@@ -110,7 +122,22 @@ class IndicatorService(GenericService):
         Constructor for indicator service
         """
         super(IndicatorService, self).__init__()
-        self.dao = DAO(Indicator)
+        self.dao = IndicatorDAO()
+
+    def get_indicators_by_country(self, iso3):
+        return self.tm.execute(self.dao, self.dao.get_indicators_by_country, iso3)
+
+    def get_indicator_by_country(self, iso3, indicator_id):
+        return self.tm.execute(self.dao, self.dao.get_indicator_by_country, iso3, indicator_id)
+
+    def get_starred_indicators(self):
+        return self.tm.execute(self.dao, self.dao.get_starred_indicators)
+
+    def get_average(self, indicator_id):
+        return self.tm.execute(self.dao, self.dao.get_average, indicator_id)
+
+    def get_indicators_by_datasource(self, datasource_id):
+        return self.tm.execute(self.dao, self.dao.get_indicators_by_datasource, datasource_id)
 
 
 class UserService(GenericService):
@@ -151,6 +178,18 @@ class ObservationService(GenericService):
     def get_by_region_and_indicator(self, region_id, indicator_id):
         return self.tm.execute(self.dao, self.dao.get_by_region_and_indicator, region_id, indicator_id)
 
+    def get_top_by_region(self, indicator_id, region_id, top):
+        return self.tm.execute(self.dao, self.dao.get_top_by_region, indicator_id, region_id, top)
+
+    def get_starred_observations_by_country(self, iso3):
+        return self.tm.execute(self.dao, self.dao.get_starred_observations_by_country, iso3)
+
+    def get_by_indicator(self, indicator_id):
+        return self.tm.execute(self.dao, self.dao.get_by_indicator, indicator_id)
+
+    def get_by_country_and_indicator(self, indicator_id, iso3):
+        return self.tm.execute(self.dao, self.dao.get_by_country_and_indicator, indicator_id, iso3)
+
 
 class RegionService(GenericService):
     """
@@ -166,6 +205,13 @@ class RegionService(GenericService):
     def get_by_artificial_code(self, code):
         return self.tm.execute(self.dao, self.dao.get_by_artificial_code, code)
 
+    def get_regions_of_region(self, un_code):
+        region = self.get_by_code(un_code)
+        return self.tm.execute(self.dao, self.dao.get_regions_of_region, region.id)
+
+    def get_regions_with_data(self, indicator_id):
+        return self.tm.execute(self.dao, self.dao.get_regions_with_data, indicator_id)
+
     def delete_all(self):
         """
         Method that deletes all regions by calling the dao
@@ -174,6 +220,9 @@ class RegionService(GenericService):
         objects = self.tm.execute(self.dao, self.dao.get_all)
         for object in objects:
             self.tm.execute(self.dao, self.dao.delete, object.un_code)
+
+    def get_all_regions(self):
+        return self.tm.execute(self.dao, self.dao.get_all_regions)
 
 
 class DataSourceService(GenericService):

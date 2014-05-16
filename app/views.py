@@ -347,10 +347,9 @@ class IndicatorAverageAPI(Resource):
         Show the average value for a indicator of all countries
         Response 200 OK
         """
-        top = filter_by_region_and_top(id)[1]
-        average = observations_average(top)
+        average = indicator_service.get_average(id)
         element = EmptyObject()
-        element.value = average
+        element.value = average[0]
         return response_xml_or_json_item(request, element, 'average')
 
 
@@ -389,8 +388,7 @@ class IndicatorStarredAPI(Resource):
         List starred indicators
         Response 200 OK
         """
-        indicators = indicator_service.get_all()
-        indicators = filter(lambda i: i.starred, indicators)
+        indicators = indicator_service.get_starred_indicators()
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
@@ -644,13 +642,7 @@ class CountriesIndicatorListAPI(Resource):
         List all indicators of a given country
         Response 200 OK
         """
-        observations = country_service.get_by_code(iso3).observations
-        indicators = []
-        for obs in observations:
-            if obs.indicator is not None:
-                indicators.append(obs.indicator)
-        set_indicators = set(indicators)
-        indicators = list(set_indicators)
+        indicators = indicator_service.get_indicators_by_country(iso3)
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
@@ -669,11 +661,7 @@ class CountriesIndicatorAPI(Resource):
         If found Response 200 OK
         Else Response 404 NOT FOUND
         """
-        observations = country_service.get_by_code(iso3).observations
-        indicator = None
-        for obs in observations:
-            if obs.indicator is not None and obs.indicator.id == indicator_id:
-                indicator = obs.indicator
+        indicator = indicator_service.get_indicator_by_country(iso3, indicator_id)
         if indicator is None:
             abort(404)
         translate_indicator(indicator)
@@ -820,7 +808,7 @@ class RegionListAPI(Resource):
         List all region
         Response 200 OK
         """
-        regions = region_service.get_all()
+        regions = region_service.get_all_regions()
         translate_region_list(regions)
         return response_xml_or_json_list(request, regions, 'regions', 'region')
 
@@ -921,14 +909,7 @@ class RegionsCountryListAPI(Resource):
         List all countries of a given region
         Response 200 OK
         """
-        region = region_service.get_by_code(id)
-        countries = []
-        if region is not None and region.id == 1:
-            countries = country_service.get_all()
-        else:
-            for country in country_service.get_all():
-                if country.is_part_of_id == region.id:
-                    countries.append(country)
+        countries = country_service.get_countries_by_regions(id)
         translate_region_list(countries)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
@@ -963,15 +944,11 @@ class RegionsCountryAPI(Resource):
         Show country by its region id and its country id
         Response 200 OK
         """
-        region = region_service.get_by_code(id)
-        selected_country = None
-        for country in country_service.get_all():
-            if country.is_part_of_id == region.id and country.iso3 == iso3:
-                selected_country = country
-        if selected_country is None:
+        country = country_service.get_country_by_region(id, iso3)
+        if country is None:
             abort(404)
-        translate_region(selected_country)
-        return response_xml_or_json_item(request, selected_country, 'country')
+        translate_region(country)
+        return response_xml_or_json_item(request, country, 'country')
 
 
 class DataSourceListAPI(Resource):
@@ -1184,10 +1161,7 @@ class DataSourceIndicatorListAPI(Resource):
         List all indicators of a given datasource
         Response 200 OK
         """
-        datasets = datasource_service.get_by_code(id).datasets
-        indicators = []
-        for dataset in datasets:
-            indicators.extend(dataset.indicators)
+        indicators = indicator_service.get_indicators_by_datasource(id)
         translate_indicator_list(indicators)
         return response_xml_or_json_list(request, indicators, 'indicators', 'indicator')
 
@@ -1261,7 +1235,7 @@ class ObservationByCountryStarred(Resource):
         translate_region(country)
         if country is None:
             abort(404)
-        observations = [obs for obs in country.observations if obs.indicator.starred]
+        observations = observation_service.get_starred_observations_by_country(iso3)
         for observation in observations:
             observation.country = country
             indicator = indicator_service.get_by_code(observation.indicator.id)
@@ -1391,7 +1365,7 @@ class ValueListAPI(Resource):
     Methods: GET, POST, PUT, DELETE
     """
 
-    @requires_auth
+    @localhost_decorator
     @cache.cached(key_prefix=make_cache_key)
     def get(self):
         """
@@ -1734,9 +1708,7 @@ class RegionCountriesWithDataAPI(Resource):
         Show country that have some observations by a given region (country is_part_of region)
         Response 200 OK
         """
-        region = region_service.get_by_code(region_id)
-        countries = [country for country in country_service.get_all() if country.is_part_of_id == region.id]
-        countries = [country for country in countries if len(country.observations) > 0]
+        countries = country_service.get_countries_with_data_by_region(region_id)
         translate_region_list(countries)
         return response_xml_or_json_list(request, countries, 'countries', 'country')
 
@@ -1920,10 +1892,7 @@ class IndicatorByCountryAndPeriodAPI(Resource):
         date_to = request.args.get("to")
         from_date, to_date = str_date_to_date(date_from, date_to)
         if country_service.get_by_code(iso3) is not None and indicator_service.get_by_code(indicator_id):
-            country = country_service.get_by_code(iso3)
-            observations = observation_service.get_all()
-            observations = [obs for obs in observations if obs.region_id == country.id]
-            observations = [obs for obs in observations if obs.indicator_id == indicator_id]
+            observations = observation_service.get_by_country_and_indicator(indicator_id, iso3)
             observations = filter_observations_by_date_range(observations, from_date, to_date)
         else:
             abort(404)
@@ -1948,8 +1917,7 @@ class IndicatorAverageByPeriodAPI(Resource):
         date_from = request.args.get("from")
         date_to = request.args.get("to")
         from_date, to_date = str_date_to_date(date_from, date_to)
-        observations = observation_service.get_all()
-        observations = [obs for obs in observations if obs.indicator_id == id]
+        observations = observation_service.get_by_indicator(id)
         observations = filter_observations_by_date_range(observations, from_date, to_date)
         if len(observations) > 0:
             average = observations_average(observations)
@@ -2501,7 +2469,7 @@ api.add_resource(IndicatorByPeriodAPI, '/indicators/<id>/range', endpoint='indic
 api.add_resource(IndicatorRegionsWithDataAPI, '/indicators/<id>/regions_with_data', endpoint='indicators_regions_with_data')
 api.add_resource(IndicatorRegionsWihtoutDataAPI, '/indicators/<id>/regions_without_data', endpoint='indicators_regions_without_data')
 api.add_resource(IndicatorAverageByPeriodAPI, '/indicators/<id>/average/range', endpoint='indicators_average_by_period')
-api.add_resource(IndicatorByCountryAndPeriodAPI, '/indicators/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
+api.add_resource(IndicatorByCountryAndPeriodAPI, '/observations/<indicator_id>/<iso3>/range', endpoint='indicators_by_country_and_period')
 api.add_resource(IndicatorRelatedAPI, '/indicators/<id>/related', endpoint='indicators_related')
 api.add_resource(IndicatorCountryTendencyAPI, '/indicators/<indicator_id>/<iso3>/tendency', endpoint='indicator_country_tendency')
 api.add_resource(RegionTranslationListAPI, '/regions/translations', endpoint='region_translation_list')
@@ -2701,7 +2669,9 @@ def filter_observations_by_date_range(observations, from_date=None, to_date=None
             or (isinstance(time, Interval) and time.start_time <= to_date and time.end_time >= from_date)  \
             or (isinstance(time, YearInterval) and to_date.year <= time.year <= from_date.year)
 
-    return filter(filter_key, observations) if from_date is not None and to_date is not None else observations
+    from_date = datetime.utcfromtimestamp(0).date() if from_date is None else from_date
+    to_date = datetime.now().date() if to_date is None else to_date
+    return filter(filter_key, observations)
 
 
 def str_date_to_date(date_from, date_to):
@@ -2712,9 +2682,8 @@ def str_date_to_date(date_from, date_to):
     :param date_to: end of the interval
     :return: from_date and to_date equivalent of given in date objects
     """
-    if date_from is not None and date_to is not None:
-        from_date = datetime.strptime(date_from, "%Y%m%d").date()
-        to_date = datetime.strptime(date_to, "%Y%m%d").date()
+    from_date = datetime.strptime(date_from, "%Y%m%d").date() if date_from is not None else None
+    to_date = datetime.strptime(date_to, "%Y%m%d").date() if date_to is not None else None
     return from_date, to_date
 
 
@@ -2724,22 +2693,11 @@ def filter_by_region_and_top(id):
     :return: countries top and top observations
     """
     top = int(request.args.get("top")) if request.args.get("top") is not None else 10
-    region = int(request.args.get("region")) if request.args.get("region") not in (None, "global") else "global"
-    if region is 'global':
-        observations = observation_service.get_all()
-        observations = [obs for obs in observations if obs.indicator_id == id]
-        observations = sorted(observations, key=lambda obs: float(obs.value.value)
-                              if obs.value.value is not None else 0, reverse=True)
-    else:
-        countries = country_service.get_all()
-        countries = [country for country in countries if country.is_part_of_id == region]
-        observations = []
-        for country in countries:
-            observations.extend(country.observations)
+    region = int(request.args.get("region")) if request.args.get("region") not in (None, "global") else 1
+    observations = observation_service.get_top_by_region(id, region, top)
     countries = country_service.get_all()  # improve if changing directionality of model on observation country
-    top = observations[:top]
-    countries = [country for observation in top for country in countries if observation.region_id == country.id]
-    return countries, top
+    countries = [country for observation in observations for country in countries if observation.region_id == country.id]
+    return countries, observations
 
 
 def observations_average(observations):
@@ -2748,7 +2706,6 @@ def observations_average(observations):
     :param observations: observations to calculate the average
     :return: average
     """
-    observations = [observation for observation in observations if observation.value.value is not None]
     if len(observations) == 1:
         average = observations[0].value.value
     elif len(observations) == 0:
@@ -2851,11 +2808,7 @@ def get_regions_of_region(id):
     :param id: id of the region
     :return: list of regions
     """
-    region = region_service.get_by_code(id)
-    regions = []
-    for selectedRegion in region_service.get_all():
-        if selectedRegion.is_part_of_id == region.id:
-            regions.append(selectedRegion)
+    regions = region_service.get_regions_of_region(id)
     translate_region_list(regions)
     return regions
 
@@ -2866,19 +2819,7 @@ def get_regions_with_data(id):
     :param id: id of the given indicator
     :return: list of regions with data
     """
-    regions_with_data = []
-    regions = get_regions_of_region(1)
-    observations = observation_service.get_all()
-    observations = [obs for obs in observations if obs.indicator_id == id]
-    regions_observations_id = [obs.region_id for obs in observations]
-    for region in regions:
-        ids_countries = [country.id for country in country_service.get_all() if country.is_part_of_id == region.id]
-        for id in ids_countries:
-            if id in regions_observations_id:
-                try:
-                    regions_with_data.index(region)
-                except ValueError:
-                    regions_with_data.append(region)
+    regions_with_data = region_service.get_regions_with_data(id)
     if len(regions_with_data) > 0:
         regions_with_data.append(region_service.get_by_code(1))
     translate_region_list(regions_with_data)
