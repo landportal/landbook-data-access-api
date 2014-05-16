@@ -402,9 +402,9 @@ class TestIndicator(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.delete("/cache")
         self.assertStatus(response, 204)
-        response = self.client.get("/indicators/1/top?region=global&top=10")
-        france = response.json[0]
-        spain = response.json[1]
+        response = self.client.get("/indicators/1/top?region=1&top=10")
+        spain = response.json[0]
+        france = response.json[1]
         self.assertEquals(spain['iso3'], "ESP")
         self.assertEquals(spain['value_id'], "1")
         self.assertEquals(france['value_id'], "2")
@@ -505,10 +505,10 @@ class TestIndicator(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.delete("/cache")
         self.assertStatus(response, 204)
-        response = self.client.get("/indicators/1/average?region=global&top=10")
+        response = self.client.get("/indicators/1/average?region=1")
         self.assertEquals(response.json['value'], 75)
-        response = self.client.get("/indicators/1/average?region=3&top=1")
-        self.assertEquals(response.json['value'], 50)
+        response = self.client.get("/indicators/1/average?region=150")
+        self.assertEquals(response.json['value'], 75)
         response = self.client.delete("/countries")
         self.assertStatus(response, 204)
         response = self.client.delete("/cache")
@@ -995,15 +995,14 @@ class TestRegion(ApiTest):
 
     def test_country_subcolecction_item(self):
         region_json = json.dumps(dict(
-           id='1',
+           id=5,
            un_code=200
-           #is_part_of_id=1
         ))
         country_json = json.dumps(dict(
            name='Spain',
            iso2='ES',
            iso3='ESP',
-           is_part_of_id=1
+           is_part_of_id=5
         ))
         response = self.client.post("/regions", data=region_json, content_type='application/json')
         self.assertStatus(response, 201)
@@ -1033,33 +1032,29 @@ class TestRegion(ApiTest):
 
     def test_country_subcolecction_collection(self):
         region_json = json.dumps(dict(
-           id='1',
+           id=5,
            name='Europe',
-           un_code=200
+           un_code=150
         ))
         country_json = json.dumps(dict(
            name='Spain',
            iso2='ES',
            iso3='ESP',
-           is_part_of_id=1
+           is_part_of_id=5
         ))
         country2_json = json.dumps(dict(
            name='France',
            iso2='FR',
            iso3='FRA',
-           is_part_of_id=1
+           is_part_of_id=5
         ))
         response = self.client.post("/regions", data=region_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/regions/1/countries")
-        self.assert200(response)
-        countries = response.json
-        self.assertEquals(len(countries), 0)
         response = self.client.post("/countries", data=country_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.post("/countries", data=country2_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/regions/200/countries")
+        response = self.client.get("/regions/150/countries")
         country = response.json[0]
         country2 = response.json[1]
         self.assertEquals(country['iso2'], "ES")
@@ -1082,30 +1077,30 @@ class TestRegion(ApiTest):
     def test_country_with_data(self):
         region_json = json.dumps(dict(
            name='Europe',
-           un_code=200,
-           id=1
+           un_code=150,
+           id=4
         ))
         country_json = json.dumps(dict(
            name='Spain',
            iso2='ES',
            iso3='ESP',
-           id=2,
-           is_part_of_id=1
+           id=5,
+           is_part_of_id=4
         ))
         country2_json = json.dumps(dict(
            name='France',
            iso2='FR',
            iso3='FRA',
-           id=3,
-           is_part_of_id=1
+           id=6,
+           is_part_of_id=4
         ))
         observation_json = json.dumps(dict(
-            id='1',
-            region_id=2
+            id=1,
+            region_id=5
         ))
         response = self.client.post("/regions", data=region_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/regions/200/countries_with_data")
+        response = self.client.get("/regions/150/countries_with_data")
         self.assert200(response)
         countries = response.json
         self.assertEquals(len(countries), 0)
@@ -1117,7 +1112,7 @@ class TestRegion(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.delete("/cache")
         self.assertStatus(response, 204)
-        response = self.client.get("/regions/200/countries_with_data")
+        response = self.client.get("/regions/150/countries_with_data")
         self.assertEquals(len(response.json), 1)
         country = response.json[0]
         self.assertEquals(country['iso2'], "ES")
@@ -2651,7 +2646,7 @@ class TestIndicatorByPeriod(ApiTest):
         self.assertStatus(response, 201)
         response = self.client.post("/observations", data=observation_json, content_type='application/json')
         self.assertStatus(response, 201)
-        response = self.client.get("/indicators/HDI/ESP/range?from=20120611&to=20140402")
+        response = self.client.get("/observations/HDI/ESP/range?from=20120611&to=20140402")
         observation = response.json[0]
         self.assertEquals(observation['id'], "1")
         self.assertEquals(observation['ref_time_id'], 2)
@@ -2663,9 +2658,9 @@ class TestIndicatorByPeriod(ApiTest):
         self.assertEquals(observation['dataset_id'], 1)
         self.assertEquals(observation['region_id'], 3)
         self.assertEquals(observation['slice_id'], "1")
-        response = self.client.get("/indicators/HDI/ESP/range?from=20140402&to=20140403")
+        response = self.client.get("/observations/HDI/ESP/range?from=20140402&to=20140403")
         self.assertEquals(len(response.json), 0)
-        response = self.client.get("/indicators/HDI/ESP/range?from=20120609&to=20120610")
+        response = self.client.get("/observations/HDI/ESP/range?from=20120609&to=20120610")
         self.assertEquals(len(response.json), 0)
 
 

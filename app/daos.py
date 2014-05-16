@@ -4,8 +4,13 @@ Created on 03/02/2014
 :author: Weso
 """
 
-from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region, Auth, Observation
+from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region, Auth, Observation, \
+    Value, Indicator, Dataset, DataSource
+from sqlalchemy import desc, func
 
+
+global_expression = ((Region.is_part_of_id == '2') | (Region.is_part_of_id == '3') | (Region.is_part_of_id == '4')
+                | (Region.is_part_of_id == '5') | (Region.is_part_of_id == '6'))
 
 class DAO(object):
     """
@@ -64,6 +69,34 @@ class DAO(object):
         update_object_attributes(persisted_object, object)
 
 
+class IndicatorDAO(DAO):
+    """
+    Dao for indicator entity
+    """
+    def __init__(self):
+        """
+        Constructor for indicator dao
+        """
+        super(IndicatorDAO, self).__init__(Indicator)
+
+    def get_indicators_by_country(self, iso3):
+        return self.session.query(Indicator).join(Observation).join(Country).filter(Country.iso3 == iso3).all()
+
+    def get_indicator_by_country(self, iso3, indicator_id):
+        return self.session.query(Indicator).join(Observation).join(Country).filter(Country.iso3 == iso3)\
+            .filter(Indicator.id == indicator_id).first()
+
+    def get_starred_indicators(self):
+        return self.session.query(Indicator).filter(Indicator.starred == True).all()
+
+    def get_average(self, indicator_id):
+        return self.session.query(func.avg(Value.value)).join(Observation)\
+            .filter(Observation.indicator_id == indicator_id).filter(Value.value != 'null').first()
+
+    def get_indicators_by_datasource(self, datasource_id):
+        return self.session.query(Indicator).join((Indicator, Dataset.indicators)).filter(Dataset.datasource_id == datasource_id).all()
+
+
 class CountryDAO(DAO):
     """
     Dao for country entity
@@ -98,6 +131,26 @@ class CountryDAO(DAO):
         persisted_object = self.get_by_code(country.iso3)
         update_object_attributes(persisted_object, country)
 
+    def get_countries_by_region(self, id):
+        if id == 1:
+            return self.session.query(Country).filter(global_expression).all()
+        else:
+            return self.session.query(Country).filter(Country.is_part_of_id == id).all()
+
+    def get_country_by_region(self, region_id, iso3):
+        if region_id == 1:
+            return self.session.query(Country).filter(global_expression)\
+                .filter(Country.iso3 == iso3).first()
+        else:
+            return self.session.query(Country).filter(Country.is_part_of_id == region_id)\
+                .filter(Country.iso3 == iso3).first()
+
+    def get_countries_with_data_by_region(self, id):
+        if id == 1:
+            return self.session.query(Country).join(Observation).filter(global_expression).group_by(Country.id).all()
+        else:
+            return self.session.query(Country).join(Observation).filter(Country.is_part_of_id == id).group_by(Country.id).all()
+
 
 class RegionDAO(DAO):
     """
@@ -117,6 +170,16 @@ class RegionDAO(DAO):
         """
         return self.session.query(self.cls).filter_by(un_code=code).first()
 
+    def get_all_regions(self):
+        return self.session.query(self.cls).filter_by(type='regions').all()
+
+    def get_regions_of_region(self, id):
+        return self.session.query(Region).filter(Region.type == 'regions').filter(Region.is_part_of_id == id).all()
+
+    def get_regions_with_data(self, indicator_id):
+        regions_ids = self.session.query(Country).join(Observation).filter(Observation.indicator_id == indicator_id)\
+            .group_by(Country.is_part_of_id).all()
+        return [self.get_by_artificial_code(region_id.is_part_of_id) for region_id in regions_ids]
 
     def get_by_artificial_code(self, code):
         """
@@ -259,11 +322,31 @@ class ObservationDAO(DAO):
     def get_by_region_and_indicator(self, region_id, indicator_id):
         if region_id == 1:
             return self.session.query(Observation).join(Region).filter(Observation.indicator_id == indicator_id)\
-                .filter((Region.is_part_of_id == '2') | (Region.is_part_of_id == '3') | (Region.is_part_of_id == '4')
-                        | (Region.is_part_of_id == '5') | (Region.is_part_of_id == '6')).all()
+                .filter(global_expression).all()
         else:
             return self.session.query(Observation).join(Region).filter(Observation.indicator_id == indicator_id)\
                 .filter(Region.is_part_of_id == region_id).all()
+
+    def get_by_country_and_indicator(self, indicator_id, iso3):
+        return self.session.query(Observation).join(Country).filter(Observation.indicator_id == indicator_id)\
+            .filter(Country.iso3 == iso3).all()
+
+    def get_top_by_region(self, indicator_id, region_id, top):
+        if region_id == 1:
+            return self.session.query(Observation).join(Value).join(Region).filter(
+
+                ).filter(Observation.indicator_id == indicator_id).order_by(desc(Observation.value)).limit(top).all()
+        else:
+            return self.session.query(Observation).join(Value).join(Region).filter(Region.is_part_of_id == region_id)\
+                .filter(Observation.indicator_id == indicator_id).order_by(desc(Observation.value)).limit(top).all()
+
+    def get_starred_observations_by_country(self, iso3):
+        return self.session.query(Observation).join(Indicator).join(Country).filter(Country.iso3 == iso3)\
+            .filter(Indicator.starred == True).all()
+
+    def get_by_indicator(self, indicator_id):
+        return self.session.query(Observation).join(Value).filter(Observation.indicator_id == indicator_id)\
+            .filter(Value.value != 'null').all()
 
 
 class AuthDAO(DAO):
