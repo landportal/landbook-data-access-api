@@ -16,7 +16,8 @@ json_converter = JSONConverter()
 class MyProxyHack(object):
     """
     Hack to proxy in testing, if not will fail because of bad ip address
-    @see http://stackoverflow.com/questions/14872829/get-ip-address-when-testing-flask-application-through-nosetests
+
+    :see http://stackoverflow.com/questions/14872829/get-ip-address-when-testing-flask-application-through-nosetests
     """
 
     def __init__(self, app):
