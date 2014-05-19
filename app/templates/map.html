@@ -6,13 +6,24 @@
     <link href="{{ url_for('static', filename='graphic.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ url_for('static', filename='wesCountry.min.css') }}" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="{{ url_for('static', filename='wesCountry.min.js') }}"></script>
+    <style>
+		#mapDiv {
+			position: relative;
+			width: 800px;
+			height: 500px;
+		}
+	</style>
 </head>
 <body>
     <h2>{{ title }}</h2>
     <h3>{{ description }}</h3>
+    <div id="mapDiv"></div>
     <script type="text/javascript">
-        var options = {{ options|safe }};
-        wesCountry.charts.chart(options);
+        var options = {
+            "container": "#mapDiv",
+            "zoomToCountryFactor": 0.1
+        };
+        wesCountry.maps.createMap(options);
     </script>
 </body>
 </html>

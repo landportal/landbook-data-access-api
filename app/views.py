@@ -2352,6 +2352,17 @@ def table():
         return response_graphics(options, title, description)
 
 
+@app.route('/graphs/map')
+def map():
+        """
+        Visualization of table
+        """
+        # options, title, description = get_visualization_json(request, 'table')
+        # return response_graphics(options, title, description)
+        # return render_template('map.html', options=json.dumps(options), title=title, description=description)
+        return render_template('map.html', title="Map", description="Map Test")
+
+
 @app.route('/')
 def help():
     """
