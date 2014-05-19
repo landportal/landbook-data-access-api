@@ -173,7 +173,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 <td>Indicators of the given country</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>landportal.info/api/countries/&lt;iso3&gt;indicators/&lt;indicator_id&gt;</td>
+<tr class="row-even"><td>landportal.info/api/countries/&lt;iso3&gt;/indicators/&lt;indicator_id&gt;</td>
 <td>Given indicators of the given country</td>
 <td>&nbsp;</td>
 </tr>
@@ -273,7 +273,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 <td>Countries that are part of the given region and have observations</td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/countries/iso3&gt;/last_update</td>
+<tr class="row-odd"><td>landportal.info/api/countries/&lt;iso3&gt;/last_update</td>
 <td>Date of the country last update</td>
 <td>&nbsp;</td>
 </tr>
@@ -287,11 +287,11 @@ In the next table you can see all the URLs defined that you can access with a sh
 </tr>
 <tr class="row-even"><td>landportal.info/api/observations/&lt;id&gt;/range</td>
 <td>Observations of a country, indicator or region, betwenn two dates</td>
-<td>from: beginning date of the interval, end: final date of the interval</td>
+<td>from: beginning date of the interval, to: final date of the interval</td>
 </tr>
 <tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/range</td>
 <td>Observations of the given indicator between two dates</td>
-<td>from: beginning date of the interval, end: final date of the interval</td>
+<td>from: beginning date of the interval, to: final date of the interval</td>
 </tr>
 <tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/regions_with_data</td>
 <td>Regions with observations for the given indicator</td>
@@ -303,11 +303,11 @@ In the next table you can see all the URLs defined that you can access with a sh
 </tr>
 <tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/average/range</td>
 <td>Average of the given indicator between two dates</td>
-<td>from: beginning date of the interval, end: final date of the interval</td>
+<td>from: beginning date of the interval, to: final date of the interval</td>
 </tr>
-<tr class="row-odd"><td>landportal.info/api/indicators/&lt;id&gt;/&lt;iso3&gt;/average/range</td>
+<tr class="row-odd"><td>landportal.info/api/observations/&lt;id&gt;/&lt;iso3&gt;/average/range</td>
 <td>Average of the given indicator and country between two dates</td>
-<td>from: beginning date of the interval, end: final date of the interval</td>
+<td>from: beginning date of the interval, to: final date of the interval</td>
 </tr>
 <tr class="row-even"><td>landportal.info/api/indicators/&lt;id&gt;/related</td>
 <td>Indicators with relation with the one given</td>

@@ -59,7 +59,8 @@
 </div>
 <div class="section" id="module-app.daos">
 <span id="app-daos-module"></span><h2>app.daos module<a class="headerlink" href="#module-app.daos" title="Permalink to this headline">¶</a></h2>
-<p>Created on 03/02/2014</p>
+<p>Created on 03/02/2014
+This file includes all the daos that support the access to the data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -76,16 +77,31 @@
 <dl class="method">
 <dt id="app.daos.AuthDAO.get_by_code">
 <tt class="descname">get_by_code</tt><big>(</big><em>username</em><big>)</big><a class="headerlink" href="#app.daos.AuthDAO.get_by_code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns a country by its given code
-:param username: name of the username requested
-:return: user with given username</p>
+<dd><p>Method that returns a country by its given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> &#8211; name of the username requested</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">user with given username</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.AuthDAO.update">
 <tt class="descname">update</tt><big>(</big><em>auth</em><big>)</big><a class="headerlink" href="#app.daos.AuthDAO.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to update an existing auth user, its username will not be changed
-:param auth: user auth to be updated, with updated attributes</p>
+<dd><p>Method to update an existing auth user, its username will not be changed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>auth</strong> &#8211; user auth to be updated, with updated attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -98,16 +114,100 @@
 <dl class="method">
 <dt id="app.daos.CountryDAO.get_by_code">
 <tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.get_by_code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns a country by its given code
-:param code: iso3 of the country requested
-:return: country with given iso3</p>
+<dd><p>Method that returns a country by its given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; iso3 of the country requested</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">country with given iso3</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.CountryDAO.get_by_id">
+<tt class="descname">get_by_id</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.get_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that returns a country by its given id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; id of the country requested</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">country with given id</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.CountryDAO.get_countries_by_region">
+<tt class="descname">get_countries_by_region</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.get_countries_by_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of countries that belong to a region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> &#8211; id of the region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of countries</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.CountryDAO.get_countries_with_data_by_region">
+<tt class="descname">get_countries_with_data_by_region</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.get_countries_with_data_by_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the countries that have data if they belong to a given region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> &#8211; id of the given region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of countries</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.CountryDAO.get_country_by_region">
+<tt class="descname">get_country_by_region</tt><big>(</big><em>region_id</em>, <em>iso3</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.get_country_by_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the given country that belongs to the given region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>region_id</strong> &#8211; id of the region to search</li>
+<li><strong>iso3</strong> &#8211; iso3 of the country to search</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">country</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.CountryDAO.update">
 <tt class="descname">update</tt><big>(</big><em>country</em><big>)</big><a class="headerlink" href="#app.daos.CountryDAO.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to update an existing country, its code will not be changed
-:param country: country to be updated, with updated attributes</p>
+<dd><p>Method to update an existing country, its code will not be changed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>country</strong> &#8211; country to be updated, with updated attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -120,44 +220,174 @@
 <dl class="method">
 <dt id="app.daos.DAO.delete">
 <tt class="descname">delete</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.DAO.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to delete an existing element by its code
-:param code: id of the object to be deleted</p>
+<dd><p>Method to delete an existing element by its code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; id of the object to be deleted</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.DAO.get_all">
 <tt class="descname">get_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.daos.DAO.get_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns all countries in the database
-:return: a collection of all elements</p>
+<dd><p>Method that returns all countries in the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a collection of all elements</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.DAO.get_by_code">
 <tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.DAO.get_by_code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns a element by its given code
-:param code: id of the element requested
-:return: element with the given id</p>
+<dd><p>Method that returns a element by its given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; id of the element requested</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">element with the given id</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.DAO.insert">
 <tt class="descname">insert</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.daos.DAO.insert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that inserts a new element
-:param object: element to be inserted</p>
+<dd><p>Method that inserts a new element</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object</strong> &#8211; element to be inserted</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.DAO.set_session">
 <tt class="descname">set_session</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#app.daos.DAO.set_session" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to set the database to use
-:param session: session of the database used</p>
+<dd><p>Method to set the database to use</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session</strong> &#8211; session of the database used</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.DAO.update">
 <tt class="descname">update</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.daos.DAO.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to update an existing element, its code will not be changed
-:param object: object to be updated, with updated attributes</p>
+<dd><p>Method to update an existing element, its code will not be changed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object</strong> &#8211; object to be updated, with updated attributes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.daos.IndicatorDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">IndicatorDAO</tt><a class="headerlink" href="#app.daos.IndicatorDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<p>Dao for indicator entity</p>
+<dl class="method">
+<dt id="app.daos.IndicatorDAO.get_average">
+<tt class="descname">get_average</tt><big>(</big><em>indicator_id</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorDAO.get_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the average of values for an indicator given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; indicator id of the given indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">average</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.IndicatorDAO.get_indicator_by_country">
+<tt class="descname">get_indicator_by_country</tt><big>(</big><em>iso3</em>, <em>indicator_id</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorDAO.get_indicator_by_country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to get an indicator of a given country</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>iso3</strong> &#8211; iso3 code of the given country</li>
+<li><strong>indicator_id</strong> &#8211; indicator id to search</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.IndicatorDAO.get_indicators_by_country">
+<tt class="descname">get_indicators_by_country</tt><big>(</big><em>iso3</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorDAO.get_indicators_by_country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to get all the indicators of a given country</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>iso3</strong> &#8211; iso3 code of the given country</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">indicators of the given country</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.IndicatorDAO.get_indicators_by_datasource">
+<tt class="descname">get_indicators_by_datasource</tt><big>(</big><em>datasource_id</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorDAO.get_indicators_by_datasource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the indicators of a datasource</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>datasource_id</strong> &#8211; datasource id for the given datasource</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">indicators of the given datasource</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.IndicatorDAO.get_starred_indicators">
+<tt class="descname">get_starred_indicators</tt><big>(</big><big>)</big><a class="headerlink" href="#app.daos.IndicatorDAO.get_starred_indicators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns indicators that are starred</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">starred indicators</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -170,25 +400,148 @@
 <dl class="method">
 <dt id="app.daos.IndicatorTranslationDAO.delete">
 <tt class="descname">delete</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorTranslationDAO.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes the indicator translation by its given code
-:param indicator_id: id of requested indicator
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+<dd><p>Method that deletes the indicator translation by its given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; id of requested indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.IndicatorTranslationDAO.get_by_codes">
 <tt class="descname">get_by_codes</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorTranslationDAO.get_by_codes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns translated indicator
-:param indicator_id: id of requested indicator
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
-:return: indicator translation</p>
+<dd><p>Method that returns translated indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; id of requested indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">indicator translation</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.IndicatorTranslationDAO.update">
 <tt class="descname">update</tt><big>(</big><em>indicator_translation</em><big>)</big><a class="headerlink" href="#app.daos.IndicatorTranslationDAO.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to update an existing indicator translation, its code will not be changed
-:param indicator_translation: updated indicator translation, with updated attributes</p>
+<dd><p>Method to update an existing indicator translation, its code will not be changed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_translation</strong> &#8211; updated indicator translation, with updated attributes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.daos.ObservationDAO">
+<em class="property">class </em><tt class="descclassname">app.daos.</tt><tt class="descname">ObservationDAO</tt><a class="headerlink" href="#app.daos.ObservationDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
+<dl class="method">
+<dt id="app.daos.ObservationDAO.get_by_country_and_indicator">
+<tt class="descname">get_by_country_and_indicator</tt><big>(</big><em>indicator_id</em>, <em>iso3</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_by_country_and_indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of a given indicator and a given country</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+<li><strong>iso3</strong> &#8211; iso3 of the given country</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.ObservationDAO.get_by_indicator">
+<tt class="descname">get_by_indicator</tt><big>(</big><em>indicator_id</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_by_indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the observations of a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; id of the given indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of observations</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.ObservationDAO.get_by_region_and_indicator">
+<tt class="descname">get_by_region_and_indicator</tt><big>(</big><em>region_id</em>, <em>indicator_id</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_by_region_and_indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of a given region and a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>region_id</strong> &#8211; id of the given region</li>
+<li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of observations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.ObservationDAO.get_starred_observations_by_country">
+<tt class="descname">get_starred_observations_by_country</tt><big>(</big><em>iso3</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_starred_observations_by_country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns starred indicators of a country</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>iso3</strong> &#8211; iso3 of the given country</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of observations</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.ObservationDAO.get_top_by_region">
+<tt class="descname">get_top_by_region</tt><big>(</big><em>indicator_id</em>, <em>region_id</em>, <em>top</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_top_by_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of a given indicator and a given region.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+<li><strong>region_id</strong> &#8211; id of the given region</li>
+<li><strong>top</strong> &#8211; number of results to be returned</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of observations</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -199,26 +552,95 @@
 <dd><p>Bases: <a class="reference internal" href="#app.daos.DAO" title="app.daos.DAO"><tt class="xref py py-class docutils literal"><span class="pre">app.daos.DAO</span></tt></a></p>
 <p>Dao for region entity</p>
 <dl class="method">
+<dt id="app.daos.RegionDAO.get_all_regions">
+<tt class="descname">get_all_regions</tt><big>(</big><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_all_regions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all regions, countries are not included</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of regions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="app.daos.RegionDAO.get_by_artificial_code">
 <tt class="descname">get_by_artificial_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_by_artificial_code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns a region by its given code
-:param code: id of the region
-:return: region with given id</p>
+<dd><p>Method that returns a region by its given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; id of the region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">region with given id</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.RegionDAO.get_by_code">
 <tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_by_code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns a region by its given code
-:param code: un_code of the region
-:return: region with given un_code</p>
+<dd><p>Method that returns a region by its given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; un_code of the region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">region with given un_ocde</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.RegionDAO.get_regions_of_region">
+<tt class="descname">get_regions_of_region</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_regions_of_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of regions that belong to a given region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> &#8211; id of the given region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of regions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.daos.RegionDAO.get_regions_with_data">
+<tt class="descname">get_regions_with_data</tt><big>(</big><em>indicator_id</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.get_regions_with_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the regions that have data for a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; id of the given indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of regions</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.RegionDAO.update">
 <tt class="descname">update</tt><big>(</big><em>region</em><big>)</big><a class="headerlink" href="#app.daos.RegionDAO.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to update an existing country, its code will not be changed
-:param region: region to be updated, with updated attributes</p>
+<dd><p>Method to update an existing country, its code will not be changed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region</strong> &#8211; region to be updated, with updated attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -231,25 +653,49 @@
 <dl class="method">
 <dt id="app.daos.RegionTranslationDAO.delete">
 <tt class="descname">delete</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.RegionTranslationDAO.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes the region translation by its given code
-:param region_id: id of requested region
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+<dd><p>Method that deletes the region translation by its given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region_id</strong> &#8211; id of requested region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.RegionTranslationDAO.get_by_codes">
 <tt class="descname">get_by_codes</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.RegionTranslationDAO.get_by_codes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns translated region
-:param region_id: id of requested region
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
-:return: region translation</p>
+<dd><p>Method that returns translated region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region_id</strong> &#8211; id of requested region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">region translation</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.RegionTranslationDAO.update">
 <tt class="descname">update</tt><big>(</big><em>region_translation</em><big>)</big><a class="headerlink" href="#app.daos.RegionTranslationDAO.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to update an existing region translation, its code will not be changed
-:param region_translation: updated region translation, with updated attributes</p>
+<dd><p>Method to update an existing region translation, its code will not be changed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region_translation</strong> &#8211; updated region translation, with updated attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -262,42 +708,115 @@
 <dl class="method">
 <dt id="app.daos.TopicTranslationDAO.delete">
 <tt class="descname">delete</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.TopicTranslationDAO.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes the topic translation by its given code calling the dao
-:param topic_id: id of requested indicator
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+<dd><p>Method that deletes the topic translation by its given code calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_id</strong> &#8211; id of requested indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.TopicTranslationDAO.get_by_codes">
 <tt class="descname">get_by_codes</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.daos.TopicTranslationDAO.get_by_codes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns translated topic
-:param topic_id: id of requested topic
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
-:return: topic translation</p>
+<dd><p>Method that returns translated topic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_id</strong> &#8211; id of requested topic</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Param:</th><td class="field-body">lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">topic translation</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.daos.TopicTranslationDAO.update">
 <tt class="descname">update</tt><big>(</big><em>topic_translation</em><big>)</big><a class="headerlink" href="#app.daos.TopicTranslationDAO.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to update an existing country, its code will not be changed
-:param topic_translation: updated topic translation, with updated attributes</p>
+<dd><p>Method to update an existing country, its code will not be changed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_translation</strong> &#8211; updated topic translation, with updated attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="app.daos.desc">
+<tt class="descclassname">app.daos.</tt><tt class="descname">desc</tt><big>(</big><em>column</em><big>)</big><a class="headerlink" href="#app.daos.desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a descending <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></tt> clause element.</p>
+<p>e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">desc</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>will produce SQL as:</p>
+<div class="highlight-python"><div class="highlight"><pre>SELECT id, name FROM user ORDER BY name DESC
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#app.daos.desc" title="app.daos.desc"><tt class="xref py py-func docutils literal"><span class="pre">desc()</span></tt></a> function is a standalone version of the
+<tt class="xref py py-meth docutils literal"><span class="pre">ColumnElement.desc()</span></tt> method available on all SQL expressions,
+e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>column</strong> &#8211; A <tt class="xref py py-class docutils literal"><span class="pre">ColumnElement</span></tt> (e.g. scalar SQL expression)
+with which to apply the <a class="reference internal" href="#app.daos.desc" title="app.daos.desc"><tt class="xref py py-func docutils literal"><span class="pre">desc()</span></tt></a> operation.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><tt class="xref py py-func docutils literal"><span class="pre">asc()</span></tt></p>
+<p><tt class="xref py py-func docutils literal"><span class="pre">nullsfirst()</span></tt></p>
+<p><tt class="xref py py-func docutils literal"><span class="pre">nullslast()</span></tt></p>
+<p class="last"><tt class="xref py py-meth docutils literal"><span class="pre">Select.order_by()</span></tt></p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.daos.update_object_attributes">
 <tt class="descclassname">app.daos.</tt><tt class="descname">update_object_attributes</tt><big>(</big><em>object_to_update</em>, <em>object_with_new_attributes</em><big>)</big><a class="headerlink" href="#app.daos.update_object_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates all the attributes of an object with other object values
-all attributes beginning with &#8216;_&#8217; will not be updated
-:param object_to_update: object to be updated
-:param object_with_new_attributes: object with the new values</p>
+all attributes beginning with &#8216;_&#8217; will not be updated</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>object_to_update</strong> &#8211; object to be updated</li>
+<li><strong>object_with_new_attributes</strong> &#8211; object with the new values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="module-app.services">
 <span id="app-services-module"></span><h2>app.services module<a class="headerlink" href="#module-app.services" title="Permalink to this headline">¶</a></h2>
-<p>Created on 03/02/2014</p>
+<p>Created on 03/02/2014
+This file includes all the services that communicate views.py and daos.py</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -321,8 +840,81 @@ all attributes beginning with &#8216;_&#8217; will not be updated
 <dl class="method">
 <dt id="app.services.CountryService.delete_all">
 <tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.CountryService.delete_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes all countries by calling the dao
-:attention: Take care of what you do, all countries will be destroyed</p>
+<dd><p>Method that deletes all countries by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attention:</th><td class="field-body">Take care of what you do, all countries will be destroyed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.CountryService.get_by_id">
+<tt class="descname">get_by_id</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.services.CountryService.get_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the country with the given id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> &#8211; iso3 of the country to search</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">country</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.CountryService.get_countries_by_regions">
+<tt class="descname">get_countries_by_regions</tt><big>(</big><em>un_code</em><big>)</big><a class="headerlink" href="#app.services.CountryService.get_countries_by_regions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the countries that belong to the given region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>un_code</strong> &#8211; un_code of the given region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of countries</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.CountryService.get_countries_with_data_by_region">
+<tt class="descname">get_countries_with_data_by_region</tt><big>(</big><em>un_code</em><big>)</big><a class="headerlink" href="#app.services.CountryService.get_countries_with_data_by_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the countries that have data and belong to a given region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>un_code</strong> &#8211; un_code of the given region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of countries</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.CountryService.get_country_by_region">
+<tt class="descname">get_country_by_region</tt><big>(</big><em>un_code</em>, <em>iso3</em><big>)</big><a class="headerlink" href="#app.services.CountryService.get_country_by_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the country that belongs to a given region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>un_code</strong> &#8211; un_code of the given region</li>
+<li><strong>iso3</strong> &#8211; iso3 code of the country to search</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -342,8 +934,15 @@ all attributes beginning with &#8216;_&#8217; will not be updated
 <dl class="method">
 <dt id="app.services.DatasetService.insert">
 <tt class="descname">insert</tt><big>(</big><em>dataset</em><big>)</big><a class="headerlink" href="#app.services.DatasetService.insert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that inserts a dataset calling the dao
-:param dataset: dataset to be persisted</p>
+<dd><p>Method that inserts a dataset calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataset</strong> &#8211; dataset to be persisted</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -357,51 +956,101 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.services.GenericService.delete">
 <tt class="descname">delete</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.services.GenericService.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes the element by its given code calling the dao
-:param code: id of the element to be deleted</p>
+<dd><p>Method that deletes the element by its given code calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; id of the element to be deleted</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.GenericService.delete_all">
 <tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.GenericService.delete_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes all elements by calling the dao
-:attention: Take care of what you do, all countries will be destroyed</p>
+<dd><p>Method that deletes all elements by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attention:</th><td class="field-body">Take care of what you do, all countries will be destroyed</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.GenericService.get_all">
 <tt class="descname">get_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.GenericService.get_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns all elements given by the dao
-:return: collection of elements</p>
+<dd><p>Method that returns all elements given by the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">collection of elements</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.GenericService.get_by_code">
 <tt class="descname">get_by_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.services.GenericService.get_by_code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns element given by the dao
-:param code: usually the id
-:return: element that owns the given id</p>
+<dd><p>Method that returns element given by the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; usually the id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">element that owns the given id</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.GenericService.insert">
 <tt class="descname">insert</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.services.GenericService.insert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that inserts a element calling the dao
-:param object: element to be persisted</p>
+<dd><p>Method that inserts a element calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object</strong> &#8211; element to be persisted</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.GenericService.update">
 <tt class="descname">update</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.services.GenericService.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that updates the element by calling the dao
-:param object: element to be updated with updated attributes</p>
+<dd><p>Method that updates the element by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object</strong> &#8211; element to be updated with updated attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.GenericService.update_all">
 <tt class="descname">update_all</tt><big>(</big><em>objects</em><big>)</big><a class="headerlink" href="#app.services.GenericService.update_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that updates all the elements given by calling the dao
-:params objects: list of objects to be updated with updated attributes</p>
+<dd><p>Method that updates all the elements given by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Params objects:</th><td class="field-body">list of objects to be updated with updated attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -418,6 +1067,86 @@ with the majority of the daos</p>
 <em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">IndicatorService</tt><a class="headerlink" href="#app.services.IndicatorService" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
 <p>Service for indicator dao</p>
+<dl class="method">
+<dt id="app.services.IndicatorService.get_average">
+<tt class="descname">get_average</tt><big>(</big><em>indicator_id</em><big>)</big><a class="headerlink" href="#app.services.IndicatorService.get_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the values averages of a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; id of the given indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">average</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.IndicatorService.get_indicator_by_country">
+<tt class="descname">get_indicator_by_country</tt><big>(</big><em>iso3</em>, <em>indicator_id</em><big>)</big><a class="headerlink" href="#app.services.IndicatorService.get_indicator_by_country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the indicator with the given id and also that belongs to the given country</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>iso3</strong> &#8211; iso3 code of the given country</li>
+<li><strong>indicator_id</strong> &#8211; id of the indicator to search</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.IndicatorService.get_indicators_by_country">
+<tt class="descname">get_indicators_by_country</tt><big>(</big><em>iso3</em><big>)</big><a class="headerlink" href="#app.services.IndicatorService.get_indicators_by_country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the indicators of a given country</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>iso3</strong> &#8211; iso3 code of the given country</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of indicators</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.IndicatorService.get_indicators_by_datasource">
+<tt class="descname">get_indicators_by_datasource</tt><big>(</big><em>datasource_id</em><big>)</big><a class="headerlink" href="#app.services.IndicatorService.get_indicators_by_datasource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the indicators of a given datasource</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>datasource_id</strong> &#8211; id of the given datasource</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of indicators</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.IndicatorService.get_starred_indicators">
+<tt class="descname">get_starred_indicators</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.IndicatorService.get_starred_indicators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the indicators that are starred</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of indicators</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -428,25 +1157,54 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.services.IndicatorTranslationService.delete">
 <tt class="descname">delete</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.IndicatorTranslationService.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes the indicator translation by its given code calling the dao
-:param indicator_id: id of requested indicator
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+<dd><p>Method that deletes the indicator translation by its given code calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>indicator_id</strong> &#8211; id of requested indicator</li>
+<li><strong>lang_code</strong> &#8211; code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.IndicatorTranslationService.delete_all">
 <tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.IndicatorTranslationService.delete_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes all indicator translations by calling the dao
-:attention: Take care of what you do, all countries will be destroyed</p>
+<dd><p>Method that deletes all indicator translations by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attention:</th><td class="field-body">Take care of what you do, all countries will be destroyed</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.IndicatorTranslationService.get_by_codes">
 <tt class="descname">get_by_codes</tt><big>(</big><em>indicator_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.IndicatorTranslationService.get_by_codes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns translated indicator given by the dao
-:param indicator_id: id of requested indicator
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
-:return: indicator translation</p>
+<dd><p>Method that returns translated indicator given by the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>indicator_id</strong> &#8211; id of requested indicator</li>
+<li><strong>lang_code</strong> &#8211; code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">indicator translation</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -463,6 +1221,102 @@ with the majority of the daos</p>
 <em class="property">class </em><tt class="descclassname">app.services.</tt><tt class="descname">ObservationService</tt><a class="headerlink" href="#app.services.ObservationService" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#app.services.GenericService" title="app.services.GenericService"><tt class="xref py py-class docutils literal"><span class="pre">app.services.GenericService</span></tt></a></p>
 <p>Service for organization dao</p>
+<dl class="method">
+<dt id="app.services.ObservationService.get_by_country_and_indicator">
+<tt class="descname">get_by_country_and_indicator</tt><big>(</big><em>indicator_id</em>, <em>iso3</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_by_country_and_indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of a given country and a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+<li><strong>iso3</strong> &#8211; iso3 code of the given country</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of observations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.ObservationService.get_by_indicator">
+<tt class="descname">get_by_indicator</tt><big>(</big><em>indicator_id</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_by_indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; id of the given indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of observations</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.ObservationService.get_by_region_and_indicator">
+<tt class="descname">get_by_region_and_indicator</tt><big>(</big><em>region_id</em>, <em>indicator_id</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_by_region_and_indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of a given region and indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>region_id</strong> &#8211; id of the given region</li>
+<li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of observations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.ObservationService.get_starred_observations_by_country">
+<tt class="descname">get_starred_observations_by_country</tt><big>(</big><em>iso3</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_starred_observations_by_country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of starred indicators for a given country</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>iso3</strong> &#8211; iso3 code of a given country</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of observations</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.ObservationService.get_top_by_region">
+<tt class="descname">get_top_by_region</tt><big>(</big><em>indicator_id</em>, <em>region_id</em>, <em>top</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_top_by_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns observations of a given indicator and a given region, with a top</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+<li><strong>region_id</strong> &#8211; id of the given region</li>
+<li><strong>top</strong> &#8211; number of results to return</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of observations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -480,14 +1334,76 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.services.RegionService.delete_all">
 <tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.RegionService.delete_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes all regions by calling the dao
-:attention: Take care of what you do, all regions will be destroyed</p>
+<dd><p>Method that deletes all regions by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attention:</th><td class="field-body">Take care of what you do, all regions will be destroyed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.RegionService.get_all_regions">
+<tt class="descname">get_all_regions</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.RegionService.get_all_regions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all regions. Countries are not included</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of regions</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.RegionService.get_by_artificial_code">
 <tt class="descname">get_by_artificial_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#app.services.RegionService.get_by_artificial_code" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the region that owns the given code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>code</strong> &#8211; id of the region to search</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.RegionService.get_regions_of_region">
+<tt class="descname">get_regions_of_region</tt><big>(</big><em>un_code</em><big>)</big><a class="headerlink" href="#app.services.RegionService.get_regions_of_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns regions that belong to a given region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>un_code</strong> &#8211; un_code of the given region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of regions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.services.RegionService.get_regions_with_data">
+<tt class="descname">get_regions_with_data</tt><big>(</big><em>indicator_id</em><big>)</big><a class="headerlink" href="#app.services.RegionService.get_regions_with_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns regions with countries that have data for a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicator_id</strong> &#8211; id of the given indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of regions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -499,25 +1415,54 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.services.RegionTranslationService.delete">
 <tt class="descname">delete</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.RegionTranslationService.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes the region translation by its given code calling the dao
-:param region_id: id of requested region
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+<dd><p>Method that deletes the region translation by its given code calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>region_id</strong> &#8211; id of requested region</li>
+<li><strong>lang_code</strong> &#8211; code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.RegionTranslationService.delete_all">
 <tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.RegionTranslationService.delete_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes all region translation by calling the dao
-:attention: Take care of what you do, all countries will be destroyed</p>
+<dd><p>Method that deletes all region translation by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attention:</th><td class="field-body">Take care of what you do, all countries will be destroyed</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.RegionTranslationService.get_by_codes">
 <tt class="descname">get_by_codes</tt><big>(</big><em>region_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.RegionTranslationService.get_by_codes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns translated region given by the dao
-:param region_id: id of requested region
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
-:return: region translation</p>
+<dd><p>Method that returns translated region given by the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>region_id</strong> &#8211; id of requested region</li>
+<li><strong>lang_code</strong> &#8211; code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">region translation</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -537,25 +1482,54 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.services.TopicTranslationService.delete">
 <tt class="descname">delete</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.TopicTranslationService.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes the topic translation by its given code calling the dao
-:param topic_id: id of requested indicator
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</p>
+<dd><p>Method that deletes the topic translation by its given code calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>topic_id</strong> &#8211; id of requested indicator</li>
+<li><strong>lang_code</strong> &#8211; code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.TopicTranslationService.delete_all">
 <tt class="descname">delete_all</tt><big>(</big><big>)</big><a class="headerlink" href="#app.services.TopicTranslationService.delete_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that deletes all countries by calling the dao
-:attention: Take care of what you do, all topic translations will be destroyed</p>
+<dd><p>Method that deletes all countries by calling the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attention:</th><td class="field-body">Take care of what you do, all topic translations will be destroyed</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.services.TopicTranslationService.get_by_codes">
 <tt class="descname">get_by_codes</tt><big>(</big><em>topic_id</em>, <em>lang_code</em><big>)</big><a class="headerlink" href="#app.services.TopicTranslationService.get_by_codes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that returns translated topic given by the dao
-:param topic_id: id of requested topic
-:param: lang_code: code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;
-:return: topic translation</p>
+<dd><p>Method that returns translated topic given by the dao</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>topic_id</strong> &#8211; id of requested topic</li>
+<li><strong>lang_code</strong> &#8211; code of the language like: &#8216;en&#8217;, &#8216;es&#8217;, &#8216;fr&#8217;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">topic translation</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -590,7 +1564,8 @@ with the majority of the daos</p>
 </div>
 <div class="section" id="module-app.utils">
 <span id="app-utils-module"></span><h2>app.utils module<a class="headerlink" href="#module-app.utils" title="Permalink to this headline">¶</a></h2>
-<p>Created on 03/02/2014</p>
+<p>Created on 03/02/2014
+This file includes some util features like marshalling</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -607,19 +1582,39 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.utils.CSVConverter.list_to_csv">
 <tt class="descname">list_to_csv</tt><big>(</big><em>elements_list</em><big>)</big><a class="headerlink" href="#app.utils.CSVConverter.list_to_csv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a list to its csv equivalent
-:param elements_list: collection to be converted
-:return: csv string</p>
+<dd><p>Convert a list to its csv equivalent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>elements_list</strong> &#8211; collection to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">csv string</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.utils.CSVConverter.object_to_csv">
 <tt class="descname">object_to_csv</tt><big>(</big><em>element</em>, <em>header=True</em>, <em>keys=None</em><big>)</big><a class="headerlink" href="#app.utils.CSVConverter.object_to_csv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a object to its csv equivalent
-:param element: object to be converted
-:param header: True if headers are desired, False if not, by default True
-:param keys: Header keys to use if method used by list_to_csv, default None
-:return: csv string</p>
+<dd><p>Convert a object to its csv equivalent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>element</strong> &#8211; object to be converted</li>
+<li><strong>header</strong> &#8211; True if headers are desired, False if not, by default True</li>
+<li><strong>keys</strong> &#8211; Header keys to use if method used by list_to_csv, default None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">csv string</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -632,9 +1627,17 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.utils.DictionaryList2ObjectList.convert">
 <tt class="descname">convert</tt><big>(</big><em>given_list</em><big>)</big><a class="headerlink" href="#app.utils.DictionaryList2ObjectList.convert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a list of dictionaries in a list of objects
-:param given_list: list of dictionaries
-:return: list of object</p>
+<dd><p>Convert a list of dictionaries in a list of objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>given_list</strong> &#8211; list of dictionaries</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -647,17 +1650,33 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.utils.JSONConverter.list_to_json">
 <tt class="descname">list_to_json</tt><big>(</big><em>elements_list</em><big>)</big><a class="headerlink" href="#app.utils.JSONConverter.list_to_json" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a list to its json equivalent
-:param elements_list: list of elements to be converted
-:return: json array ready be returned as string</p>
+<dd><p>Convert a list to its json equivalent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>elements_list</strong> &#8211; list of elements to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json array ready be returned as string</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.utils.JSONConverter.object_to_json">
 <tt class="descname">object_to_json</tt><big>(</big><em>element</em><big>)</big><a class="headerlink" href="#app.utils.JSONConverter.object_to_json" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a object to its json equivalent
-:param element: element to be converted
-:return: json object in string format</p>
+<dd><p>Convert a object to its json equivalent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>element</strong> &#8211; element to be converted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json object in string format</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -666,8 +1685,15 @@ with the majority of the daos</p>
 <dt id="app.utils.Struct">
 <em class="property">class </em><tt class="descclassname">app.utils.</tt><tt class="descname">Struct</tt><big>(</big><em>**entries</em><big>)</big><a class="headerlink" href="#app.utils.Struct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Class to convert from dictionary to object
-:see: <a class="reference external" href="http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663">http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663</a></p>
+<p>Class to convert from dictionary to object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">See:</th><td class="field-body"><a class="reference external" href="http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663">http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -678,20 +1704,44 @@ with the majority of the daos</p>
 <dl class="method">
 <dt id="app.utils.XMLConverter.list_to_xml">
 <tt class="descname">list_to_xml</tt><big>(</big><em>elements_list</em>, <em>root_node='elements'</em>, <em>child_node='element'</em><big>)</big><a class="headerlink" href="#app.utils.XMLConverter.list_to_xml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a list to its XML equivalent
-:param elements_list: list of elements to be converted
-:param root_node: name for the root tag in the xml, by default <em>elements</em>
-:param child_node: name for object tag in every element of the list, by default <em>element</em>
-:return: Xml string</p>
+<dd><p>Convert a list to its XML equivalent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>elements_list</strong> &#8211; list of elements to be converted</li>
+<li><strong>root_node</strong> &#8211; name for the root tag in the xml, by default <em>elements</em></li>
+<li><strong>child_node</strong> &#8211; name for object tag in every element of the list, by default <em>element</em></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Xml string</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="app.utils.XMLConverter.object_to_xml">
 <tt class="descname">object_to_xml</tt><big>(</big><em>element</em>, <em>root_node='element'</em><big>)</big><a class="headerlink" href="#app.utils.XMLConverter.object_to_xml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a object to its XML equivalent
-:param element: element to be converted
-:param root_node: name for root tag on xml, by default <em>element</em>
-:return: Xml string</p>
+<dd><p>Convert a object to its XML equivalent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>element</strong> &#8211; element to be converted</li>
+<li><strong>root_node</strong> &#8211; name for root tag on xml, by default <em>element</em></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Xml string</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -699,41 +1749,77 @@ with the majority of the daos</p>
 <dl class="function">
 <dt id="app.utils.check_if_date">
 <tt class="descclassname">app.utils.</tt><tt class="descname">check_if_date</tt><big>(</big><em>field_name</em>, <em>object</em>, <em>row</em><big>)</big><a class="headerlink" href="#app.utils.check_if_date" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a date field into long format
-:param field_name: name of the field where the date is
-:param object: object to store the date in long format
-:param row: object, usually a SQLAlchemy row where field is stored</p>
+<dd><p>Convert a date field into long format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field_name</strong> &#8211; name of the field where the date is</li>
+<li><strong>object</strong> &#8211; object to store the date in long format</li>
+<li><strong>row</strong> &#8211; object, usually a SQLAlchemy row where field is stored</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.utils.get_user_attrs">
 <tt class="descclassname">app.utils.</tt><tt class="descname">get_user_attrs</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#app.utils.get_user_attrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the attributes of an object
-:param object: the object to get attributes from
-:return: list of attributes</p>
+<dd><p>Return the attributes of an object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object</strong> &#8211; the object to get attributes from</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of attributes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.utils.is_primitive">
 <tt class="descclassname">app.utils.</tt><tt class="descname">is_primitive</tt><big>(</big><em>thing</em><big>)</big><a class="headerlink" href="#app.utils.is_primitive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether a object is of a primitive type or not
-:param thing: object to check if its type is primitive
-:return: True if it is primitive, else False</p>
+<dd><p>Check whether a object is of a primitive type or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>thing</strong> &#8211; object to check if its type is primitive</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if it is primitive, else False</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.utils.row2dict">
 <tt class="descclassname">app.utils.</tt><tt class="descname">row2dict</tt><big>(</big><em>row</em><big>)</big><a class="headerlink" href="#app.utils.row2dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a row of SQLAlchemy into a dictionary
-:see: <a class="reference external" href="http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict">http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict</a>
-:param row: SQLAlchemy row
-:return: dictionary</p>
+<dd><p>Converts a row of SQLAlchemy into a dictionary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">See:</th><td class="field-body"><a class="reference external" href="http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict">http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>row</strong> &#8211; SQLAlchemy row</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="module-app.views">
 <span id="app-views-module"></span><h2>app.views module<a class="headerlink" href="#module-app.views" title="Permalink to this headline">¶</a></h2>
-<p>Created on 03/02/2014</p>
+<p>Created on 03/02/2014
+This file includes all the URI implementation and calls</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -746,8 +1832,7 @@ with the majority of the daos</p>
 <dt id="app.views.AuthAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">AuthAPI</tt><a class="headerlink" href="#app.views.AuthAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Auth URI
-Methods: POST, PUT</p>
+<p>Auth URI</p>
 <dl class="attribute">
 <dt id="app.views.AuthAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'auth'</em><a class="headerlink" href="#app.views.AuthAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -779,8 +1864,7 @@ Methods: POST, PUT</p>
 <dt id="app.views.CountriesIndicatorAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountriesIndicatorAPI</tt><a class="headerlink" href="#app.views.CountriesIndicatorAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Countries Indicator element URI
-Methods: GET</p>
+<p>Countries Indicator element URI</p>
 <dl class="attribute">
 <dt id="app.views.CountriesIndicatorAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'countries_indicators'</em><a class="headerlink" href="#app.views.CountriesIndicatorAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -810,8 +1894,7 @@ Else Response 404 NOT FOUND</p>
 <dt id="app.views.CountriesIndicatorLastUpdateAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountriesIndicatorLastUpdateAPI</tt><a class="headerlink" href="#app.views.CountriesIndicatorLastUpdateAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>More recent indicators of a country collection URI
-Methods: GET</p>
+<p>More recent indicators of a country collection URI</p>
 <dl class="attribute">
 <dt id="app.views.CountriesIndicatorLastUpdateAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'countries_indicators_last_update'</em><a class="headerlink" href="#app.views.CountriesIndicatorLastUpdateAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -840,8 +1923,7 @@ Response 200 OK</p>
 <dt id="app.views.CountriesIndicatorListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountriesIndicatorListAPI</tt><a class="headerlink" href="#app.views.CountriesIndicatorListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Countries Indicator collection URI
-Methods: GET</p>
+<p>Countries Indicator collection URI</p>
 <dl class="attribute">
 <dt id="app.views.CountriesIndicatorListAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'countries_indicators_list'</em><a class="headerlink" href="#app.views.CountriesIndicatorListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -870,8 +1952,7 @@ Response 200 OK</p>
 <dt id="app.views.CountryAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountryAPI</tt><a class="headerlink" href="#app.views.CountryAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Countries element URI
-Methods: GET, PUT, DELETE</p>
+<p>Countries element URI</p>
 <dl class="method">
 <dt id="app.views.CountryAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -910,8 +1991,7 @@ Response 200 OK</p>
 <dt id="app.views.CountryListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">CountryListAPI</tt><a class="headerlink" href="#app.views.CountryListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Countries collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Countries collection URI</p>
 <dl class="method">
 <dt id="app.views.CountryListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.CountryListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -955,8 +2035,7 @@ Response 200 OK</p>
 <dt id="app.views.DataSourceAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceAPI</tt><a class="headerlink" href="#app.views.DataSourceAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Datasources element URI
-Methods: GET, PUT, DELETE</p>
+<p>Datasources element URI</p>
 <dl class="method">
 <dt id="app.views.DataSourceAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -995,8 +2074,7 @@ Response 200 OK</p>
 <dt id="app.views.DataSourceIndicatorAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceIndicatorAPI</tt><a class="headerlink" href="#app.views.DataSourceIndicatorAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Datasource Indicator element URI
-Methods: GET</p>
+<p>Datasource Indicator element URI</p>
 <dl class="attribute">
 <dt id="app.views.DataSourceIndicatorAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'datasources_indicators'</em><a class="headerlink" href="#app.views.DataSourceIndicatorAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1025,8 +2103,7 @@ Response 200 OK</p>
 <dt id="app.views.DataSourceIndicatorListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceIndicatorListAPI</tt><a class="headerlink" href="#app.views.DataSourceIndicatorListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>DataSource Indicator collection URI
-Methods: GET</p>
+<p>DataSource Indicator collection URI</p>
 <dl class="attribute">
 <dt id="app.views.DataSourceIndicatorListAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'datasources_indicators_list'</em><a class="headerlink" href="#app.views.DataSourceIndicatorListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1055,8 +2132,7 @@ Response 200 OK</p>
 <dt id="app.views.DataSourceListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DataSourceListAPI</tt><a class="headerlink" href="#app.views.DataSourceListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>DataSource collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>DataSource collection URI</p>
 <dl class="method">
 <dt id="app.views.DataSourceListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DataSourceListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1100,8 +2176,7 @@ Response 200 OK</p>
 <dt id="app.views.DatasetAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DatasetAPI</tt><a class="headerlink" href="#app.views.DatasetAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Dataset element URI
-Methods: GET, PUT, DELETE</p>
+<p>Dataset element URI</p>
 <dl class="method">
 <dt id="app.views.DatasetAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1140,8 +2215,7 @@ Response 200 OK</p>
 <dt id="app.views.DatasetListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DatasetListAPI</tt><a class="headerlink" href="#app.views.DatasetListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Dataset collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Dataset collection URI</p>
 <dl class="method">
 <dt id="app.views.DatasetListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DatasetListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1185,8 +2259,7 @@ Response 200 OK</p>
 <dt id="app.views.DeleteCacheAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">DeleteCacheAPI</tt><a class="headerlink" href="#app.views.DeleteCacheAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Delete cache URI
-Methods: DELETE</p>
+<p>Delete cache URI</p>
 <dl class="method">
 <dt id="app.views.DeleteCacheAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.DeleteCacheAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1219,8 +2292,7 @@ Methods: DELETE</p>
 <dt id="app.views.IndicatorAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorAPI</tt><a class="headerlink" href="#app.views.IndicatorAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicators element URI
-Methods: GET, PUT, DELETE</p>
+<p>Indicators element URI</p>
 <dl class="method">
 <dt id="app.views.IndicatorAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1259,8 +2331,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorAverageAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorAverageAPI</tt><a class="headerlink" href="#app.views.IndicatorAverageAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator average api
-Methods: GET</p>
+<p>Indicator average api</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorAverageAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_average'</em><a class="headerlink" href="#app.views.IndicatorAverageAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1289,8 +2360,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorAverageByPeriodAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorAverageByPeriodAPI</tt><a class="headerlink" href="#app.views.IndicatorAverageByPeriodAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Average of indicator observation by period range
-Methods: GET</p>
+<p>Average of indicator observation by period range</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorAverageByPeriodAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_average_by_period'</em><a class="headerlink" href="#app.views.IndicatorAverageByPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1321,8 +2391,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorByCountryAndPeriodAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorByCountryAndPeriodAPI</tt><a class="headerlink" href="#app.views.IndicatorByCountryAndPeriodAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Countries element URI
-Methods: GET, PUT, DELETE</p>
+<p>Countries element URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorByCountryAndPeriodAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_by_country_and_period'</em><a class="headerlink" href="#app.views.IndicatorByCountryAndPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1353,8 +2422,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorByPeriodAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorByPeriodAPI</tt><a class="headerlink" href="#app.views.IndicatorByPeriodAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator by period element URI
-Methods: GET</p>
+<p>Indicator by period element URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorByPeriodAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_by_period'</em><a class="headerlink" href="#app.views.IndicatorByPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1385,8 +2453,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorCompatibleAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorCompatibleAPI</tt><a class="headerlink" href="#app.views.IndicatorCompatibleAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator compatible api
-Methods: GET</p>
+<p>Indicator compatible api</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorCompatibleAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_compatible'</em><a class="headerlink" href="#app.views.IndicatorCompatibleAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1415,8 +2482,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorCountryTendencyAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorCountryTendencyAPI</tt><a class="headerlink" href="#app.views.IndicatorCountryTendencyAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator country tendency element URI
-Methods: GET</p>
+<p>Indicator country tendency element URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorCountryTendencyAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicator_country_tendency'</em><a class="headerlink" href="#app.views.IndicatorCountryTendencyAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1445,8 +2511,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorListAPI</tt><a class="headerlink" href="#app.views.IndicatorListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicators collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Indicators collection URI</p>
 <dl class="method">
 <dt id="app.views.IndicatorListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1490,8 +2555,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorRegionsWihtoutDataAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorRegionsWihtoutDataAPI</tt><a class="headerlink" href="#app.views.IndicatorRegionsWihtoutDataAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator regions without data element URI
-Methods: GET</p>
+<p>Indicator regions without data element URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorRegionsWihtoutDataAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_regions_without_data'</em><a class="headerlink" href="#app.views.IndicatorRegionsWihtoutDataAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1522,8 +2586,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorRegionsWithDataAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorRegionsWithDataAPI</tt><a class="headerlink" href="#app.views.IndicatorRegionsWithDataAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator by period element URI
-Methods: GET</p>
+<p>Indicator by period element URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorRegionsWithDataAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_regions_with_data'</em><a class="headerlink" href="#app.views.IndicatorRegionsWithDataAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1552,8 +2615,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorRelatedAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorRelatedAPI</tt><a class="headerlink" href="#app.views.IndicatorRelatedAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator related collection URI
-Methods: GET</p>
+<p>Indicator related collection URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorRelatedAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_related'</em><a class="headerlink" href="#app.views.IndicatorRelatedAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1582,8 +2644,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorStarredAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorStarredAPI</tt><a class="headerlink" href="#app.views.IndicatorStarredAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicators starred URI
-Methods: GET</p>
+<p>Indicators starred URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorStarredAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicator_starred'</em><a class="headerlink" href="#app.views.IndicatorStarredAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1612,8 +2673,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorTopAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorTopAPI</tt><a class="headerlink" href="#app.views.IndicatorTopAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicator top api
-Methods: GET</p>
+<p>Indicator top api</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorTopAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_top'</em><a class="headerlink" href="#app.views.IndicatorTopAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1642,8 +2702,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorTranslationAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorTranslationAPI</tt><a class="headerlink" href="#app.views.IndicatorTranslationAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicators translations element URI
-Methods: GET, PUT, DELETE</p>
+<p>Indicators translations element URI</p>
 <dl class="method">
 <dt id="app.views.IndicatorTranslationAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1682,8 +2741,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorTranslationListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorTranslationListAPI</tt><a class="headerlink" href="#app.views.IndicatorTranslationListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Indicators translations collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Indicators translations collection URI</p>
 <dl class="method">
 <dt id="app.views.IndicatorTranslationListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.IndicatorTranslationListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1727,8 +2785,7 @@ Response 200 OK</p>
 <dt id="app.views.IndicatorsCountryLastUpdateAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">IndicatorsCountryLastUpdateAPI</tt><a class="headerlink" href="#app.views.IndicatorsCountryLastUpdateAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>More recent indicator of a country element URI
-Methods: GET</p>
+<p>More recent indicator of a country element URI</p>
 <dl class="attribute">
 <dt id="app.views.IndicatorsCountryLastUpdateAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'indicators_countries_last_update'</em><a class="headerlink" href="#app.views.IndicatorsCountryLastUpdateAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1757,8 +2814,7 @@ Response 200 OK</p>
 <dt id="app.views.MeasurementUnitAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">MeasurementUnitAPI</tt><a class="headerlink" href="#app.views.MeasurementUnitAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Measurement unit element URI
-Methods: GET, PUT, DELETE</p>
+<p>Measurement unit element URI</p>
 <dl class="method">
 <dt id="app.views.MeasurementUnitAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1797,8 +2853,7 @@ Response 200 OK</p>
 <dt id="app.views.MeasurementUnitListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">MeasurementUnitListAPI</tt><a class="headerlink" href="#app.views.MeasurementUnitListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Measurement unit collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Measurement unit collection URI</p>
 <dl class="method">
 <dt id="app.views.MeasurementUnitListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.MeasurementUnitListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1842,8 +2897,7 @@ Response 200 OK</p>
 <dt id="app.views.ObservationAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationAPI</tt><a class="headerlink" href="#app.views.ObservationAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Observations element URI
-Methods: GET, PUT, DELETE</p>
+<p>Observations element URI</p>
 <dl class="method">
 <dt id="app.views.ObservationAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -1880,8 +2934,7 @@ Methods: GET, PUT, DELETE</p>
 <dt id="app.views.ObservationByCountryStarred">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByCountryStarred</tt><a class="headerlink" href="#app.views.ObservationByCountryStarred" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Observation by country and starred indicator collection URI
-Methods: GET</p>
+<p>Observation by country and starred indicator collection URI</p>
 <dl class="attribute">
 <dt id="app.views.ObservationByCountryStarred.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'observations_by_country_starred'</em><a class="headerlink" href="#app.views.ObservationByCountryStarred.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1891,8 +2944,15 @@ Methods: GET</p>
 <dt id="app.views.ObservationByCountryStarred.get">
 <tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationByCountryStarred.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show observations filtering by country and showed if the indicator is starred.
-:param iso3: iso3 of the country to filter
 Response 200 OK</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>iso3</strong> &#8211; iso3 of the country to filter</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1911,8 +2971,7 @@ Response 200 OK</p>
 <dt id="app.views.ObservationByPeriodAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByPeriodAPI</tt><a class="headerlink" href="#app.views.ObservationByPeriodAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Observations by period element URI
-Methods: GET, PUT, DELETE</p>
+<p>Observations by period element URI</p>
 <dl class="attribute">
 <dt id="app.views.ObservationByPeriodAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'observations_by_period'</em><a class="headerlink" href="#app.views.ObservationByPeriodAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1946,8 +3005,7 @@ Response 200 OK</p>
 <dt id="app.views.ObservationByTwoAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByTwoAPI</tt><a class="headerlink" href="#app.views.ObservationByTwoAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Observation by two collection URI
-Methods: GET</p>
+<p>Observation by two collection URI</p>
 <dl class="attribute">
 <dt id="app.views.ObservationByTwoAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'observations_by_two'</em><a class="headerlink" href="#app.views.ObservationByTwoAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -1996,8 +3054,7 @@ It could be one of three next:</p>
 <dt id="app.views.ObservationByTwoAverageAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationByTwoAverageAPI</tt><a class="headerlink" href="#app.views.ObservationByTwoAverageAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Observations by two average URI
-Methods: GET</p>
+<p>Observations by two average URI</p>
 <dl class="attribute">
 <dt id="app.views.ObservationByTwoAverageAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'observations_by_two_average'</em><a class="headerlink" href="#app.views.ObservationByTwoAverageAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2046,8 +3103,7 @@ It could be one of three next:</p>
 <dt id="app.views.ObservationListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ObservationListAPI</tt><a class="headerlink" href="#app.views.ObservationListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Observations collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Observations collection URI</p>
 <dl class="method">
 <dt id="app.views.ObservationListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2089,8 +3145,7 @@ Methods: GET, POST, PUT, DELETE</p>
 <dt id="app.views.OrganizationAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationAPI</tt><a class="headerlink" href="#app.views.OrganizationAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Organizations element URI
-Methods: GET, PUT, DELETE</p>
+<p>Organizations element URI</p>
 <dl class="method">
 <dt id="app.views.OrganizationAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2129,8 +3184,7 @@ Response 200 OK</p>
 <dt id="app.views.OrganizationListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationListAPI</tt><a class="headerlink" href="#app.views.OrganizationListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Organizations collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Organizations collection URI</p>
 <dl class="method">
 <dt id="app.views.OrganizationListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.OrganizationListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2174,8 +3228,7 @@ Response 200 OK</p>
 <dt id="app.views.OrganizationUserAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationUserAPI</tt><a class="headerlink" href="#app.views.OrganizationUserAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Organizations users element URI
-Methods: GET</p>
+<p>Organizations users element URI</p>
 <dl class="attribute">
 <dt id="app.views.OrganizationUserAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'organizations_users'</em><a class="headerlink" href="#app.views.OrganizationUserAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2205,8 +3258,7 @@ Else Response 404 NOT FOUND</p>
 <dt id="app.views.OrganizationUserListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">OrganizationUserListAPI</tt><a class="headerlink" href="#app.views.OrganizationUserListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Organizations users collection URI
-Methods: GET</p>
+<p>Organizations users collection URI</p>
 <dl class="attribute">
 <dt id="app.views.OrganizationUserListAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'organizations_users_list'</em><a class="headerlink" href="#app.views.OrganizationUserListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2235,8 +3287,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionAPI</tt><a class="headerlink" href="#app.views.RegionAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Regions element URI
-Methods: GET, PUT, DELETE</p>
+<p>Regions element URI</p>
 <dl class="method">
 <dt id="app.views.RegionAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2275,8 +3326,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionCountriesWithDataAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionCountriesWithDataAPI</tt><a class="headerlink" href="#app.views.RegionCountriesWithDataAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Countries with data by region element URI
-Methods: GET</p>
+<p>Countries with data by region element URI</p>
 <dl class="attribute">
 <dt id="app.views.RegionCountriesWithDataAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'regions_countries_with_data'</em><a class="headerlink" href="#app.views.RegionCountriesWithDataAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2305,8 +3355,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionListAPI</tt><a class="headerlink" href="#app.views.RegionListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Regions collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Regions collection URI</p>
 <dl class="method">
 <dt id="app.views.RegionListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2350,8 +3399,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionTranslationAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionTranslationAPI</tt><a class="headerlink" href="#app.views.RegionTranslationAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Region translation element URI
-Methods: GET, PUT, DELETE</p>
+<p>Region translation element URI</p>
 <dl class="method">
 <dt id="app.views.RegionTranslationAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2390,8 +3438,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionTranslationListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionTranslationListAPI</tt><a class="headerlink" href="#app.views.RegionTranslationListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Region translation collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Region translation collection URI</p>
 <dl class="method">
 <dt id="app.views.RegionTranslationListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.RegionTranslationListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2435,8 +3482,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionsCountryAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionsCountryAPI</tt><a class="headerlink" href="#app.views.RegionsCountryAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Countries Indicator element URI
-Methods: GET</p>
+<p>Countries Indicator element URI</p>
 <dl class="attribute">
 <dt id="app.views.RegionsCountryAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'regions_countries'</em><a class="headerlink" href="#app.views.RegionsCountryAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2465,8 +3511,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionsCountryListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionsCountryListAPI</tt><a class="headerlink" href="#app.views.RegionsCountryListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Regions Country collection URI
-Methods: GET</p>
+<p>Regions Country collection URI</p>
 <dl class="attribute">
 <dt id="app.views.RegionsCountryListAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'regions_countries_list'</em><a class="headerlink" href="#app.views.RegionsCountryListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2495,8 +3540,7 @@ Response 200 OK</p>
 <dt id="app.views.RegionsRegionListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">RegionsRegionListAPI</tt><a class="headerlink" href="#app.views.RegionsRegionListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Regions Region collection URI
-Methods: GET</p>
+<p>Regions Region collection URI</p>
 <dl class="attribute">
 <dt id="app.views.RegionsRegionListAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'regions_regions_list'</em><a class="headerlink" href="#app.views.RegionsRegionListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2525,8 +3569,7 @@ Response 200 OK</p>
 <dt id="app.views.TopicAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicAPI</tt><a class="headerlink" href="#app.views.TopicAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Topic element URI
-Methods: GET, PUT, DELETE</p>
+<p>Topic element URI</p>
 <dl class="method">
 <dt id="app.views.TopicAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2565,8 +3608,7 @@ Response 200 OK</p>
 <dt id="app.views.TopicIndicatorAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicIndicatorAPI</tt><a class="headerlink" href="#app.views.TopicIndicatorAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Topics Indicator element URI
-Methods: GET</p>
+<p>Topics Indicator element URI</p>
 <dl class="attribute">
 <dt id="app.views.TopicIndicatorAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'topics_indicators'</em><a class="headerlink" href="#app.views.TopicIndicatorAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2595,8 +3637,7 @@ Response 200 OK</p>
 <dt id="app.views.TopicIndicatorListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicIndicatorListAPI</tt><a class="headerlink" href="#app.views.TopicIndicatorListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Topics Indicator collection URI
-Methods: GET</p>
+<p>Topics Indicator collection URI</p>
 <dl class="attribute">
 <dt id="app.views.TopicIndicatorListAPI.endpoint">
 <tt class="descname">endpoint</tt><em class="property"> = 'topics_indicators_list'</em><a class="headerlink" href="#app.views.TopicIndicatorListAPI.endpoint" title="Permalink to this definition">¶</a></dt>
@@ -2625,8 +3666,7 @@ Response 200 OK</p>
 <dt id="app.views.TopicListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicListAPI</tt><a class="headerlink" href="#app.views.TopicListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Topic collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Topic collection URI</p>
 <dl class="method">
 <dt id="app.views.TopicListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2670,8 +3710,7 @@ Response 200 OK</p>
 <dt id="app.views.TopicTranslationAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicTranslationAPI</tt><a class="headerlink" href="#app.views.TopicTranslationAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Topic translations element URI
-Methods: GET, PUT, DELETE</p>
+<p>Topic translations element URI</p>
 <dl class="method">
 <dt id="app.views.TopicTranslationAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2710,8 +3749,7 @@ Response 200 OK</p>
 <dt id="app.views.TopicTranslationListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">TopicTranslationListAPI</tt><a class="headerlink" href="#app.views.TopicTranslationListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Topic translations collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Topic translations collection URI</p>
 <dl class="method">
 <dt id="app.views.TopicTranslationListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.TopicTranslationListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2755,8 +3793,7 @@ Response 200 OK</p>
 <dt id="app.views.UserAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">UserAPI</tt><a class="headerlink" href="#app.views.UserAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Users element URI
-Methods: GET, PUT, DELETE</p>
+<p>Users element URI</p>
 <dl class="method">
 <dt id="app.views.UserAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2795,8 +3832,7 @@ Response 200 OK</p>
 <dt id="app.views.UserListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">UserListAPI</tt><a class="headerlink" href="#app.views.UserListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Users collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Users collection URI</p>
 <dl class="method">
 <dt id="app.views.UserListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.UserListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2840,8 +3876,7 @@ Response 200 OK</p>
 <dt id="app.views.ValueAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ValueAPI</tt><a class="headerlink" href="#app.views.ValueAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Value element URI
-Methods: GET, PUT, DELETE</p>
+<p>Value element URI</p>
 <dl class="method">
 <dt id="app.views.ValueAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2880,8 +3915,7 @@ Response 200 OK</p>
 <dt id="app.views.ValueListAPI">
 <em class="property">class </em><tt class="descclassname">app.views.</tt><tt class="descname">ValueListAPI</tt><a class="headerlink" href="#app.views.ValueListAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></tt></p>
-<p>Value collection URI
-Methods: GET, POST, PUT, DELETE</p>
+<p>Value collection URI</p>
 <dl class="method">
 <dt id="app.views.ValueListAPI.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueListAPI.delete" title="Permalink to this definition">¶</a></dt>
@@ -2895,9 +3929,7 @@ Methods: GET, POST, PUT, DELETE</p>
 <dl class="method">
 <dt id="app.views.ValueListAPI.get">
 <tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ValueListAPI.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>List all values
-Response 200 OK</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="app.views.ValueListAPI.mediatypes">
@@ -2949,26 +3981,53 @@ password combination is valid.</p>
 <dl class="function">
 <dt id="app.views.filter_by_region_and_top">
 <tt class="descclassname">app.views.</tt><tt class="descname">filter_by_region_and_top</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.views.filter_by_region_and_top" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter by region and a top given
-:return: countries top and top observations</p>
+<dd><p>Filter by region and a top given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">countries top and top observations</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.filter_observations_by_date_range">
 <tt class="descclassname">app.views.</tt><tt class="descname">filter_observations_by_date_range</tt><big>(</big><em>observations</em>, <em>from_date=None</em>, <em>to_date=None</em><big>)</big><a class="headerlink" href="#app.views.filter_observations_by_date_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filters observations by a given date range
-:param observations: list of observations to filter
-:param from_date: beginning of the date range
-:param to_date: end of the date range
-:return: filtered list of observations</p>
+<dd><p>Filters observations by a given date range</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>observations</strong> &#8211; list of observations to filter</li>
+<li><strong>from_date</strong> &#8211; beginning of the date range</li>
+<li><strong>to_date</strong> &#8211; end of the date range</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">filtered list of observations</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.get_intervals">
 <tt class="descclassname">app.views.</tt><tt class="descname">get_intervals</tt><big>(</big><em>times</em><big>)</big><a class="headerlink" href="#app.views.get_intervals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return intervals to xAxis on the graphic
-:param times: times collection
-:return: times in the format of the graphic</p>
+<dd><p>Return intervals to xAxis on the graphic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>times</strong> &#8211; times collection</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">times in the format of the graphic</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3003,33 +4062,68 @@ It could be one of three next:</p>
 <dl class="function">
 <dt id="app.views.get_regions_of_region">
 <tt class="descclassname">app.views.</tt><tt class="descname">get_regions_of_region</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.views.get_regions_of_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the regions that belong to another region
-:param id: id of the region
-:return: list of regions</p>
+<dd><p>Returns the regions that belong to another region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> &#8211; id of the region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of regions</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.get_regions_with_data">
 <tt class="descclassname">app.views.</tt><tt class="descname">get_regions_with_data</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.views.get_regions_with_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return all the regions with data for a given indicator
-:param id: id of the given indicator
-:return: list of regions with data</p>
+<dd><p>Return all the regions with data for a given indicator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> &#8211; id of the given indicator</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of regions with data</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.get_requested_lang">
 <tt class="descclassname">app.views.</tt><tt class="descname">get_requested_lang</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.get_requested_lang" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the lang request
-:return: language requested by the client if not given <em>en</em> as default</p>
+<dd><p>Returns the lang request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">language requested by the client if not given <em>en</em> as default</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.get_visualization_json">
 <tt class="descclassname">app.views.</tt><tt class="descname">get_visualization_json</tt><big>(</big><em>request</em>, <em>chartType</em><big>)</big><a class="headerlink" href="#app.views.get_visualization_json" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create json object through a dict by request parameters given
-:param request: request object from the client
-:param chartType: type of chart to be showed
-:return: json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic</p>
+<dd><p>Create json object through a dict by request parameters given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; request object from the client</li>
+<li><strong>chartType</strong> &#8211; type of chart to be showed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3041,22 +4135,43 @@ It could be one of three next:</p>
 <dl class="function">
 <dt id="app.views.is_csv_accepted">
 <tt class="descclassname">app.views.</tt><tt class="descname">is_csv_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#app.views.is_csv_accepted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns if csv is accepted or not
-:return: True if csv is accepted, False otherwise</p>
+<dd><p>Returns if csv is accepted or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if csv is accepted, False otherwise</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.is_jsonp_accepted">
 <tt class="descclassname">app.views.</tt><tt class="descname">is_jsonp_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#app.views.is_jsonp_accepted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns if jsonp is accepted or not
-:return: True if jsonp is accepted, False otherwise</p>
+<dd><p>Returns if jsonp is accepted or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if jsonp is accepted, False otherwise</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.is_xml_accepted">
 <tt class="descclassname">app.views.</tt><tt class="descname">is_xml_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#app.views.is_xml_accepted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns if xml is accepted or not
-:return: True if xml is accepted, False otherwise</p>
+<dd><p>Returns if xml is accepted or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if xml is accepted, False otherwise</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3076,16 +4191,31 @@ it will return a 403 FORBIDDEN error code</p>
 <dt id="app.views.make_cache_key">
 <tt class="descclassname">app.views.</tt><tt class="descname">make_cache_key</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.make_cache_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function that allows creating a unique id for every request
-There was a problem caching and changing arguments of the URL, so this is one possible solution
-:see: <a class="reference external" href="http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well">http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well</a></p>
+There was a problem caching and changing arguments of the URL, so this is one possible solution</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">See:</th><td class="field-body"><a class="reference external" href="http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well">http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.observations_average">
 <tt class="descclassname">app.views.</tt><tt class="descname">observations_average</tt><big>(</big><em>observations</em><big>)</big><a class="headerlink" href="#app.views.observations_average" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the average of observations values
-:param observations: observations to calculate the average
-:return: average</p>
+<dd><p>Returns the average of observations values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>observations</strong> &#8211; observations to calculate the average</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">average</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3108,10 +4238,20 @@ There was a problem caching and changing arguments of the URL, so this is one po
 <dl class="function">
 <dt id="app.views.response_graphics">
 <tt class="descclassname">app.views.</tt><tt class="descname">response_graphics</tt><big>(</big><em>options</em>, <em>title</em>, <em>description</em><big>)</big><a class="headerlink" href="#app.views.response_graphics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reponses with a page containing the requested graphic
-:param options: options dict
-:param title: title for the graphic
-:param description: description for the graphic</p>
+<dd><p>Reponses with a page containing the requested graphic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> &#8211; options dict</li>
+<li><strong>title</strong> &#8211; title for the graphic</li>
+<li><strong>description</strong> &#8211; description for the graphic</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3122,11 +4262,23 @@ Available formats:
 * JSON
 * XML
 * JSONP
-* CSV
-:param request: the request object
-:param item: the object to be converted
-:param item_string: the string text to show in the root node, only needed for xml
-:return: response in the requested format</p>
+* CSV</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; the request object</li>
+<li><strong>item</strong> &#8211; the object to be converted</li>
+<li><strong>item_string</strong> &#8211; the string text to show in the root node, only needed for xml</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">response in the requested format</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3137,12 +4289,24 @@ Available formats:
 * JSON
 * XML
 * JSONP
-* CSV
-:param request: the request object
-:param collection: the collection to be converted
-:param collection_string: the string text to show in the root node, only needed for xml
-:param item_string: the string in the root node of the object, only needed for xml
-:return: response in the requested format</p>
+* CSV</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>request</strong> &#8211; the request object</li>
+<li><strong>collection</strong> &#8211; the collection to be converted</li>
+<li><strong>collection_string</strong> &#8211; the string text to show in the root node, only needed for xml</li>
+<li><strong>item_string</strong> &#8211; the string in the root node of the object, only needed for xml</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">response in the requested format</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3155,10 +4319,22 @@ Available formats:
 <dt id="app.views.str_date_to_date">
 <tt class="descclassname">app.views.</tt><tt class="descname">str_date_to_date</tt><big>(</big><em>date_from</em>, <em>date_to</em><big>)</big><a class="headerlink" href="#app.views.str_date_to_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert two dates in str format to date object
-Format: YYYYMMDD
-:param date_from: beginning of the interval
-:param date_to: end of the interval
-:return: from_date and to_date equivalent of given in date objects</p>
+Format: YYYYMMDD</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>date_from</strong> &#8211; beginning of the interval</li>
+<li><strong>date_to</strong> &#8211; end of the interval</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">from_date and to_date equivalent of given in date objects</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -3170,52 +4346,104 @@ Format: YYYYMMDD
 <dl class="function">
 <dt id="app.views.translate_indicator">
 <tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator</tt><big>(</big><em>indicator</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translate an indicator object into given language
-:param indicator: indicator object to be translated
-:param lang: language of translation, by default en</p>
+<dd><p>Translate an indicator object into given language</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>indicator</strong> &#8211; indicator object to be translated</li>
+<li><strong>lang</strong> &#8211; language of translation, by default en</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.translate_indicator_list">
 <tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator_list</tt><big>(</big><em>indicators</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translate an indicator list into given language
-:param indicators: list of indicators to be translated</p>
+<dd><p>Translate an indicator list into given language</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>indicators</strong> &#8211; list of indicators to be translated</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.translate_region">
 <tt class="descclassname">app.views.</tt><tt class="descname">translate_region</tt><big>(</big><em>region</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translate a region object into given language
-:param region: region object to be translated
-:param lang: language of translation, by default en</p>
+<dd><p>Translate a region object into given language</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>region</strong> &#8211; region object to be translated</li>
+<li><strong>lang</strong> &#8211; language of translation, by default en</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.translate_region_list">
 <tt class="descclassname">app.views.</tt><tt class="descname">translate_region_list</tt><big>(</big><em>regions</em><big>)</big><a class="headerlink" href="#app.views.translate_region_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translate a region list into given language
-:param regions: list of regions to be translated</p>
+<dd><p>Translate a region list into given language</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>regions</strong> &#8211; list of regions to be translated</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.translate_topic">
 <tt class="descclassname">app.views.</tt><tt class="descname">translate_topic</tt><big>(</big><em>topic</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_topic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translate a topic object into given language
-:param topic: topic object to be translated
-:param lang: language of translation, by default en</p>
+<dd><p>Translate a topic object into given language</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>topic</strong> &#8211; topic object to be translated</li>
+<li><strong>lang</strong> &#8211; language of translation, by default en</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.views.translate_topic_list">
 <tt class="descclassname">app.views.</tt><tt class="descname">translate_topic_list</tt><big>(</big><em>topics</em><big>)</big><a class="headerlink" href="#app.views.translate_topic_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translate a topic list into given language
-:param topics: list of topics to be translated</p>
+<dd><p>Translate a topic list into given language</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topics</strong> &#8211; list of topics to be translated</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="module-app">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app" title="Permalink to this headline">¶</a></h2>
-<p>Created on 03/02/2014</p>
+<p>Created on 03/02/2014
+This file make the setup configuration for the Flask-Server</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
