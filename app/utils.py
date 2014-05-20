@@ -1,5 +1,6 @@
 """
 Created on 03/02/2014
+This file includes some util features like marshalling
 
 :author: Weso
 """
@@ -13,10 +14,10 @@ class JSONConverter(object):
     """
     JSON converter from objects and list
     """
-    
     def list_to_json(self, elements_list):
         """
         Convert a list to its json equivalent
+
         :param elements_list: list of elements to be converted
         :return: json array ready be returned as string
         """
@@ -31,6 +32,7 @@ class JSONConverter(object):
     def object_to_json(self, element):
         """
         Convert a object to its json equivalent
+
         :param element: element to be converted
         :return: json object in string format
         """
@@ -51,6 +53,7 @@ class XMLConverter(object):
     def list_to_xml(self, elements_list, root_node="elements", child_node="element"):
         """
         Convert a list to its XML equivalent
+
         :param elements_list: list of elements to be converted
         :param root_node: name for the root tag in the xml, by default *elements*
         :param child_node: name for object tag in every element of the list, by default *element*
@@ -65,6 +68,7 @@ class XMLConverter(object):
     def object_to_xml(self, element, root_node="element"):
         """
         Convert a object to its XML equivalent
+
         :param element: element to be converted
         :param root_node: name for root tag on xml, by default *element*
         :return: Xml string
@@ -84,6 +88,7 @@ class CSVConverter(object):
     def list_to_csv(self, elements_list):
         """
         Convert a list to its csv equivalent
+
         :param elements_list: collection to be converted
         :return: csv string
         """
@@ -97,6 +102,7 @@ class CSVConverter(object):
     def object_to_csv(self, element, header=True, keys=None):
         """
         Convert a object to its csv equivalent
+
         :param element: object to be converted
         :param header: True if headers are desired, False if not, by default True
         :param keys: Header keys to use if method used by list_to_csv, default None
@@ -124,6 +130,7 @@ class CSVConverter(object):
 class Struct(object):
     """
     Class to convert from dictionary to object
+
     :see: http://stackoverflow.com/questions/1305532/convert-python-dict-to-object/1305663#1305663
     """
     def __init__(self, **entries): 
@@ -137,6 +144,7 @@ class DictionaryList2ObjectList(object):
     def convert(self, given_list):
         """
         Convert a list of dictionaries in a list of objects
+
         :param given_list: list of dictionaries
         :return: list of object
         """
@@ -149,6 +157,7 @@ class DictionaryList2ObjectList(object):
 def check_if_date(field_name, object, row):
     """
     Convert a date field into long format
+
     :param field_name: name of the field where the date is
     :param object: object to store the date in long format
     :param row: object, usually a SQLAlchemy row where field is stored
@@ -162,6 +171,7 @@ def check_if_date(field_name, object, row):
 def row2dict(row):
     """
     Converts a row of SQLAlchemy into a dictionary
+
     :see: http://stackoverflow.com/questions/1958219/convert-sqlalchemy-row-object-to-python-dict
     :param row: SQLAlchemy row
     :return: dictionary
@@ -189,6 +199,7 @@ def row2dict(row):
 def get_user_attrs(object):
     """
     Return the attributes of an object
+
     :param object: the object to get attributes from
     :return: list of attributes
     """
@@ -200,6 +211,7 @@ def get_user_attrs(object):
 def is_primitive(thing):
     """
     Check whether a object is of a primitive type or not
+
     :param thing: object to check if its type is primitive
     :return: True if it is primitive, else False
     """

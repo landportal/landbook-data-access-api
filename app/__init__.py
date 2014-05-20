@@ -1,5 +1,6 @@
 """
 Created on 03/02/2014
+This file make the setup configuration for the Flask-Server
 
 :author: Weso
 """

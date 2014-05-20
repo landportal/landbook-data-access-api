@@ -1,5 +1,6 @@
 """
 Created on 03/02/2014
+This file includes all the URI implementation and calls
 
 :author: Weso
 """
@@ -92,6 +93,7 @@ def make_cache_key(*args, **kwargs):
     """
     Function that allows creating a unique id for every request
     There was a problem caching and changing arguments of the URL, so this is one possible solution
+
     :see: http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well
     """
     return request.url
@@ -100,7 +102,6 @@ def make_cache_key(*args, **kwargs):
 class CountryListAPI(Resource):
     """
     Countries collection URI
-    Methods: GET, POST, PUT, DELETE
     """
     @requires_auth
     @cache.cached(key_prefix=make_cache_key)
@@ -118,6 +119,7 @@ class CountryListAPI(Resource):
         """
         Create a new country
         Response 201 CREATED
+
         :return: URI
         """
         country = Country(request.json.get("iso2"), request.json.get("iso3"), request.json.get("faoURI"))
@@ -144,6 +146,7 @@ class CountryListAPI(Resource):
         """
         Delete all countries
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all countries will be destroyed
         """
         country_service.delete_all()
@@ -153,7 +156,6 @@ class CountryListAPI(Resource):
 class CountryAPI(Resource):
     """
     Countries element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -206,7 +208,6 @@ class CountryAPI(Resource):
 class IndicatorListAPI(Resource):
     """
     Indicators collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -225,6 +226,7 @@ class IndicatorListAPI(Resource):
         """
         Create a new indicator
         Response 201 CREATED
+
         :return: URI
         """
         indicator = Indicator(request.json.get("id"), request.json.get("preferable_tendency"),
@@ -256,6 +258,7 @@ class IndicatorListAPI(Resource):
         """
         Delete all indicators
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all indicators will be destroyed
         """
         indicator_service.delete_all()
@@ -265,7 +268,6 @@ class IndicatorListAPI(Resource):
 class IndicatorAPI(Resource):
     """
     Indicators element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -314,7 +316,6 @@ class IndicatorAPI(Resource):
 class IndicatorTopAPI(Resource):
     """
     Indicator top api
-    Methods: GET
     """
 
     @requires_auth
@@ -337,7 +338,6 @@ class IndicatorTopAPI(Resource):
 class IndicatorAverageAPI(Resource):
     """
     Indicator average api
-    Methods: GET
     """
 
     @requires_auth
@@ -356,7 +356,6 @@ class IndicatorAverageAPI(Resource):
 class IndicatorCompatibleAPI(Resource):
     """
     Indicator compatible api
-    Methods: GET
     """
 
     @requires_auth
@@ -378,7 +377,6 @@ class IndicatorCompatibleAPI(Resource):
 class IndicatorStarredAPI(Resource):
     """
     Indicators starred URI
-    Methods: GET
     """
 
     @requires_auth
@@ -396,7 +394,6 @@ class IndicatorStarredAPI(Resource):
 class UserListAPI(Resource):
     """
     Users collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -413,6 +410,7 @@ class UserListAPI(Resource):
         """
         Create a new user
         Response 201 CREATED
+
         :return: URI
         """
         user = User(request.json.get("id"), request.json.get("ip"),
@@ -438,6 +436,7 @@ class UserListAPI(Resource):
         """
         Delete all users
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all users will be destroyed
         """
         user_service.delete_all()
@@ -447,7 +446,6 @@ class UserListAPI(Resource):
 class UserAPI(Resource):
     """
     Users element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -494,7 +492,6 @@ class UserAPI(Resource):
 class OrganizationListAPI(Resource):
     """
     Organizations collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -511,6 +508,7 @@ class OrganizationListAPI(Resource):
         """
         Create a new organization
         Response 201 CREATED
+
         :return: URI
         """
         organization = Organization(request.json.get("id"), request.json.get("name"))
@@ -537,7 +535,8 @@ class OrganizationListAPI(Resource):
         """
         Delete all organizations
         Response 204 NO CONTENT
-        @attention: Take care of what you do, all organizations will be destroyed
+
+        :attention: Take care of what you do, all organizations will be destroyed
         """
         organization_service.delete_all()
         return {}, 204
@@ -546,7 +545,6 @@ class OrganizationListAPI(Resource):
 class OrganizationAPI(Resource):
     """
     Organizations element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -593,7 +591,6 @@ class OrganizationAPI(Resource):
 class OrganizationUserListAPI(Resource):
     """
     Organizations users collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -609,7 +606,6 @@ class OrganizationUserListAPI(Resource):
 class OrganizationUserAPI(Resource):
     """
     Organizations users element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -632,7 +628,6 @@ class OrganizationUserAPI(Resource):
 class CountriesIndicatorListAPI(Resource):
     """
     Countries Indicator collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -650,7 +645,6 @@ class CountriesIndicatorListAPI(Resource):
 class CountriesIndicatorAPI(Resource):
     """
     Countries Indicator element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -671,7 +665,6 @@ class CountriesIndicatorAPI(Resource):
 class ObservationListAPI(Resource):
     """
     Observations collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @localhost_decorator
@@ -721,6 +714,7 @@ class ObservationListAPI(Resource):
         """
         Delete all observations
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all observations will be destroyed
         """
         observation_service.delete_all()
@@ -730,7 +724,6 @@ class ObservationListAPI(Resource):
 class ObservationAPI(Resource):
     """
     Observations element URI
-    Methods: GET, PUT, DELETE
     """
 
     @localhost_decorator
@@ -798,7 +791,6 @@ class ObservationAPI(Resource):
 class RegionListAPI(Resource):
     """
     Regions collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -817,6 +809,7 @@ class RegionListAPI(Resource):
         """
         Create a new region
         Response 201 CREATED
+
         :return: URI
         """
         region = Region()
@@ -845,6 +838,7 @@ class RegionListAPI(Resource):
         """
         Delete all regions
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all regions will be destroyed
         """
         region_service.delete_all()
@@ -854,7 +848,6 @@ class RegionListAPI(Resource):
 class RegionAPI(Resource):
     """
     Regions element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -899,7 +892,6 @@ class RegionAPI(Resource):
 class RegionsCountryListAPI(Resource):
     """
     Regions Country collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -917,7 +909,6 @@ class RegionsCountryListAPI(Resource):
 class RegionsRegionListAPI(Resource):
     """
     Regions Region collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -934,7 +925,6 @@ class RegionsRegionListAPI(Resource):
 class RegionsCountryAPI(Resource):
     """
     Countries Indicator element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -954,7 +944,6 @@ class RegionsCountryAPI(Resource):
 class DataSourceListAPI(Resource):
     """
     DataSource collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -971,6 +960,7 @@ class DataSourceListAPI(Resource):
         """
         Create a new datasource
         Response 201 CREATED
+
         :return: URI
         """
         datasource = DataSource(request.json.get("name"))
@@ -997,6 +987,7 @@ class DataSourceListAPI(Resource):
         """
         Delete all datasources
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all datasources will be destroyed
         """
         datasource_service.delete_all()
@@ -1006,7 +997,6 @@ class DataSourceListAPI(Resource):
 class DataSourceAPI(Resource):
     """
     Datasources element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -1052,7 +1042,6 @@ class DataSourceAPI(Resource):
 class DatasetListAPI(Resource):
     """
     Dataset collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -1069,6 +1058,7 @@ class DatasetListAPI(Resource):
         """
         Create a new dataset
         Response 201 CREATED
+
         :return: URI
         """
         dataset = Dataset(request.json.get("id"))
@@ -1097,6 +1087,7 @@ class DatasetListAPI(Resource):
         """
         Delete all datasets
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all datasets will be destroyed
         """
         dataset_service.delete_all()
@@ -1106,7 +1097,6 @@ class DatasetListAPI(Resource):
 class DatasetAPI(Resource):
     """
     Dataset element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -1151,7 +1141,6 @@ class DatasetAPI(Resource):
 class DataSourceIndicatorListAPI(Resource):
     """
     DataSource Indicator collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1169,7 +1158,6 @@ class DataSourceIndicatorListAPI(Resource):
 class DataSourceIndicatorAPI(Resource):
     """
     Datasource Indicator element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1194,7 +1182,6 @@ class DataSourceIndicatorAPI(Resource):
 class ObservationByTwoAPI(Resource):
     """
     Observation by two collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1206,6 +1193,7 @@ class ObservationByTwoAPI(Resource):
          * Indicator id and country iso3
          * Country iso3 and indicator id
          * Region un_code and indicator id
+
         :param id_first_filter: first filter
         :param id_second_filter: second filter
         Response 200 OK
@@ -1220,7 +1208,6 @@ class ObservationByTwoAPI(Resource):
 class ObservationByCountryStarred(Resource):
     """
     Observation by country and starred indicator collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1228,8 +1215,9 @@ class ObservationByCountryStarred(Resource):
     def get(self, iso3):
         """
         Show observations filtering by country and showed if the indicator is starred.
-        :param iso3: iso3 of the country to filter
         Response 200 OK
+
+        :param iso3: iso3 of the country to filter
         """
         country = country_service.get_by_code(iso3)
         translate_region(country)
@@ -1251,7 +1239,6 @@ class ObservationByCountryStarred(Resource):
 class ObservationByTwoAverageAPI(Resource):
     """
     Observations by two average URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1263,6 +1250,7 @@ class ObservationByTwoAverageAPI(Resource):
          * Indicator id and country iso3
          * Country iso3 and indicator id
          * Region un_code and indicator id
+
         :param id_first_filter: first filter
         :param id_second_filter: second filter
         Response 200 OK
@@ -1297,6 +1285,7 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
      * Indicator id and country iso3
      * Country iso3 and indicator id
      * Region un_code and indicator id
+
     :param id_first_filter: id of the first filter
     :param id_second_filter: id of the second filter
     :return: Filtered observations
@@ -1362,7 +1351,6 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
 class ValueListAPI(Resource):
     """
     Value collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @localhost_decorator
@@ -1379,6 +1367,7 @@ class ValueListAPI(Resource):
         """
         Create a new value
         Response 201 CREATED
+
         :return: URI
         """
         value = Value()
@@ -1407,6 +1396,7 @@ class ValueListAPI(Resource):
         """
         Delete all value
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all values will be destroyed
         """
         value_service.delete_all()
@@ -1416,7 +1406,6 @@ class ValueListAPI(Resource):
 class ValueAPI(Resource):
     """
     Value element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -1462,7 +1451,6 @@ class ValueAPI(Resource):
 class TopicListAPI(Resource):
     """
     Topic collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -1481,6 +1469,7 @@ class TopicListAPI(Resource):
         """
         Create a new topic
         Response 201 CREATED
+
         :return: URI
         """
         topic = Topic(request.json.get("id"))
@@ -1505,6 +1494,7 @@ class TopicListAPI(Resource):
         """
         Delete all topics
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all topic will be destroyed
         """
         topic_service.delete_all()
@@ -1514,7 +1504,6 @@ class TopicListAPI(Resource):
 class TopicAPI(Resource):
     """
     Topic element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -1559,7 +1548,6 @@ class TopicAPI(Resource):
 class MeasurementUnitListAPI(Resource):
     """
     Measurement unit collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -1577,6 +1565,7 @@ class MeasurementUnitListAPI(Resource):
         """
         Create a new measurement_unit
         Response 201 CREATED
+
         :return: URI
         """
         measurement_unit = MeasurementUnit(request.json.get('id'), request.json.get('name'),
@@ -1602,6 +1591,7 @@ class MeasurementUnitListAPI(Resource):
         """
         Delete all measurement_untis
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all measurement_units will be destroyed
         """
         measurement_unit_service.delete_all()
@@ -1611,7 +1601,6 @@ class MeasurementUnitListAPI(Resource):
 class MeasurementUnitAPI(Resource):
     """
     Measurement unit element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -1657,7 +1646,6 @@ class MeasurementUnitAPI(Resource):
 class TopicIndicatorListAPI(Resource):
     """
     Topics Indicator collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1675,7 +1663,6 @@ class TopicIndicatorListAPI(Resource):
 class TopicIndicatorAPI(Resource):
     """
     Topics Indicator element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1698,7 +1685,6 @@ class TopicIndicatorAPI(Resource):
 class RegionCountriesWithDataAPI(Resource):
     """
     Countries with data by region element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1716,7 +1702,6 @@ class RegionCountriesWithDataAPI(Resource):
 class CountriesIndicatorLastUpdateAPI(Resource):
     """
     More recent indicators of a country collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1736,7 +1721,6 @@ class CountriesIndicatorLastUpdateAPI(Resource):
 class IndicatorsCountryLastUpdateAPI(Resource):
     """
     More recent indicator of a country element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1756,7 +1740,6 @@ class IndicatorsCountryLastUpdateAPI(Resource):
 class ObservationByPeriodAPI(Resource):
     """
     Observations by period element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -1803,7 +1786,6 @@ class ObservationByPeriodAPI(Resource):
 class IndicatorByPeriodAPI(Resource):
     """
     Indicator by period element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1830,7 +1812,6 @@ class IndicatorByPeriodAPI(Resource):
 class IndicatorRegionsWithDataAPI(Resource):
     """
     Indicator by period element URI
-    Methods: GET
     """
     @requires_auth
     @cache.cached(key_prefix=make_cache_key)
@@ -1849,7 +1830,6 @@ class IndicatorRegionsWithDataAPI(Resource):
 class IndicatorRegionsWihtoutDataAPI(Resource):
     """
     Indicator regions without data element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1876,7 +1856,6 @@ class IndicatorRegionsWihtoutDataAPI(Resource):
 class IndicatorByCountryAndPeriodAPI(Resource):
     """
     Countries element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -1902,7 +1881,6 @@ class IndicatorByCountryAndPeriodAPI(Resource):
 class IndicatorAverageByPeriodAPI(Resource):
     """
     Average of indicator observation by period range
-    Methods: GET
     """
 
     @requires_auth
@@ -1931,7 +1909,6 @@ class IndicatorAverageByPeriodAPI(Resource):
 class IndicatorRelatedAPI(Resource):
     """
     Indicator related collection URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1951,7 +1928,6 @@ class IndicatorRelatedAPI(Resource):
 class IndicatorCountryTendencyAPI(Resource):
     """
     Indicator country tendency element URI
-    Methods: GET
     """
 
     @requires_auth
@@ -1973,7 +1949,6 @@ class IndicatorCountryTendencyAPI(Resource):
 class RegionTranslationListAPI(Resource):
     """
     Region translation collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -2015,6 +1990,7 @@ class RegionTranslationListAPI(Resource):
         """
         Delete all region translations
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all regions translations will be destroyed
         """
         region_translation_service.delete_all()
@@ -2024,7 +2000,6 @@ class RegionTranslationListAPI(Resource):
 class RegionTranslationAPI(Resource):
     """
     Region translation element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -2068,7 +2043,6 @@ class RegionTranslationAPI(Resource):
 class IndicatorTranslationListAPI(Resource):
     """
     Indicators translations collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -2085,6 +2059,7 @@ class IndicatorTranslationListAPI(Resource):
         """
         Create a new indicator translation
         Response 201 CREATED
+
         :return: URI
         """
         translation = IndicatorTranslation(request.json.get("lang_code"), request.json.get("name"),
@@ -2110,6 +2085,7 @@ class IndicatorTranslationListAPI(Resource):
         """
         Delete all indicators translations
         Response 204 NO CONTENT
+
         :attention: Take care of what you do, all indicators translations will be destroyed
         """
         indicator_translation_service.delete_all()
@@ -2119,7 +2095,6 @@ class IndicatorTranslationListAPI(Resource):
 class IndicatorTranslationAPI(Resource):
     """
     Indicators translations element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -2164,7 +2139,6 @@ class IndicatorTranslationAPI(Resource):
 class TopicTranslationListAPI(Resource):
     """
     Topic translations collection URI
-    Methods: GET, POST, PUT, DELETE
     """
 
     @requires_auth
@@ -2181,6 +2155,7 @@ class TopicTranslationListAPI(Resource):
         """
         Create a new topic translation
         Response 201 CREATED
+
         :return: URI
         """
         translation = TopicTranslation(request.json.get("lang_code"), request.json.get("name"),
@@ -2215,7 +2190,6 @@ class TopicTranslationListAPI(Resource):
 class TopicTranslationAPI(Resource):
     """
     Topic translations element URI
-    Methods: GET, PUT, DELETE
     """
 
     @requires_auth
@@ -2259,7 +2233,6 @@ class TopicTranslationAPI(Resource):
 class DeleteCacheAPI(Resource):
     """
     Delete cache URI
-    Methods: DELETE
     """
 
     @localhost_decorator
@@ -2379,6 +2352,19 @@ def table():
         return response_graphics(options, title, description)
 
 
+@app.route('/graphs/map')
+def map():
+        """
+        Visualization of table
+        """
+        options, title, description = get_visualization_map_json(request)
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
+        elif request.args.get("format") == 'jsonp':
+            return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
+        return render_template('map.html', options=json.dumps(options), title=title, description=description)
+
+
 @app.route('/')
 def help():
     """
@@ -2390,7 +2376,6 @@ def help():
 class AuthAPI(Resource):
     """
     Auth URI
-    Methods: POST, PUT
     """
 
     @localhost_decorator
@@ -2486,6 +2471,7 @@ api.add_resource(AuthAPI, '/auth', endpoint='auth')
 def translate_indicator_list(indicators):
     """
     Translate an indicator list into given language
+
     :param indicators: list of indicators to be translated
     """
     lang = get_requested_lang()
@@ -2496,6 +2482,7 @@ def translate_indicator_list(indicators):
 def translate_indicator(indicator, lang=None):
     """
     Translate an indicator object into given language
+
     :param indicator: indicator object to be translated
     :param lang: language of translation, by default en
     """
@@ -2511,6 +2498,7 @@ def translate_indicator(indicator, lang=None):
 def translate_region_list(regions):
     """
     Translate a region list into given language
+
     :param regions: list of regions to be translated
     """
     lang = get_requested_lang()
@@ -2521,6 +2509,7 @@ def translate_region_list(regions):
 def translate_region(region, lang=None):
     """
     Translate a region object into given language
+
     :param region: region object to be translated
     :param lang: language of translation, by default en
     """
@@ -2535,6 +2524,7 @@ def translate_region(region, lang=None):
 def translate_topic_list(topics):
     """
     Translate a topic list into given language
+
     :param topics: list of topics to be translated
     """
     lang = get_requested_lang()
@@ -2545,6 +2535,7 @@ def translate_topic_list(topics):
 def translate_topic(topic, lang=None):
     """
     Translate a topic object into given language
+
     :param topic: topic object to be translated
     :param lang: language of translation, by default en
     """
@@ -2559,6 +2550,7 @@ def translate_topic(topic, lang=None):
 def get_requested_lang():
     """
     Returns the lang request
+
     :return: language requested by the client if not given *en* as default
     """
     lang = request.args.get('lang') if request.args.get('lang') is not None else 'en'
@@ -2568,6 +2560,7 @@ def get_requested_lang():
 def is_xml_accepted(request):
     """
     Returns if xml is accepted or not
+
     :return: True if xml is accepted, False otherwise
     """
     return request.args.get('format') == "xml"
@@ -2576,6 +2569,7 @@ def is_xml_accepted(request):
 def is_jsonp_accepted(request):
     """
     Returns if jsonp is accepted or not
+
     :return: True if jsonp is accepted, False otherwise
     """
     return request.args.get('format') == "jsonp"
@@ -2584,6 +2578,7 @@ def is_jsonp_accepted(request):
 def is_csv_accepted(request):
     """
     Returns if csv is accepted or not
+
     :return: True if csv is accepted, False otherwise
     """
     return request.args.get('format') == "csv"
@@ -2597,6 +2592,7 @@ def response_xml_or_json_item(request, item, item_string):
     * XML
     * JSONP
     * CSV
+
     :param request: the request object
     :param item: the object to be converted
     :param item_string: the string text to show in the root node, only needed for xml
@@ -2627,6 +2623,7 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
     * XML
     * JSONP
     * CSV
+
     :param request: the request object
     :param collection: the collection to be converted
     :param collection_string: the string text to show in the root node, only needed for xml
@@ -2653,6 +2650,7 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
 def filter_observations_by_date_range(observations, from_date=None, to_date=None):
     """
     Filters observations by a given date range
+
     :param observations: list of observations to filter
     :param from_date: beginning of the date range
     :param to_date: end of the date range
@@ -2678,6 +2676,7 @@ def str_date_to_date(date_from, date_to):
     """
     Convert two dates in str format to date object
     Format: YYYYMMDD
+
     :param date_from: beginning of the interval
     :param date_to: end of the interval
     :return: from_date and to_date equivalent of given in date objects
@@ -2690,6 +2689,7 @@ def str_date_to_date(date_from, date_to):
 def filter_by_region_and_top(id):
     """
     Filter by region and a top given
+
     :return: countries top and top observations
     """
     top = int(request.args.get("top")) if request.args.get("top") is not None else 10
@@ -2703,6 +2703,7 @@ def filter_by_region_and_top(id):
 def observations_average(observations):
     """
     Returns the average of observations values
+
     :param observations: observations to calculate the average
     :return: average
     """
@@ -2720,6 +2721,7 @@ def observations_average(observations):
 def get_visualization_json(request, chartType):
     """
     Create json object through a dict by request parameters given
+
     :param request: request object from the client
     :param chartType: type of chart to be showed
     :return: json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic
@@ -2765,9 +2767,42 @@ def get_visualization_json(request, chartType):
     return json_object, title, description
 
 
+def get_visualization_map_json(request):
+    """
+    Create json object for map through a dict by request parameters given
+
+    :param request: request object from the client
+    :return: json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic
+    """
+    indicator = indicator_service.get_by_code(request.args.get('indicator'))
+    countries = request.args.get('countries').split(',') if request.args.get('countries') != 'global' else 'global'
+    if countries != 'global':
+        countries = [country for country in country_service.get_all() if country.iso3 in countries]
+    else:
+        countries = country_service.get_all()
+    title = request.args.get('title') if request.args.get('title') is not None else ''
+    description = request.args.get('description') if request.args.get('description') is not None else ''
+    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
+    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
+    countriesValues = []
+    for country in countries:
+        observations = filter_observations_by_date_range([observation for observation in country.observations \
+                                                      if observation.indicator_id == indicator.id], from_time, to_time)
+        countriesValues.append({
+            'code': country.iso3,
+            'value': observations[-1].value.value if len(observations) > 0 else 'No value available'
+        })
+    json_object = {
+        'container': '#mapDiv',
+        'countries': countriesValues
+    }
+    return json_object, title, description
+
+
 def get_intervals(times):
     """
     Return intervals to xAxis on the graphic
+
     :param times: times collection
     :return: times in the format of the graphic
     """
@@ -2791,6 +2826,7 @@ def get_intervals(times):
 def response_graphics(options, title, description):
     """
     Reponses with a page containing the requested graphic
+
     :param options: options dict
     :param title: title for the graphic
     :param description: description for the graphic
@@ -2805,6 +2841,7 @@ def response_graphics(options, title, description):
 def get_regions_of_region(id):
     """
     Returns the regions that belong to another region
+
     :param id: id of the region
     :return: list of regions
     """
@@ -2816,6 +2853,7 @@ def get_regions_of_region(id):
 def get_regions_with_data(id):
     """
     Return all the regions with data for a given indicator
+
     :param id: id of the given indicator
     :return: list of regions with data
     """

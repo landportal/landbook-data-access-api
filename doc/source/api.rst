@@ -83,7 +83,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/countries/<iso3>/indicators                                  | Indicators of the given country                                            |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/countries/<iso3>indicators/<indicator_id>                    | Given indicators of the given country                                      |                                                                                 |
+| landportal.info/api/countries/<iso3>/indicators/<indicator_id>                   | Given indicators of the given country                                      |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/observations/<id_first_filter>/<id_second_filter>            | Observations of a region and an indicator or a country and an indicator    |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -133,23 +133,23 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/regions/<region_id>/countries_with_data                      | Countries that are part of the given region and have observations          |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/countries/iso3>/last_update                                  | Date of the country last update                                            |                                                                                 |
+| landportal.info/api/countries/<iso3>/last_update                                 | Date of the country last update                                            |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/indicators/<id>/<iso3>/last_update                           | Date of the country last update for the given indicator                    |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/observations/<id>                                            | Observations of a country, indicator or region                             |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/observations/<id>/range                                      | Observations of a country, indicator or region, betwenn two dates          | from: beginning date of the interval, end: final date of the interval           |
+| landportal.info/api/observations/<id>/range                                      | Observations of a country, indicator or region, betwenn two dates          | from: beginning date of the interval, to: final date of the interval            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/indicators/<id>/range                                        | Observations of the given indicator between two dates                      | from: beginning date of the interval, end: final date of the interval           |
+| landportal.info/api/indicators/<id>/range                                        | Observations of the given indicator between two dates                      | from: beginning date of the interval, to: final date of the interval            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/indicators/<id>/regions_with_data                            | Regions with observations for the given indicator                          |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/indicators/<id>/regions_without_data                         | Regions without observations for the given indicator                       |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/indicators/<id>/average/range                                | Average of the given indicator between two dates                           | from: beginning date of the interval, end: final date of the interval           |
+| landportal.info/api/indicators/<id>/average/range                                | Average of the given indicator between two dates                           | from: beginning date of the interval, to: final date of the interval            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/indicators/<id>/<iso3>/average/range                         | Average of the given indicator and country between two dates               | from: beginning date of the interval, end: final date of the interval           |
+| landportal.info/api/observations/<id>/<iso3>/average/range                       | Average of the given indicator and country between two dates               | from: beginning date of the interval, to: final date of the interval            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/indicators/<id>/related                                      | Indicators with relation with the one given                                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -197,6 +197,7 @@ As you can see you can define what kind of chart you want to be showed, availabl
 * **polarchart**: Chart that shows three or more variables represented on axes starting from the same point.
 * **scatterchart**: Chart that shows various points but without connecting the dots
 * **table**: Table with the data
+* **map**: Map with highlighted countries and values if you pass over them
 
 Also there are some arguments available to modify graph aspect or data. Available arguments are:
 
@@ -212,6 +213,18 @@ Also there are some arguments available to modify graph aspect or data. Availabl
 
 You can see below examples for barchart and piechart:
 
-.. image:: images/bar.PNG
+.. raw:: html
 
-.. image:: images/pie.PNG
+    <script src="_static/wesCountry.min.js"></script>
+    <div id="barChartDiv" style="margin-top:10px;">
+    	<script>
+    		var options = {"chartType": "bar", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#barChartDiv"};
+    		wesCountry.charts.chart(options);
+    	</script>      
+    </div>
+    <div id="pieChartDiv" style="margin-top:10px;">
+    	<script>
+    		var options = {"chartType": "pie", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#pieChartDiv"};
+    		wesCountry.charts.chart(options);
+    	</script>      
+    </div>
