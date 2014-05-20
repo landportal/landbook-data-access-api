@@ -2357,10 +2357,12 @@ def map():
         """
         Visualization of table
         """
-        # options, title, description = get_visualization_json(request, 'table')
-        # return response_graphics(options, title, description)
-        # return render_template('map.html', options=json.dumps(options), title=title, description=description)
-        return render_template('map.html', title="Map", description="Map Test")
+        options, title, description = get_visualization_map_json(request)
+        if request.args.get("format") == "json":
+            return Response(json.dumps(options), mimetype='application/json')
+        elif request.args.get("format") == 'jsonp':
+            return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
+        return render_template('map.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/')
@@ -2761,6 +2763,38 @@ def get_visualization_json(request, chartType):
         'valueOnItem': {
             'show': False
         }
+    }
+    return json_object, title, description
+
+
+def get_visualization_map_json(request):
+    """
+    Create json object for map through a dict by request parameters given
+
+    :param request: request object from the client
+    :return: json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic
+    """
+    indicator = indicator_service.get_by_code(request.args.get('indicator'))
+    countries = request.args.get('countries').split(',') if request.args.get('countries') != 'global' else 'global'
+    if countries != 'global':
+        countries = [country for country in country_service.get_all() if country.iso3 in countries]
+    else:
+        countries = country_service.get_all()
+    title = request.args.get('title') if request.args.get('title') is not None else ''
+    description = request.args.get('description') if request.args.get('description') is not None else ''
+    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
+    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
+    countriesValues = []
+    for country in countries:
+        observations = filter_observations_by_date_range([observation for observation in country.observations \
+                                                      if observation.indicator_id == indicator.id], from_time, to_time)
+        countriesValues.append({
+            'code': country.iso3,
+            'value': observations[-1].value.value if len(observations) > 0 else 'No value available'
+        })
+    json_object = {
+        'container': '#mapDiv',
+        'countries': countriesValues
     }
     return json_object, title, description
 

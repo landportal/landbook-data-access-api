@@ -19,10 +19,7 @@
     <h3>{{ description }}</h3>
     <div id="mapDiv"></div>
     <script type="text/javascript">
-        var options = {
-            "container": "#mapDiv",
-            "zoomToCountryFactor": 0.1
-        };
+        var options = {{ options|safe }}
         wesCountry.maps.createMap(options);
     </script>
 </body>
