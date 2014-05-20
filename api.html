@@ -371,6 +371,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 <li><strong>polarchart</strong>: Chart that shows three or more variables represented on axes starting from the same point.</li>
 <li><strong>scatterchart</strong>: Chart that shows various points but without connecting the dots</li>
 <li><strong>table</strong>: Table with the data</li>
+<li><strong>map</strong>: Map with highlighted countries and values if you pass over them</li>
 </ul>
 <p>Also there are some arguments available to modify graph aspect or data. Available arguments are:</p>
 <ul class="simple">
@@ -385,9 +386,19 @@ In the next table you can see all the URLs defined that you can access with a sh
 <li><strong>to_time</strong>: End date for the date range to filter data. Format required: &#8216;YYYYMMDD&#8217;</li>
 </ul>
 <p>You can see below examples for barchart and piechart:</p>
-<img alt="_images/bar.PNG" src="_images/bar.PNG" />
-<img alt="_images/pie.PNG" src="_images/pie.PNG" />
+<script src="_static/wesCountry.min.js"></script>
+<div id="barChartDiv" style="margin-top:10px;">
+    <script>
+            var options = {"chartType": "bar", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#barChartDiv"};
+            wesCountry.charts.chart(options);
+    </script>
 </div>
+<div id="pieChartDiv" style="margin-top:10px;">
+    <script>
+            var options = {"chartType": "pie", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#pieChartDiv"};
+            wesCountry.charts.chart(options);
+    </script>
+</div></div>
 </div>
 </div>
 

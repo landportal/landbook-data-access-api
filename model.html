@@ -194,9 +194,14 @@
 
 <dl class="class">
 <dt id="model.models.Computation">
-<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">Computation</tt><big>(</big><em>uri=None</em><big>)</big><a class="headerlink" href="#model.models.Computation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">Computation</tt><big>(</big><em>uri=None</em>, <em>description=None</em><big>)</big><a class="headerlink" href="#model.models.Computation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></tt></p>
 <p>classdocs</p>
+<dl class="attribute">
+<dt id="model.models.Computation.description">
+<tt class="descname">description</tt><a class="headerlink" href="#model.models.Computation.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="model.models.Computation.id">
 <tt class="descname">id</tt><a class="headerlink" href="#model.models.Computation.id" title="Permalink to this definition">¶</a></dt>
@@ -273,7 +278,7 @@
 
 <dl class="class">
 <dt id="model.models.DataSource">
-<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">DataSource</tt><big>(</big><em>name=None</em>, <em>organization=None</em><big>)</big><a class="headerlink" href="#model.models.DataSource" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">DataSource</tt><big>(</big><em>name=None</em>, <em>organization=None</em>, <em>dsource_id=None</em><big>)</big><a class="headerlink" href="#model.models.DataSource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></tt></p>
 <p>classdocs</p>
 <dl class="method">
@@ -310,7 +315,7 @@
 
 <dl class="class">
 <dt id="model.models.Dataset">
-<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">Dataset</tt><big>(</big><em>id=None</em>, <em>frequency=None</em>, <em>source=None</em><big>)</big><a class="headerlink" href="#model.models.Dataset" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">model.models.</tt><tt class="descname">Dataset</tt><big>(</big><em>data_set_id=None</em>, <em>frequency=None</em>, <em>source=None</em><big>)</big><a class="headerlink" href="#model.models.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></tt></p>
 <p>classdocs</p>
 <dl class="method">

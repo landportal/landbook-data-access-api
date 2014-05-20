@@ -197,6 +197,7 @@ As you can see you can define what kind of chart you want to be showed, availabl
 * **polarchart**: Chart that shows three or more variables represented on axes starting from the same point.
 * **scatterchart**: Chart that shows various points but without connecting the dots
 * **table**: Table with the data
+* **map**: Map with highlighted countries and values if you pass over them
 
 Also there are some arguments available to modify graph aspect or data. Available arguments are:
 
@@ -212,6 +213,18 @@ Also there are some arguments available to modify graph aspect or data. Availabl
 
 You can see below examples for barchart and piechart:
 
-.. image:: images/bar.PNG
+.. raw:: html
 
-.. image:: images/pie.PNG
+    <script src="_static/wesCountry.min.js"></script>
+    <div id="barChartDiv" style="margin-top:10px;">
+    	<script>
+    		var options = {"chartType": "bar", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#barChartDiv"};
+    		wesCountry.charts.chart(options);
+    	</script>      
+    </div>
+    <div id="pieChartDiv" style="margin-top:10px;">
+    	<script>
+    		var options = {"chartType": "pie", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#pieChartDiv"};
+    		wesCountry.charts.chart(options);
+    	</script>      
+    </div>
