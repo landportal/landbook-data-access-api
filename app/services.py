@@ -237,15 +237,17 @@ class ObservationService(GenericService):
         super(ObservationService, self).__init__()
         self.dao = ObservationDAO()
 
-    def get_by_region_and_indicator(self, region_id, indicator_id):
+    def get_by_region_and_indicator(self, region_id, indicator_id, limit, offset):
         """
         Returns observations of a given region and indicator
 
         :param region_id: id of the given region
         :param indicator_id: id of the given indicator
+        :param limit: number of limit results
+        :param offset: number of results to skip
         :return: list of observations
         """
-        return self.tm.execute(self.dao, self.dao.get_by_region_and_indicator, region_id, indicator_id)
+        return self.tm.execute(self.dao, self.dao.get_by_region_and_indicator, region_id, indicator_id, limit, offset)
 
     def get_top_by_region(self, indicator_id, region_id, top):
         """
@@ -258,14 +260,16 @@ class ObservationService(GenericService):
         """
         return self.tm.execute(self.dao, self.dao.get_top_by_region, indicator_id, region_id, top)
 
-    def get_starred_observations_by_country(self, iso3):
+    def get_starred_observations_by_country(self, iso3, limit, offset):
         """
         Returns observations of starred indicators for a given country
 
         :param iso3: iso3 code of a given country
+        :param limit: number of limit results
+        :param offset: number of results to skip
         :return: list of observations
         """
-        return self.tm.execute(self.dao, self.dao.get_starred_observations_by_country, iso3)
+        return self.tm.execute(self.dao, self.dao.get_starred_observations_by_country, iso3, limit, offset)
 
     def get_by_indicator(self, indicator_id):
         """
