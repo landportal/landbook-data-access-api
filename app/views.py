@@ -733,14 +733,18 @@ class ObservationAPI(Resource):
         Show observations
         Response 200 OK
         """
+        limit, offset = get_limit_and_offset()
         if country_service.get_by_code(id) is not None:
             country = country_service.get_by_code(id)
-            return response_xml_or_json_list(request, country.observations, 'observations', 'observation')
+            observations = slice_by_limit_and_offset(country.observations, limit, offset)
+            return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif indicator_service.get_by_code(id) is not None:
             observations = []
             indicator = indicator_service.get_by_code(id)
             for dataset in indicator.datasets:
                 observations.extend(dataset.observations)
+            observations = [observation for observation in observations if observation.indicator_id == indicator.id]
+            observations = slice_by_limit_and_offset(observations, limit, offset)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         elif region_service.get_by_code(id) is not None:
             region = region_service.get_by_code(id)
@@ -748,6 +752,7 @@ class ObservationAPI(Resource):
             for country in country_service.get_all():
                 if country.is_part_of_id is region.id:
                     observations.extend(country.observations)
+            observations = slice_by_limit_and_offset(observations, limit, offset)
             return response_xml_or_json_list(request, observations, 'observations', 'observation')
         else:
             response = observation_service.get_by_code(id)
@@ -1223,7 +1228,8 @@ class ObservationByCountryStarred(Resource):
         translate_region(country)
         if country is None:
             abort(404)
-        observations = observation_service.get_starred_observations_by_country(iso3)
+        limit, offset = get_limit_and_offset()
+        observations = observation_service.get_starred_observations_by_country(iso3, limit, offset)
         for observation in observations:
             observation.country = country
             indicator = indicator_service.get_by_code(observation.indicator.id)
@@ -1304,24 +1310,27 @@ def get_observations_by_two_filters(id_first_filter, id_second_filter):
             observation.other_parseable_fields = ['country', 'indicator', 'ref_time', 'value', 'measurement_unit']
 
     observations = None
+    limit, offset = get_limit_and_offset()
     if country_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
             country = country_service.get_by_code(id_first_filter)
             indicator = indicator_service.get_by_code(id_second_filter)
             observations = [observation for observation in country.observations
                             if observation.indicator_id == id_second_filter]
+            slice_by_limit_and_offset(observations, limit, offset)
             append_objects()
     elif indicator_service.get_by_code(id_first_filter) and country_service.get_by_code(id_second_filter):
         country = country_service.get_by_code(id_second_filter)
         indicator = indicator_service.get_by_code(id_first_filter)
         observations = [observation for observation in country.observations
                         if observation.indicator_id == id_first_filter]
+        slice_by_limit_and_offset(observations, limit, offset)
         append_objects()
     elif region_service.get_by_code(id_first_filter) and indicator_service.get_by_code(id_second_filter):
         observations = []
         region = region_service.get_by_code(id_first_filter)
         indicator = indicator_service.get_by_code(id_second_filter)
         translate_indicator(indicator)
-        for observation in observation_service.get_by_region_and_indicator(region.id, id_second_filter):
+        for observation in observation_service.get_by_region_and_indicator(region.id, id_second_filter, limit, offset):
             country = country_service.get_by_id(observation.region_id)
             observation.country = country
             translate_region(country)
@@ -2353,6 +2362,7 @@ def table():
 
 
 @app.route('/graphs/map')
+@cache.cached(key_prefix=make_cache_key)
 def map():
         """
         Visualization of table
@@ -2468,6 +2478,7 @@ api.add_resource(DeleteCacheAPI, '/cache', endpoint='delete_cache')
 api.add_resource(AuthAPI, '/auth', endpoint='auth')
 
 
+@cache.cached()
 def translate_indicator_list(indicators):
     """
     Translate an indicator list into given language
@@ -2479,6 +2490,7 @@ def translate_indicator_list(indicators):
         translate_indicator(indicator, lang)
 
 
+@cache.cached()
 def translate_indicator(indicator, lang=None):
     """
     Translate an indicator object into given language
@@ -2495,6 +2507,7 @@ def translate_indicator(indicator, lang=None):
         indicator.other_parseable_fields = ['name', 'description']
 
 
+@cache.cached()
 def translate_region_list(regions):
     """
     Translate a region list into given language
@@ -2506,6 +2519,7 @@ def translate_region_list(regions):
         translate_region(region, lang)
 
 
+@cache.cached()
 def translate_region(region, lang=None):
     """
     Translate a region object into given language
@@ -2521,6 +2535,7 @@ def translate_region(region, lang=None):
         region.other_parseable_fields = ['name']
 
 
+@cache.cached()
 def translate_topic_list(topics):
     """
     Translate a topic list into given language
@@ -2532,6 +2547,7 @@ def translate_topic_list(topics):
         translate_topic(topic, lang)
 
 
+@cache.cached()
 def translate_topic(topic, lang=None):
     """
     Translate a topic object into given language
@@ -2784,17 +2800,17 @@ def get_visualization_map_json(request):
     description = request.args.get('description') if request.args.get('description') is not None else ''
     from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
     to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
-    countriesValues = []
+    countries_values = []
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
-        countriesValues.append({
+        countries_values.append({
             'code': country.iso3,
             'value': observations[-1].value.value if len(observations) > 0 else 'No value available'
         })
     json_object = {
         'container': '#mapDiv',
-        'countries': countriesValues
+        'countries': countries_values
     }
     return json_object, title, description
 
@@ -2862,6 +2878,17 @@ def get_regions_with_data(id):
         regions_with_data.append(region_service.get_by_code(1))
     translate_region_list(regions_with_data)
     return regions_with_data
+
+
+def get_limit_and_offset():
+    limit = int(request.args.get("limit")) if request.args.get("limit") is not None else 30
+    offset = int(request.args.get("offset")) if request.args.get("offset") is not None else 0
+    return limit, offset
+
+
+def slice_by_limit_and_offset(list, limit, offset):
+    limit = limit + offset if (limit + offset) < len(list) else len(list)
+    return list[offset:limit]
 
 
 class EmptyObject():

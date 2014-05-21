@@ -408,20 +408,22 @@ class ObservationDAO(DAO):
         """
         super(ObservationDAO, self).__init__(Observation)
 
-    def get_by_region_and_indicator(self, region_id, indicator_id):
+    def get_by_region_and_indicator(self, region_id, indicator_id, limit, offset):
         """
         Returns observations of a given region and a given indicator
 
         :param region_id: id of the given region
         :param indicator_id: id of the given indicator
+        :param limit: number of limit results
+        :param offset: number of results to skip
         :return: list of observations
         """
         if region_id == 1:
             return self.session.query(Observation).join(Region).filter(Observation.indicator_id == indicator_id)\
-                .filter(global_expression).all()
+                .filter(global_expression).offset(offset).limit(limit)
         else:
             return self.session.query(Observation).join(Region).filter(Observation.indicator_id == indicator_id)\
-                .filter(Region.is_part_of_id == region_id).all()
+                .filter(Region.is_part_of_id == region_id).offset(offset).limit(limit)
 
     def get_by_country_and_indicator(self, indicator_id, iso3):
         """
@@ -450,7 +452,7 @@ class ObservationDAO(DAO):
             return self.session.query(Observation).join(Value).join(Region).filter(Region.is_part_of_id == region_id)\
                 .filter(Observation.indicator_id == indicator_id).order_by(desc(Observation.value)).limit(top).all()
 
-    def get_starred_observations_by_country(self, iso3):
+    def get_starred_observations_by_country(self, iso3, limit, offset):
         """
         Returns starred indicators of a country
 
@@ -458,7 +460,7 @@ class ObservationDAO(DAO):
         :return: list of observations
         """
         return self.session.query(Observation).join(Indicator).join(Country).filter(Country.iso3 == iso3)\
-            .filter(Indicator.starred == True).all()
+            .filter(Indicator.starred == True).limit(limit).offset(offset).all()
 
     def get_by_indicator(self, indicator_id):
         """
