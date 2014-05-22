@@ -7,7 +7,6 @@ This file make the setup configuration for the Flask-Server
 from flask.app import Flask
 from flask.ext.cache import Cache
 from flask.ext.track_usage import TrackUsage
-from flask.ext.track_usage.storage.printer import PrintStorage
 from flask.ext.track_usage.storage.sql import SQLStorage
 from flask_sqlalchemy import SQLAlchemy
 

@@ -8,7 +8,7 @@ from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
 from flask.helpers import url_for
 from flask import json, render_template
-from app import app, cache, t
+from app import app, cache, sql_database_storage
 from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
     Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval, Time, \
@@ -2359,7 +2359,6 @@ def table():
         Visualization of table
         """
         options, title, description = get_visualization_json(request, 'table')
-        print options
         return response_table(options, title, description)
 
 
@@ -2367,13 +2366,14 @@ def table():
 @cache.cached(key_prefix=make_cache_key)
 def map():
         """
-        Visualization of table
+        Visualization of map
         """
         options, title, description = get_visualization_map_json(request)
         if request.args.get("format") == "json":
             return Response(json.dumps(options), mimetype='application/json')
         elif request.args.get("format") == 'jsonp':
-            return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
+            callback_name = request.args.get('callback') if request.args.get('callback') is not None else 'callback'
+            return Response(callback_name + "("+json.dumps(options)+");", mimetype='application/javascript')
         return render_template('map.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2383,6 +2383,17 @@ def help():
     Main URI with the documentation redirection
     """
     return redirect('http://weso.github.io/landportal-data-access-api/', code=302)
+
+
+# @localhost_decorator
+# @app.route('/statitics')
+# def statitics():
+#     """
+#     Statitics URI, json returned
+#     """
+#     limit = request.args.
+#     page =
+#     return Response(sql_database_storage.get_usage(), mimetype='application/json')
 
 
 class AuthAPI(Resource):
@@ -2854,7 +2865,8 @@ def response_graphics(options, title, description):
     if request.args.get("format") == "json":
         return Response(json.dumps(options), mimetype='application/json')
     elif request.args.get("format") == 'jsonp':
-        return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
+        callback_name = request.args.get('callback') if request.args.get('callback') is not None else 'callback'
+        return Response(callback_name + "("+json.dumps(options)+");", mimetype='application/javascript')
     return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
 
@@ -2869,8 +2881,10 @@ def response_table(options, title, description):
     if request.args.get("format") == "json":
         return Response(json.dumps(options), mimetype='application/json')
     elif request.args.get("format") == 'jsonp':
-        return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
-    return render_template('table.html', options=json.dumps(options), title=title, description=description)
+        callback_name = request.args.get('callback') if request.args.get('callback') is not None else 'callback'
+        return Response(callback_name + "("+json.dumps(options)+");", mimetype='application/javascript')
+    return render_template('table.html', options=options, title=title, description=description)
+
 
 def get_regions_of_region(id):
     """
@@ -2899,12 +2913,20 @@ def get_regions_with_data(id):
 
 
 def get_limit_and_offset():
+    """
+    Returns limit and offset in the request, if not provided limit=30 and offset=0
+
+    :return: limit and offset
+    """
     limit = int(request.args.get("limit")) if request.args.get("limit") is not None else 30
     offset = int(request.args.get("offset")) if request.args.get("offset") is not None else 0
     return limit, offset
 
 
 def slice_by_limit_and_offset(list, limit, offset):
+    """
+    Returns the sliced list
+    """
     limit = limit + offset if (limit + offset) < len(list) else len(list)
     return list[offset:limit]
 
