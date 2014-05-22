@@ -8,7 +8,7 @@ from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
 from flask.helpers import url_for
 from flask import json, render_template
-from app import app, cache
+from app import app, cache, t
 from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
     Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval, Time, \
@@ -103,6 +103,7 @@ class CountryListAPI(Resource):
     """
     Countries collection URI
     """
+
     @requires_auth
     @cache.cached(key_prefix=make_cache_key)
     def get(self):
@@ -726,7 +727,7 @@ class ObservationAPI(Resource):
     Observations element URI
     """
 
-    @localhost_decorator
+    @requires_auth
     @cache.cached(key_prefix=make_cache_key)
     def get(self, id):
         """
@@ -2358,7 +2359,8 @@ def table():
         Visualization of table
         """
         options, title, description = get_visualization_json(request, 'table')
-        return response_graphics(options, title, description)
+        print options
+        return response_table(options, title, description)
 
 
 @app.route('/graphs/map')
@@ -2744,7 +2746,7 @@ def get_visualization_json(request, chartType):
     """
     indicator = indicator_service.get_by_code(request.args.get('indicator'))
     countries = request.args.get('countries').split(',')
-    countries = [country for country in country_service.get_all() if country.iso3 in countries]
+    countries = [country_service.get_by_code(country_code) for country_code in countries]
     colours = request.args.get('colours').split(',')
     colours = ['#'+colour for colour in colours]
     title = request.args.get('title') if request.args.get('title') is not None else ''
@@ -2753,15 +2755,17 @@ def get_visualization_json(request, chartType):
     yTag = request.args.get('yTag')
     from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
     to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
+    times = []
     series = []
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
         if len(observations) > 10:  # limit to ten, to ensure good view
             observations = observations[-10:]
-        times = [observation.ref_time for observation in observations]
+        times = [observation.ref_time for observation in observations if observation.ref_time.value is not None] if len(times) < len(observations) else times
         series.append({
             'name': country.translations[0].name,
+            'id': country.iso3,
             'values': [float(observation.value.value) if observation.value.value is not None
                        else None for observation in observations]
         })
@@ -2853,6 +2857,20 @@ def response_graphics(options, title, description):
         return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
     return render_template('graphic.html', options=json.dumps(options), title=title, description=description)
 
+
+def response_table(options, title, description):
+    """
+    Reponses with a page containing the requested graphic
+
+    :param options: options dict
+    :param title: title for the graphic
+    :param description: description for the graphic
+    """
+    if request.args.get("format") == "json":
+        return Response(json.dumps(options), mimetype='application/json')
+    elif request.args.get("format") == 'jsonp':
+        return Response("callback("+json.dumps(options)+");", mimetype='application/javascript')
+    return render_template('table.html', options=json.dumps(options), title=title, description=description)
 
 def get_regions_of_region(id):
     """
