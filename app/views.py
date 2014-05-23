@@ -2385,15 +2385,18 @@ def help():
     return redirect('http://weso.github.io/landportal-data-access-api/', code=302)
 
 
-# @localhost_decorator
-# @app.route('/statitics')
-# def statitics():
-#     """
-#     Statitics URI, json returned
-#     """
-#     limit = request.args.
-#     page =
-#     return Response(sql_database_storage.get_usage(), mimetype='application/json')
+@localhost_decorator
+@app.route('/statitics')
+def statitics():
+    """
+    Statitics URI, json returned
+    """
+    limit = int(request.args.get('limit')) if request.args.get('limit') is not None else 500
+    page = int(request.args.get('page')) if request.args.get('page') is not None else 1
+    start_date = request.args.get('from')
+    end_date = request.args.get('to')
+    start_date, end_date = str_date_to_date(start_date, end_date)
+    return Response(json.dumps(sql_database_storage.get_usage(start_date, end_date, limit, page)), mimetype='application/json')
 
 
 class AuthAPI(Resource):
