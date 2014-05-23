@@ -2774,6 +2774,7 @@ def get_visualization_json(request, chartType):
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
+        observations = sorted(observations, key=lambda observation: observation.ref_time.value)
         if len(observations) > 10:  # limit to ten, to ensure good view
             observations = observations[-10:]
         times = [observation.ref_time for observation in observations if observation.ref_time.value is not None] if len(times) < len(observations) else times
@@ -2781,6 +2782,7 @@ def get_visualization_json(request, chartType):
             'name': country.translations[0].name,
             'id': country.iso3,
             'values': [float(observation.value.value) if observation.value.value is not None
+                        and observation.ref_time.value == times[observations.index(observation)].value
                        else None for observation in observations]
         })
     json_object = {
