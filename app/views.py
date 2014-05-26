@@ -2385,6 +2385,11 @@ def help():
     return redirect('http://weso.github.io/landportal-data-access-api/', code=302)
 
 
+@app.route('/author')
+def author():
+    return render_template('author.html')
+
+
 @localhost_decorator
 @app.route('/statitics')
 def statitics():
