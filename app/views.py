@@ -2788,7 +2788,7 @@ def get_visualization_json(request, chartType):
             'id': country.iso3,
             'values': [float(observation.value.value) if observation.value.value is not None
                         and observation.ref_time.value == times[observations.index(observation)].value
-                       else None for observation in observations]
+                       else None for observation in observations] if len(observations) > 0 else [None]
         })
     json_object = {
         'chartType': chartType,
