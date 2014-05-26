@@ -18,8 +18,8 @@ app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'exclude'
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 app.config['DEBUG'] = True
 db = SQLAlchemy(app)
-sql_database_storage = SQLStorage('mysql+mysqlconnector://root:root@localhost:3306/landportal', table_name='api_usage')
-#sql_database_storage = SQLStorage('sqlite:///analytics.db', table_name='api_usage')
+#sql_database_storage = SQLStorage('mysql+mysqlconnector://root:root@localhost:3306/landportal', table_name='api_usage')
+sql_database_storage = SQLStorage('sqlite:///analytics.db', table_name='api_usage')
 t = TrackUsage(app, sql_database_storage)
 
 from app import views
