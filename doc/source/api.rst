@@ -45,7 +45,7 @@ The entities available are the next:
 	Represents a common topic among various indicators
 
 
-As said before, api is based in RESTful principles, therefore you can make a petition with your browser or curl, like::
+As said before, api is based in RESTful principles, therefore, you can make a petition with your browser or curl, like::
 
 	curl landportal.info/api/countries?format=json
 
@@ -95,7 +95,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/regions/<un_code>                                            | Region with the given un code                                              |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/regions/<id>/countries                                       | Countries with that are part of the given region                           |                                                                                 |
+| landportal.info/api/regions/<id>/countries                                       | Countries that are part of the given region                                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/regions/<id>/countries/<iso3>                                | Country with the given iso3 and is part of the given region                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
