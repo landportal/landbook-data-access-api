@@ -98,7 +98,7 @@
 <dt><strong>topic</strong></dt>
 <dd>Represents a common topic among various indicators</dd>
 </dl>
-<p>As said before, api is based in RESTful principles, therefore you can make a petition with your browser or curl, like:</p>
+<p>As said before, api is based in RESTful principles, therefore, you can make a petition with your browser or curl, like:</p>
 <div class="highlight-python"><div class="highlight"><pre>curl landportal.info/api/countries?format=json
 </pre></div>
 </div>
@@ -179,7 +179,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 </tr>
 <tr class="row-odd"><td>landportal.info/api/observations/&lt;id_first_filter&gt;/&lt;id_second_filter&gt;</td>
 <td>Observations of a region and an indicator or a country and an indicator</td>
-<td>&nbsp;</td>
+<td>limit: max number of results, offset: initial gap not to be returned</td>
 </tr>
 <tr class="row-even"><td>landportal.info/api/observations/&lt;id_first_filter&gt;/&lt;id_second_filter&gt;/average</td>
 <td>Average of the observations, same as above one</td>
@@ -187,7 +187,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 </tr>
 <tr class="row-odd"><td>landportal.info/api/observations/&lt;iso3&gt;/starred</td>
 <td>Observations of a country if the indicator is starred</td>
-<td>&nbsp;</td>
+<td>limit: max number of results, offset: initial gap not to be returned</td>
 </tr>
 <tr class="row-even"><td>landportal.info/api/regions</td>
 <td>All regions</td>
@@ -198,7 +198,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 <td>&nbsp;</td>
 </tr>
 <tr class="row-even"><td>landportal.info/api/regions/&lt;id&gt;/countries</td>
-<td>Countries with that are part of the given region</td>
+<td>Countries that are part of the given region</td>
 <td>&nbsp;</td>
 </tr>
 <tr class="row-odd"><td>landportal.info/api/regions/&lt;id&gt;/countries/&lt;iso3&gt;</td>
@@ -283,7 +283,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 </tr>
 <tr class="row-odd"><td>landportal.info/api/observations/&lt;id&gt;</td>
 <td>Observations of a country, indicator or region</td>
-<td>&nbsp;</td>
+<td>limit: max number of results, offset: initial gap not to be returned</td>
 </tr>
 <tr class="row-even"><td>landportal.info/api/observations/&lt;id&gt;/range</td>
 <td>Observations of a country, indicator or region, betwenn two dates</td>

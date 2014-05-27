@@ -45,7 +45,7 @@ The entities available are the next:
 	Represents a common topic among various indicators
 
 
-As said before, api is based in RESTful principles, therefore you can make a petition with your browser or curl, like::
+As said before, api is based in RESTful principles, therefore, you can make a petition with your browser or curl, like::
 
 	curl landportal.info/api/countries?format=json
 
@@ -85,17 +85,17 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/countries/<iso3>/indicators/<indicator_id>                   | Given indicators of the given country                                      |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/observations/<id_first_filter>/<id_second_filter>            | Observations of a region and an indicator or a country and an indicator    |                                                                                 |
+| landportal.info/api/observations/<id_first_filter>/<id_second_filter>            | Observations of a region and an indicator or a country and an indicator    | limit: max number of results, offset: initial gap not to be returned            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/observations/<id_first_filter>/<id_second_filter>/average    | Average of the observations, same as above one                             |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/observations/<iso3>/starred                                  | Observations of a country if the indicator is starred                      |                                                                                 |
+| landportal.info/api/observations/<iso3>/starred                                  | Observations of a country if the indicator is starred                      | limit: max number of results, offset: initial gap not to be returned            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/regions                                                      | All regions                                                                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/regions/<un_code>                                            | Region with the given un code                                              |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/regions/<id>/countries                                       | Countries with that are part of the given region                           |                                                                                 |
+| landportal.info/api/regions/<id>/countries                                       | Countries that are part of the given region                                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/regions/<id>/countries/<iso3>                                | Country with the given iso3 and is part of the given region                |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -137,7 +137,7 @@ In the next table you can see all the URLs defined that you can access with a sh
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/indicators/<id>/<iso3>/last_update                           | Date of the country last update for the given indicator                    |                                                                                 |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
-| landportal.info/api/observations/<id>                                            | Observations of a country, indicator or region                             |                                                                                 |
+| landportal.info/api/observations/<id>                                            | Observations of a country, indicator or region                             | limit: max number of results, offset: initial gap not to be returned            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
 | landportal.info/api/observations/<id>/range                                      | Observations of a country, indicator or region, betwenn two dates          | from: beginning date of the interval, to: final date of the interval            |
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+

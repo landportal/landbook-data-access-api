@@ -487,7 +487,7 @@ This file includes all the daos that support the access to the data</p>
 
 <dl class="method">
 <dt id="app.daos.ObservationDAO.get_by_region_and_indicator">
-<tt class="descname">get_by_region_and_indicator</tt><big>(</big><em>region_id</em>, <em>indicator_id</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_by_region_and_indicator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_by_region_and_indicator</tt><big>(</big><em>region_id</em>, <em>indicator_id</em>, <em>limit</em>, <em>offset</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_by_region_and_indicator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns observations of a given region and a given indicator</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -496,6 +496,8 @@ This file includes all the daos that support the access to the data</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>region_id</strong> &#8211; id of the given region</li>
 <li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+<li><strong>limit</strong> &#8211; number of limit results</li>
+<li><strong>offset</strong> &#8211; number of results to skip</li>
 </ul>
 </td>
 </tr>
@@ -508,7 +510,7 @@ This file includes all the daos that support the access to the data</p>
 
 <dl class="method">
 <dt id="app.daos.ObservationDAO.get_starred_observations_by_country">
-<tt class="descname">get_starred_observations_by_country</tt><big>(</big><em>iso3</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_starred_observations_by_country" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_starred_observations_by_country</tt><big>(</big><em>iso3</em>, <em>limit</em>, <em>offset</em><big>)</big><a class="headerlink" href="#app.daos.ObservationDAO.get_starred_observations_by_country" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns starred indicators of a country</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1260,7 +1262,7 @@ with the majority of the daos</p>
 
 <dl class="method">
 <dt id="app.services.ObservationService.get_by_region_and_indicator">
-<tt class="descname">get_by_region_and_indicator</tt><big>(</big><em>region_id</em>, <em>indicator_id</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_by_region_and_indicator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_by_region_and_indicator</tt><big>(</big><em>region_id</em>, <em>indicator_id</em>, <em>limit</em>, <em>offset</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_by_region_and_indicator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns observations of a given region and indicator</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1269,6 +1271,8 @@ with the majority of the daos</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>region_id</strong> &#8211; id of the given region</li>
 <li><strong>indicator_id</strong> &#8211; id of the given indicator</li>
+<li><strong>limit</strong> &#8211; number of limit results</li>
+<li><strong>offset</strong> &#8211; number of results to skip</li>
 </ul>
 </td>
 </tr>
@@ -1281,15 +1285,21 @@ with the majority of the daos</p>
 
 <dl class="method">
 <dt id="app.services.ObservationService.get_starred_observations_by_country">
-<tt class="descname">get_starred_observations_by_country</tt><big>(</big><em>iso3</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_starred_observations_by_country" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_starred_observations_by_country</tt><big>(</big><em>iso3</em>, <em>limit</em>, <em>offset</em><big>)</big><a class="headerlink" href="#app.services.ObservationService.get_starred_observations_by_country" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns observations of starred indicators for a given country</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>iso3</strong> &#8211; iso3 code of a given country</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>iso3</strong> &#8211; iso3 code of a given country</li>
+<li><strong>limit</strong> &#8211; number of limit results</li>
+<li><strong>offset</strong> &#8211; number of results to skip</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of observations</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of observations</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -2911,7 +2921,9 @@ Response 200 OK</p>
 <dl class="method">
 <dt id="app.views.ObservationAPI.get">
 <tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.ObservationAPI.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Show observations
+Response 200 OK</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="app.views.ObservationAPI.mediatypes">
@@ -4031,6 +4043,20 @@ password combination is valid.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="app.views.get_limit_and_offset">
+<tt class="descclassname">app.views.</tt><tt class="descname">get_limit_and_offset</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.get_limit_and_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns limit and offset in the request, if not provided limit=30 and offset=0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">limit and offset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="app.views.get_observations_by_two_filters">
 <tt class="descclassname">app.views.</tt><tt class="descname">get_observations_by_two_filters</tt><big>(</big><em>id_first_filter</em>, <em>id_second_filter</em><big>)</big><a class="headerlink" href="#app.views.get_observations_by_two_filters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return observations filtering by two ids.
@@ -4220,8 +4246,8 @@ There was a problem caching and changing arguments of the URL, so this is one po
 
 <dl class="function">
 <dt id="app.views.map">
-<tt class="descclassname">app.views.</tt><tt class="descname">map</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.map" title="Permalink to this definition">¶</a></dt>
-<dd><p>Visualization of table</p>
+<tt class="descclassname">app.views.</tt><tt class="descname">map</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of map</p>
 </dd></dl>
 
 <dl class="function">
@@ -4260,6 +4286,25 @@ There was a problem caching and changing arguments of the URL, so this is one po
 <dl class="function">
 <dt id="app.views.response_graphics">
 <tt class="descclassname">app.views.</tt><tt class="descname">response_graphics</tt><big>(</big><em>options</em>, <em>title</em>, <em>description</em><big>)</big><a class="headerlink" href="#app.views.response_graphics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reponses with a page containing the requested graphic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> &#8211; options dict</li>
+<li><strong>title</strong> &#8211; title for the graphic</li>
+<li><strong>description</strong> &#8211; description for the graphic</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.response_table">
+<tt class="descclassname">app.views.</tt><tt class="descname">response_table</tt><big>(</big><em>options</em>, <em>title</em>, <em>description</em><big>)</big><a class="headerlink" href="#app.views.response_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reponses with a page containing the requested graphic</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4338,6 +4383,17 @@ Available formats:
 </dd></dl>
 
 <dl class="function">
+<dt id="app.views.slice_by_limit_and_offset">
+<tt class="descclassname">app.views.</tt><tt class="descname">slice_by_limit_and_offset</tt><big>(</big><em>list</em>, <em>limit</em>, <em>offset</em><big>)</big><a class="headerlink" href="#app.views.slice_by_limit_and_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the sliced list</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.statitics">
+<tt class="descclassname">app.views.</tt><tt class="descname">statitics</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.statitics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="app.views.str_date_to_date">
 <tt class="descclassname">app.views.</tt><tt class="descname">str_date_to_date</tt><big>(</big><em>date_from</em>, <em>date_to</em><big>)</big><a class="headerlink" href="#app.views.str_date_to_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert two dates in str format to date object
@@ -4367,7 +4423,7 @@ Format: YYYYMMDD</p>
 
 <dl class="function">
 <dt id="app.views.translate_indicator">
-<tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator</tt><big>(</big><em>indicator</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translate an indicator object into given language</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4385,7 +4441,7 @@ Format: YYYYMMDD</p>
 
 <dl class="function">
 <dt id="app.views.translate_indicator_list">
-<tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator_list</tt><big>(</big><em>indicators</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_indicator_list</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.translate_indicator_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translate an indicator list into given language</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4399,7 +4455,7 @@ Format: YYYYMMDD</p>
 
 <dl class="function">
 <dt id="app.views.translate_region">
-<tt class="descclassname">app.views.</tt><tt class="descname">translate_region</tt><big>(</big><em>region</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_region" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_region</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.translate_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translate a region object into given language</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4417,7 +4473,7 @@ Format: YYYYMMDD</p>
 
 <dl class="function">
 <dt id="app.views.translate_region_list">
-<tt class="descclassname">app.views.</tt><tt class="descname">translate_region_list</tt><big>(</big><em>regions</em><big>)</big><a class="headerlink" href="#app.views.translate_region_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_region_list</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.translate_region_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translate a region list into given language</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4431,7 +4487,7 @@ Format: YYYYMMDD</p>
 
 <dl class="function">
 <dt id="app.views.translate_topic">
-<tt class="descclassname">app.views.</tt><tt class="descname">translate_topic</tt><big>(</big><em>topic</em>, <em>lang=None</em><big>)</big><a class="headerlink" href="#app.views.translate_topic" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_topic</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.translate_topic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translate a topic object into given language</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4449,7 +4505,7 @@ Format: YYYYMMDD</p>
 
 <dl class="function">
 <dt id="app.views.translate_topic_list">
-<tt class="descclassname">app.views.</tt><tt class="descname">translate_topic_list</tt><big>(</big><em>topics</em><big>)</big><a class="headerlink" href="#app.views.translate_topic_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">app.views.</tt><tt class="descname">translate_topic_list</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#app.views.translate_topic_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translate a topic list into given language</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
