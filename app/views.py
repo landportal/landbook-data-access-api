@@ -12,7 +12,7 @@ from app import app, cache, sql_database_storage
 from app.utils import JSONConverter, XMLConverter, CSVConverter, DictionaryList2ObjectList
 from model.models import Country, Indicator, User, Organization, Observation, Region, DataSource, Dataset, Value, \
     Topic, Instant, Interval, RegionTranslation, IndicatorTranslation, TopicTranslation, YearInterval, Time, \
-    MeasurementUnit, Auth
+    MeasurementUnit, Auth, MonthInterval
 from app.services import CountryService, IndicatorService, UserService, OrganizationService, ObservationService, \
     RegionService, DataSourceService, DatasetService, ValueService, TopicService, IndicatorRelationshipService, \
     RegionTranslationService, IndicatorTranslationService, TopicTranslationService, MeasurementUnitService, AuthService
@@ -2750,6 +2750,24 @@ def observations_average(observations):
     return float(average)/len(observations)
 
 
+def group_observations_by_years(observations):
+    observations_dict = {}
+    for observation in observations:
+        if isinstance(observation.ref_time, MonthInterval):
+            if not observations_dict.has_key(observation.ref_time.year):
+                observations_dict[observation.ref_time.year] = [observation]
+            else:
+                observations_dict[observation.ref_time.year].append(observation)
+        else:
+            observations_dict[observation.ref_time.year] = [observation]
+    returned_observations = []
+    for key in observations_dict.keys():
+        value = Value()
+        value.value = reduce(lambda x, y: x + float(y.value.value), observations_dict[key], 0) / len(observations_dict[key])
+        returned_observations.append(Observation(ref_time=YearInterval(key), value=value))
+    return returned_observations
+
+
 def get_visualization_json(request, chartType):
     """
     Create json object through a dict by request parameters given
@@ -2774,6 +2792,7 @@ def get_visualization_json(request, chartType):
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
+        observations = group_observations_by_years(observations)
         observations = sorted(observations, key=lambda observation: observation.ref_time.value)
         if len(observations) > 10:  # limit to ten, to ensure good view
             observations = observations[-10:]
