@@ -23,3 +23,4 @@ sql_database_storage = SQLStorage('mysql+mysqlconnector://root:root@localhost:33
 t = TrackUsage(app, sql_database_storage)
 
 from app import views
+
