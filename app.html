@@ -3991,6 +3991,12 @@ password combination is valid.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="app.views.donutChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">donutChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.donutChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of donutchart</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="app.views.filter_by_region_and_top">
 <tt class="descclassname">app.views.</tt><tt class="descname">filter_by_region_and_top</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#app.views.filter_by_region_and_top" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter by region and a top given</p>
@@ -4163,6 +4169,22 @@ It could be one of three next:</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> &#8211; request object from the client</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json_object, dict to make json.dumps; title, title of the graphic; description, descriptions of the graphic</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.group_observations_by_years">
+<tt class="descclassname">app.views.</tt><tt class="descname">group_observations_by_years</tt><big>(</big><em>observations</em><big>)</big><a class="headerlink" href="#app.views.group_observations_by_years" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of observations grouped by years</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>observations</strong> &#8211; list of observations to group</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of grouped observations</td>
 </tr>
 </tbody>
 </table>
@@ -4386,6 +4408,12 @@ Available formats:
 <dt id="app.views.slice_by_limit_and_offset">
 <tt class="descclassname">app.views.</tt><tt class="descname">slice_by_limit_and_offset</tt><big>(</big><em>list</em>, <em>limit</em>, <em>offset</em><big>)</big><a class="headerlink" href="#app.views.slice_by_limit_and_offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the sliced list</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.views.stackChart">
+<tt class="descclassname">app.views.</tt><tt class="descname">stackChart</tt><big>(</big><big>)</big><a class="headerlink" href="#app.views.stackChart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualization of stackedchart</p>
 </dd></dl>
 
 <dl class="function">

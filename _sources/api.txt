@@ -196,6 +196,8 @@ As you can see you can define what kind of chart you want to be showed, availabl
 * **piechart**: Chart that shows various pies divided with a percentage according to the values in the serie.
 * **polarchart**: Chart that shows three or more variables represented on axes starting from the same point.
 * **scatterchart**: Chart that shows various points but without connecting the dots
+* **stackedchart**: Chart similiar to bar chart, but values of the same year are represented in a stack
+* **donutchart**: Chart like pie chart but with a hole inside it
 * **table**: Table with the data
 * **map**: Map with highlighted countries and values if you pass over them
 
