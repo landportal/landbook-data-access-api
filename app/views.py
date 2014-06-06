@@ -96,7 +96,7 @@ def make_cache_key(*args, **kwargs):
 
     :see: http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well
     """
-    return request.url+request.headers.get('Accept')
+    return request.url+str(request.headers.get('Accept'))
 
 
 class CountryListAPI(Resource):
