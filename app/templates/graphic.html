@@ -10,8 +10,11 @@
 <body>
     <h2>{{ title }}</h2>
     <h3>{{ description }}</h3>
+    <div id="container" style="height: 400px"></div>
     <script type="text/javascript">
         var options = {{ options|safe }};
+        options.container = "#container";
+        options.download = true;
         wesCountry.charts.chart(options);
     </script>
 </body>
