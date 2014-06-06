@@ -50,6 +50,9 @@ As said before, api is based in RESTful principles, therefore, you can make a pe
 	curl landportal.info/api/countries?format=json
 
 Formats availabe through the format argument are: **JSON**, **XML**, **CSV** and **JSONP**.
+If none of them is suplied the API will look into the Accept header for some of the following: *application/json*, *application/xml*, *text/csv* or *application/javascript*.
+If neither the format argument nor the Accept header are provided the API will response in **JSON** format.
+
 In the next table you can see all the URLs defined that you can access with a short description and arguments to modify the result. Variables in the URL are surrounded by '<' and '>':
 
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
@@ -196,6 +199,8 @@ As you can see you can define what kind of chart you want to be showed, availabl
 * **piechart**: Chart that shows various pies divided with a percentage according to the values in the serie.
 * **polarchart**: Chart that shows three or more variables represented on axes starting from the same point.
 * **scatterchart**: Chart that shows various points but without connecting the dots
+* **stackedchart**: Chart similiar to bar chart, but values of the same year are represented in a stack
+* **donutchart**: Chart like pie chart but with a hole inside it
 * **table**: Table with the data
 * **map**: Map with highlighted countries and values if you pass over them
 

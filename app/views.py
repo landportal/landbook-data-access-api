@@ -96,7 +96,7 @@ def make_cache_key(*args, **kwargs):
 
     :see: http://stackoverflow.com/questions/9413566/flask-cache-memoize-url-query-string-parameters-as-well
     """
-    return request.url
+    return request.url+request.headers.get('Accept')
 
 
 class CountryListAPI(Resource):
@@ -2257,124 +2257,142 @@ class DeleteCacheAPI(Resource):
 
 @app.route('/graphs/barchart')
 def barChart():
-        """
-        Visualization of barchart
-        """
-        options, title, description = get_visualization_json(request, 'bar')
-        return response_graphics(options, title, description)
+    """
+    Visualization of barchart
+    """
+    options, title, description = get_visualization_json(request, 'bar')
+    return response_graphics(options, title, description)
 
 
 @app.route('/graphs/piechart')
-def pieChart():
-        """
-        Visualization of piechart
-        """
-        options, title, description = get_visualization_json(request, 'pie')
-        return response_graphics(options, title, description)
+def piechart():
+    """
+    Visualization of piechart
+    """
+    options, title, description = get_visualization_json(request, 'pie')
+    return response_graphics(options, title, description)
 
 
 @app.route('/graphs/linechart')
-def lineChart():
-        """
-        Visualization of linechart
-        """
-        options, title, description = get_visualization_json(request, 'line')
-        return response_graphics(options, title, description)
+def linechart():
+    """
+    Visualization of linechart
+    """
+    options, title, description = get_visualization_json(request, 'line')
+    return response_graphics(options, title, description)
 
 
 @app.route('/graphs/areachart')
-def areaChart():
-        """
-        Visualization of areachart
-        """
-        options, title, description = get_visualization_json(request, 'area')
-        return response_graphics(options, title, description)
+def areachart():
+    """
+    Visualization of areachart
+    """
+    options, title, description = get_visualization_json(request, 'area')
+    return response_graphics(options, title, description)
 
 
 @app.route('/graphs/scatterchart')
-def scatterChart():
-        """
-        Visualization of scatterchart
-        """
-        indicators = request.args.get('indicator').split(',')
-        indicators = [indicator_service.get_by_code(indicator) for indicator in indicators]
-        countries = request.args.get('countries')
-        if countries == 'all':
-            countries = country_service.get_all()
-        else:
-            countries = countries.split(',')
-            countries = [country for country in country_service.get_all() if country.iso3 in countries]
-        colours = request.args.get('colours').split(',')
-        colours = ['#'+colour for colour in colours]
-        title = request.args.get('title') if request.args.get('title') is not None else ''
-        description = request.args.get('description') if request.args.get('description') is not None else ''
-        xTag = request.args.get('xTag')
-        yTag = request.args.get('yTag')
-        from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
-        to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
-        series = []
-        for country in countries:
-            observations_x_indicator = filter_observations_by_date_range([observation for observation in country.observations \
-                                                          if observation.indicator_id == indicators[1].id], from_time, to_time)
-            observations_y_indicator = filter_observations_by_date_range([observation for observation in country.observations \
-                                                          if observation.indicator_id == indicators[0].id], from_time, to_time)
-            if len(observations_y_indicator) > 0 and len(observations_x_indicator) > 0:
-                observations_x_indicator.sort(key=lambda observations: observation.ref_time.value)
-                observations_y_indicator.sort(key=lambda observations: observation.ref_time.value)
-                series.append({
-                    'name': country.translations[0].name,
-                    'values': [[float(observations_x_indicator[i].value.value) if observations_x_indicator[i].value.value is not None else 0,
-                                float(observations_y_indicator[i].value.value) if observations_y_indicator[i].value.value is not None else 0]
-                               for i in range(min(len(observations_x_indicator), len(observations_y_indicator)))]
-                })
-        json_object = {
-            'chartType': 'scatter',
-            'xAxis': {
-                'title': xTag
-            },
-            'yAxis': {
-                'title': yTag
-            },
-            'series': series,
-            'serieColours': colours,
-            'valueOnItem': {
-                'show': False
-            }
+def scatterchart():
+    """
+    Visualization of scatterchart
+    """
+    indicators = request.args.get('indicator').split(',')
+    indicators = [indicator_service.get_by_code(indicator) for indicator in indicators]
+    countries = request.args.get('countries')
+    if countries == 'all':
+        countries = country_service.get_all()
+    else:
+        countries = countries.split(',')
+        countries = [country for country in country_service.get_all() if country.iso3 in countries]
+    colours = request.args.get('colours').split(',')
+    colours = ['#'+colour for colour in colours]
+    title = request.args.get('title') if request.args.get('title') is not None else ''
+    description = request.args.get('description') if request.args.get('description') is not None else ''
+    xTag = request.args.get('xTag')
+    yTag = request.args.get('yTag')
+    from_time = datetime.strptime(request.args.get('from'), "%Y%m%d").date() if request.args.get('from') is not None else None
+    to_time = datetime.strptime(request.args.get('to'), "%Y%m%d").date() if request.args.get('to') is not None else None
+    series = []
+    for country in countries:
+        observations_x_indicator = filter_observations_by_date_range([observation for observation in country.observations \
+                                                      if observation.indicator_id == indicators[1].id], from_time, to_time)
+        observations_y_indicator = filter_observations_by_date_range([observation for observation in country.observations \
+                                                      if observation.indicator_id == indicators[0].id], from_time, to_time)
+        if len(observations_y_indicator) > 0 and len(observations_x_indicator) > 0:
+            observations_x_indicator.sort(key=lambda observations: observation.ref_time.value)
+            observations_y_indicator.sort(key=lambda observations: observation.ref_time.value)
+            series.append({
+                'name': country.translations[0].name,
+                'values': [[float(observations_x_indicator[i].value.value) if observations_x_indicator[i].value.value is not None else 0,
+                            float(observations_y_indicator[i].value.value) if observations_y_indicator[i].value.value is not None else 0]
+                           for i in range(min(len(observations_x_indicator), len(observations_y_indicator)))]
+            })
+    json_object = {
+        'chartType': 'scatter',
+        'xAxis': {
+            'title': xTag
+        },
+        'yAxis': {
+            'title': yTag
+        },
+        'series': series,
+        'serieColours': colours,
+        'valueOnItem': {
+            'show': False
         }
-        return response_graphics(json_object, title, description)
+    }
+    return response_graphics(json_object, title, description)
 
 
 @app.route('/graphs/polarchart')
-def polarChart():
-        """
-        Visualization of polarchart
-        """
-        options, title, description = get_visualization_json(request, 'polar')
-        return response_graphics(options, title, description)
+def polarchart():
+    """
+    Visualization of polarchart
+    """
+    options, title, description = get_visualization_json(request, 'polar')
+    return response_graphics(options, title, description)
+
+
+@app.route('/graphs/stackedchart')
+def stackchart():
+    """
+    Visualization of stackedchart
+    """
+    options, title, description = get_visualization_json(request, 'stacked')
+    return response_graphics(options, title, description)
+
+
+@app.route('/graphs/donutchart')
+def donutchart():
+    """
+    Visualization of donutchart
+    """
+    options, title, description = get_visualization_json(request, 'donut')
+    return response_graphics(options, title, description)
 
 
 @app.route('/graphs/table')
 def table():
-        """
-        Visualization of table
-        """
-        options, title, description = get_visualization_json(request, 'table')
-        return response_table(options, title, description)
+    """
+    Visualization of table
+    """
+    options, title, description = get_visualization_json(request, 'table')
+    return response_table(options, title, description)
 
 
 @app.route('/graphs/map')
 @cache.cached(key_prefix=make_cache_key)
 def map():
-        """
-        Visualization of map
-        """
-        options, title, description = get_visualization_map_json(request)
-        if request.args.get("format") == "json":
-            return Response(json.dumps(options), mimetype='application/json')
-        elif request.args.get("format") == 'jsonp':
-            callback_name = request.args.get('callback') if request.args.get('callback') is not None else 'callback'
-            return Response(callback_name + "("+json.dumps(options)+");", mimetype='application/javascript')
-        return render_template('map.html', options=json.dumps(options), title=title, description=description)
+    """
+    Visualization of map
+    """
+    options, title, description = get_visualization_map_json(request)
+    if request.args.get("format") == "json":
+        return Response(json.dumps(options), mimetype='application/json')
+    elif request.args.get("format") == 'jsonp':
+        callback_name = request.args.get('callback') if request.args.get('callback') is not None else 'callback'
+        return Response(callback_name + "("+json.dumps(options)+");", mimetype='application/javascript')
+    return render_template('map.html', options=json.dumps(options), title=title, description=description)
 
 
 @app.route('/')
@@ -2662,21 +2680,42 @@ def response_xml_or_json_list(request, collection, collection_string, item_strin
     :param item_string: the string in the root node of the object, only needed for xml
     :return: response in the requested format
     """
-    if is_xml_accepted(request):
+    def return_json():
+        return Response(json_converter.list_to_json(collection
+                                                        ), mimetype='application/json')
+
+    def return_xml():
         return Response(xml_converter.list_to_xml(collection,
                                                   collection_string, item_string), mimetype='application/xml')
-    elif is_jsonp_accepted(request):
-        function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
-        response = function + '(' + json_converter.list_to_json(collection) + ');'
-        return Response(response, mimetype='application/javascript')
-    elif is_csv_accepted(request):
+
+    def return_csv():
         response = Response(csv_converter.list_to_csv(collection
                                 ), mimetype='text/csv', content_type='application/octet-stream')
         response.headers["Content-Disposition"] = 'attachment; filename="' + collection_string + '".csv'
         return response
+
+    def return_jsonp():
+        function = request.args.get('jsonp') if request.args.get('jsonp') is not None else 'callback'
+        response = function + '(' + json_converter.list_to_json(collection) + ');'
+        return Response(response, mimetype='application/javascript')
+
+    functions = {
+        'json': return_json,
+        'xml': return_xml,
+        'csv': return_csv,
+        'jsonp': return_jsonp
+    }
+    functions_accept = {
+        'application/json': return_json,
+        'application/xml': return_xml,
+        'text/csv': return_csv,
+        'application/javascript': return_jsonp
+    }
+    if request.args.get('format') in functions.keys():
+        return functions[request.args.get('format')]()
     else:
-        return Response(json_converter.list_to_json(collection
-                                                    ), mimetype='application/json')
+        return (functions_accept[request.headers.get('Accept')]
+                if request.headers.get('Accept') in functions_accept.keys() else functions['json'])()
 
 
 def filter_observations_by_date_range(observations, from_date=None, to_date=None):
@@ -2751,6 +2790,12 @@ def observations_average(observations):
 
 
 def group_observations_by_years(observations):
+    """
+    Returns a list of observations grouped by years
+
+    :param observations: list of observations to group
+    :return: list of grouped observations
+    """
     observations_dict = {}
     for observation in observations:
         if isinstance(observation.ref_time, MonthInterval):
@@ -2792,6 +2837,7 @@ def get_visualization_json(request, chartType):
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
+        organization = observations[0].dataset.datasource.organization
         observations = group_observations_by_years(observations)
         observations = sorted(observations, key=lambda observation: observation.ref_time.value)
         if len(observations) > 10:  # limit to ten, to ensure good view
@@ -2817,7 +2863,9 @@ def get_visualization_json(request, chartType):
         'serieColours': colours,
         'valueOnItem': {
             'show': False
-        }
+        },
+        'foot': "source: " + "<a href='http://" + request.host + "/book/sources/"
+                + organization.id + "'>" + organization.name + "</a>"
     }
     return json_object, title, description
 
@@ -2843,13 +2891,16 @@ def get_visualization_map_json(request):
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
+        organization = observations[0].dataset.datasource.organization
         countries_values.append({
             'code': country.iso3,
             'value': observations[-1].value.value if len(observations) > 0 else 'No value available'
         })
     json_object = {
         'container': '#mapDiv',
-        'countries': countries_values
+        'countries': countries_values,
+        'foot': "source: " + "<a href='http://" + request.host + "/book/sources/"
+                + organization.id + "'>" + organization.name + "</a>"
     }
     return json_object, title, description
 
@@ -2861,20 +2912,6 @@ def get_intervals(times):
     :param times: times collection
     :return: times in the format of the graphic
     """
-    # if len(times) > 1:
-    #     if isinstance(times[0], Instant):
-    #         return [time.timestamp for time in times]
-    #     elif isinstance(times[0], YearInterval):
-    #         return [time.year for time in times]
-    #     elif isinstance(times[0], Interval):
-    #         return [time.start_time for time in times]
-    # elif len(times) == 1:
-    #     if isinstance(times[0], Instant):
-    #         return [times[0].timestamp]
-    #     elif isinstance(times[0], YearInterval):
-    #         return [times[0].year]
-    #     elif isinstance(times[0], Interval):
-    #         return [times[0].start_time]
     return [time.value for time in times]
 
 
@@ -2961,3 +2998,4 @@ class EmptyObject():
     """
     def __init__(self):
         pass
+

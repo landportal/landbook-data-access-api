@@ -6,7 +6,7 @@ This file includes all the daos that support the access to the data
 """
 
 from model.models import Country, RegionTranslation, IndicatorTranslation, TopicTranslation, Region, Auth, Observation, \
-    Value, Indicator, Dataset, DataSource
+    Value, Indicator, Dataset
 from sqlalchemy import desc, func
 
 

@@ -19,7 +19,8 @@
     <h3>{{ description }}</h3>
     <div id="mapDiv"></div>
     <script type="text/javascript">
-        var options = {{ options|safe }}
+        var options = {{ options|safe }};
+        options.download = true;
         wesCountry.maps.createMap(options);
     </script>
 </body>
