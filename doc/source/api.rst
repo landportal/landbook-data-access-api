@@ -8,7 +8,7 @@ API Security
 ------------
 For security, a basic realm authentication is required, except graphics. Graphics are covered in the next section.
 
-You need to obtain a token: these token then is used to authentication, so you have to authenticate with your username of landportal.info and with the generated token as the password. This token is generated when yoy register yourself in the landportal website, so you can access this token in your account info.
+You need to obtain a token: these token then is used to authentication, so you have to authenticate with your username of landportal.info and with the generated token as the password. This token is generated when you register yourself in the landportal website, so you can access this token in your account info.
 
 API Structure
 -------------
