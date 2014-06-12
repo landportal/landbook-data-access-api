@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Analytics for landportal.info/api</title>
+    <link href="{{ url_for('static', filename='wesCountry.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='analytics.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{{ url_for('static', filename='wesCountry.min.js') }}"></script>
+</head>
+<body>
+    <div id="content">
+        <h1>Statitics for landportal.info/api</h1>
+        <h2>Information for {{ number }} entries <small>Data from {{ start_date }} to {{ end_date }}</small></h2>
+        <div id="containerBrowsers">
+            <h3>Browsers</h3>
+            <script type="text/javascript">
+                var options = {{ browsers|safe }};
+                options.container = "#containerBrowsers";
+                wesCountry.charts.multiChart(options);
+            </script>
+        </div>
+        <div id="containerPlatforms">
+            <h3>Platforms</h3>
+            <script type="text/javascript">
+                var options = {{ platforms|safe }};
+                options.container = "#containerPlatforms";
+                wesCountry.charts.multiChart(options);
+            </script>
+        </div>
+        <div id="containerAddresses">
+            <h3>Addresses</h3>
+            <script type="text/javascript">
+                var options = {{ addresses|safe }};
+                options.container = "#containerAddresses";
+                wesCountry.charts.multiChart(options);
+            </script>
+        </div>
+        <div id="containerDates">
+            <h3>Dates</h3>
+            <script type="text/javascript">
+                var options = {{ dates|safe }};
+                options.container = "#containerDates";
+                wesCountry.charts.multiChart(options);
+            </script>
+        </div>
+        <div id="containerPaths">
+            <h3>Paths</h3>
+            <div class="panel panel-default">
+              <table class="table">
+                  <thead>
+                    <tr>
+                        <th>Path</th>
+                        <th>Number of accesses</th>
+                        <th>Average speed</th>
+                    </tr>
+                    </thead>
+                  {% for path in paths.keys()|sort %}
+                      <tr>
+                          <td>{{ path }}</td>
+                          <td><span class="badge">{{ paths[path]|length }}</span></td>
+                          <td>{{ paths[path]|sum(attribute="speed") / paths[path]|length }} s</td>
+                      </tr>
+                  {% endfor %}
+              </table>
+            </div>
+        </div>
+        <div id="containerMap">
+            <h3>Locations</h3>
+            <script type="text/javascript">
+                var options = {{ countries|safe }};
+                options.container = "#containerMap";
+                wesCountry.maps.createMap(options);
+            </script>
+        </div>
+        <ul class="pager">
+            {% if previous %}
+                <li class="previous"><a href="?page={{ page - 1 }}">&larr; Previous</a></li>
+            {% else %}
+                <li class="previous disabled"><a href="javascript: void(0)">&larr; Previous</a></li>
+            {% endif %}
+            {% if next %}
+                <li class="next"><a href="?page={{ page + 1 }}">Next &rarr;</a></li>
+            {% else %}
+                <li class="next disabled"><a href="javascript: void(0)">Next &rarr;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>

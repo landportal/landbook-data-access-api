@@ -1,0 +1,54 @@
+#content {
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+#containerBrowsers {
+    float: left;
+    height: 400px;
+    width: 400px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+
+#containerPlatforms {
+    float: left;
+    height: 400px;
+    width: 400px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+
+#containerAddresses {
+    float: left;
+    height: 400px;
+    width: 400px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+
+#containerDates {
+    float: left;
+    height: 400px;
+    width: 400px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+
+#containerPaths {
+    clear: both;
+    padding-top: 75px;
+}
+
+.pager {
+    padding-top: 50px;
+}
+
+#containerMap {
+    height: 700px;
+}
+

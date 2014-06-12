@@ -4,6 +4,9 @@ This file includes all the URI implementation and calls
 
 :author: Weso
 """
+from itertools import groupby
+from time import strptime
+import urllib2
 from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
 from flask.helpers import url_for
@@ -2403,18 +2406,81 @@ def help():
     return redirect('http://weso.github.io/landportal-data-access-api/', code=302)
 
 
-@localhost_decorator
+@requires_auth
 @app.route('/statitics')
 def statitics():
     """
     Statitics URI, json returned
     """
+    def create_map_json(statitics):
+        grouped_dict = {}
+        url = "http://www.telize.com/geoip/"
+        sorted_statitics = sorted(statitics, key=lambda x: x['remote_addr'])
+        for k, g in groupby(sorted_statitics, lambda x: x['remote_addr']):
+            grouped_dict[k] = list(g)
+        series = []
+        for key in grouped_dict.keys():
+            try:
+                data = json.loads(urllib2.urlopen(url + key).read())
+                series.append({
+                    'code': data['country_code3'],
+                    'value': len(grouped_dict[key])
+                })
+            except urllib2.HTTPError:
+                print "No information for ip: ", key
+        dict = {
+            'countries': series,
+        }
+        return dict
+
+    def group_information_by(statitics, func):
+        dict = {}
+        sorted_statitics = sorted(statitics, key=func)
+        for k, g in groupby(sorted_statitics, func):
+            dict[k] = list(g)
+        return dict
+
+    def create_wesCountry_json(grouped_dict, chart_type):
+        series = []
+        for key in grouped_dict.keys():
+            series.append({
+                'name': key if key is not None else "unknown",
+                'values': [len(grouped_dict[key])]
+            })
+        dict = {
+            'series': series,
+            'serieColours': ['#FCD271', '#FA5882', '#2BBBD8', '#168cff', '#AC79C5', '#ff8900', '#ff0000', '#009e00', '#a8bb00'],
+            'chartType': chart_type,
+            'xAxis': {
+                'values': []
+            }
+        }
+        return dict
+
     limit = int(request.args.get('limit')) if request.args.get('limit') is not None else 500
     page = int(request.args.get('page')) if request.args.get('page') is not None else 1
     start_date = request.args.get('from')
     end_date = request.args.get('to')
     start_date, end_date = str_date_to_date(start_date, end_date)
-    return Response(json.dumps(sql_database_storage.get_usage(start_date, end_date, limit, page)), mimetype='application/json')
+    if request.args.get('format') == 'json':
+        return Response(json.dumps(sql_database_storage.get_usage(start_date, end_date, limit, page)), mimetype='application/json')
+    else:
+        statitics = sql_database_storage.get_usage(start_date, end_date, limit, page)
+        grouped_statitics = group_information_by(statitics, lambda x: x['date'])
+        next_statitics = sql_database_storage.get_usage(start_date, end_date, limit, page + 1)
+        return render_template('analytics.html', number=limit, total=len(statitics),
+                               browsers=json.dumps(create_wesCountry_json(group_information_by(statitics, lambda x: x['user_agent']['browser']), ['pie', 'bar', 'donut'])),
+                               platforms=json.dumps(create_wesCountry_json(group_information_by(statitics, lambda x: x['user_agent']['platform']), ['pie', 'bar', 'donut'])),
+                               addresses=json.dumps(create_wesCountry_json(group_information_by(statitics, lambda x: x['remote_addr']), ['pie', 'donut'])),
+                               dates=json.dumps(create_wesCountry_json(group_information_by(statitics
+                                                , lambda x: str(x['date'].date())), ['pie', 'donut'])),
+                               countries=json.dumps(create_map_json(statitics)),
+                               paths=group_information_by(statitics, lambda x: x['path']),
+                               start_date=min(grouped_statitics).date(),
+                               end_date=max(grouped_statitics).date(),
+                               page=page,
+                               previous=page > 1,
+                               next=len(next_statitics) > 0)
 
 
 class AuthAPI(Resource):
