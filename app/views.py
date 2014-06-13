@@ -2428,6 +2428,8 @@ def statitics():
                 })
             except urllib2.HTTPError:
                 print "No information for ip: ", key
+            else:
+                print "No information for ip: ", key
         dict = {
             'countries': series,
         }
