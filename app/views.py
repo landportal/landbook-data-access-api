@@ -5,7 +5,6 @@ This file includes all the URI implementation and calls
 :author: Weso
 """
 from itertools import groupby
-from time import strptime
 import urllib2
 from flask_restful import Resource, abort, Api
 from flask.wrappers import Response
@@ -2413,6 +2412,11 @@ def statitics():
     Statitics URI, json returned
     """
     def create_map_json(statitics):
+        """
+        Creates a dict with map wesCountry format
+        :param statitics: statitics to show in the map
+        :return: dict with map wesCountry format
+        """
         grouped_dict = {}
         url = "http://www.telize.com/geoip/"
         sorted_statitics = sorted(statitics, key=lambda x: x['remote_addr'])
@@ -2438,6 +2442,12 @@ def statitics():
         return dict
 
     def group_information_by(statitics, func):
+        """
+        Groups the statitics with a given func
+        :param statitics: statitics to group
+        :param func: func to group
+        :return: dict with grouped statitics
+        """
         dict = {}
         sorted_statitics = sorted(statitics, key=func)
         for k, g in groupby(sorted_statitics, func):
@@ -2445,6 +2455,12 @@ def statitics():
         return dict
 
     def create_wesCountry_json(grouped_dict, chart_type):
+        """
+        Creates a dictionary with wesCountry format
+        :param grouped_dict: a dict with grouped information
+        :param chart_type: string with type of the chart
+        :return: a dictionary
+        """
         series = []
         for key in grouped_dict.keys():
             series.append({
@@ -2916,6 +2932,11 @@ def get_visualization_json(request, chartType):
         series.append({
             'name': country.translations[0].name,
             'id': country.iso3,
+            'region': {
+                'en': region_translation_service.get_by_codes(country.is_part_of_id, 'en').name,
+                'es': region_translation_service.get_by_codes(country.is_part_of_id, 'es').name,
+                'fr': region_translation_service.get_by_codes(country.is_part_of_id, 'fr').name
+            },
             'values': [float(observation.value.value) if observation.value.value is not None
                         and observation.ref_time.value == times[observations.index(observation)].value
                        else None for observation in observations] if len(observations) > 0 else [None]
