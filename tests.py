@@ -3021,7 +3021,7 @@ class TestCSV(ApiTest):
         response = self.client.post("/countries", data=spain_json, content_type='application/json')
         self.assertStatus(response, 201)
         response = self.client.get("/countries/ESP?format=csv")
-        self.assertEquals(response.data, "is_part_of_id;type;faoURI;iso3;iso2;region;un_code;id\nNone;countries;None;ESP;ES;None;None;1;\n")
+        self.assertEquals(response.data, "is_part_of_id;type;faoURI;iso3;iso2;taxonomy_id;region;un_code;id\nNone;countries;None;ESP;ES;None;None;None;1;\n")
 
 
 class TestJSONP(ApiTest):
