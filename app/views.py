@@ -2894,7 +2894,8 @@ def group_observations_by_years(observations):
     returned_observations = []
     for key in observations_dict.keys():
         value = Value()
-        value.value = reduce(lambda x, y: x + float(y.value.value), observations_dict[key], 0) / len(observations_dict[key])
+        value.value = reduce(lambda x, y: x + float(y.value.value) if y.value.value is not None else 0,
+                             observations_dict[key], 0) / len(observations_dict[key])
         returned_observations.append(Observation(ref_time=YearInterval(key), value=value))
     return returned_observations
 
@@ -2923,7 +2924,9 @@ def get_visualization_json(request, chartType):
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
-        organization = observations[0].dataset.datasource.organization
+        organization = Organization(id='unknown', name='unknown')
+        if len(observations) > 0:
+            organization = observations[0].dataset.datasource.organization
         observations = group_observations_by_years(observations)
         observations = sorted(observations, key=lambda observation: observation.ref_time.value)
         if len(observations) > 10:  # limit to ten, to ensure good view
