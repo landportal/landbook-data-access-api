@@ -4,6 +4,7 @@ This file includes all the services that communicate views.py and daos.py
 
 :author: Weso
 """
+import time
 from app import db
 from app.daos import AuthDAO, ObservationDAO, IndicatorDAO
 from daos import DAO, CountryDAO, RegionTranslationDAO, IndicatorTranslationDAO, TopicTranslationDAO, RegionDAO
@@ -580,6 +581,10 @@ class TransactionManager(object):
         """
         session = db.session
         getattr(dao, 'set_session')(session)
-        result = function(*args)
+        try:
+            result = function(*args)
+        except:
+            time.sleep(5)
+            result = function(*args) # retry after a while
         session.commit()
         return result
