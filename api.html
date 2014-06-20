@@ -61,7 +61,7 @@
 <div class="section" id="api-security">
 <h2>API Security<a class="headerlink" href="#api-security" title="Permalink to this headline">¶</a></h2>
 <p>For security, a basic realm authentication is required, except graphics. Graphics are covered in the next section.</p>
-<p>You need to obtain a token: these token then is used to authentication, so you have to authenticate with your username of landportal.info and with the generated token as the password. This token is generated when yoy register yourself in the landportal website, so you can access this token in your account info.</p>
+<p>You need to obtain a token: these token then is used to authentication, so you have to authenticate with your username of landportal.info and with the generated token as the password. This token is generated when you register yourself in the landportal website, so you can access this token in your account info.</p>
 </div>
 <div class="section" id="api-structure">
 <h2>API Structure<a class="headerlink" href="#api-structure" title="Permalink to this headline">¶</a></h2>
@@ -103,7 +103,9 @@
 </pre></div>
 </div>
 <p>Formats availabe through the format argument are: <strong>JSON</strong>, <strong>XML</strong>, <strong>CSV</strong> and <strong>JSONP</strong>.
-In the next table you can see all the URLs defined that you can access with a short description and arguments to modify the result. Variables in the URL are surrounded by &#8216;&lt;&#8217; and &#8216;&gt;&#8217;:</p>
+If none of them is suplied the API will look into the Accept header for some of the following: <em>application/json</em>, <em>application/xml</em>, <em>text/csv</em> or <em>application/javascript</em>.
+If neither the format argument nor the Accept header are provided the API will response in <strong>JSON</strong> format.</p>
+<p>In the next table you can see all the URLs defined that you can access with a short description and arguments to modify the result. Variables in the URL are surrounded by &#8216;&lt;&#8217; and &#8216;&gt;&#8217;:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="34%" />

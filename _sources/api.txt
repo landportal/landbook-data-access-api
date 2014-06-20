@@ -8,7 +8,7 @@ API Security
 ------------
 For security, a basic realm authentication is required, except graphics. Graphics are covered in the next section.
 
-You need to obtain a token: these token then is used to authentication, so you have to authenticate with your username of landportal.info and with the generated token as the password. This token is generated when yoy register yourself in the landportal website, so you can access this token in your account info.
+You need to obtain a token: these token then is used to authentication, so you have to authenticate with your username of landportal.info and with the generated token as the password. This token is generated when you register yourself in the landportal website, so you can access this token in your account info.
 
 API Structure
 -------------
@@ -50,6 +50,9 @@ As said before, api is based in RESTful principles, therefore, you can make a pe
 	curl landportal.info/api/countries?format=json
 
 Formats availabe through the format argument are: **JSON**, **XML**, **CSV** and **JSONP**.
+If none of them is suplied the API will look into the Accept header for some of the following: *application/json*, *application/xml*, *text/csv* or *application/javascript*.
+If neither the format argument nor the Accept header are provided the API will response in **JSON** format.
+
 In the next table you can see all the URLs defined that you can access with a short description and arguments to modify the result. Variables in the URL are surrounded by '<' and '>':
 
 +----------------------------------------------------------------------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------------------+
