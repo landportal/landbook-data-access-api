@@ -581,10 +581,6 @@ class TransactionManager(object):
         """
         session = db.session
         getattr(dao, 'set_session')(session)
-        try:
-            result = function(*args)
-        except:
-            time.sleep(5)
-            result = function(*args) # retry after a while
+        result = function(*args)
         session.commit()
         return result
