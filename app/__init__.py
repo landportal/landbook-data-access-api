@@ -16,6 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localh
 app.config['TRACK_USAGE_USE_FREEGEOIP'] = False
 app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'exclude'
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+#cache = Cache(app, config={'CACHE_TYPE': 'memcached', 'CACHE_MEMCACHED_SERVERS': ['5.9.221.11:11211']})
 app.config['DEBUG'] = True
 db = SQLAlchemy(app)
 sql_database_storage = SQLStorage('mysql+mysqlconnector://root:root@localhost:3306/landportal', table_name='api_usage')
