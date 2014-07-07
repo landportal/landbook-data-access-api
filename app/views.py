@@ -83,7 +83,8 @@ def requires_auth(f):
     def decorated(*args, **kwargs):
         auth = request.authorization
         if (not auth or not check_auth(auth.username, auth.password)) \
-                and (not request.remote_addr == '127.0.0.1' and not request.remote_addr == 'localhost'):
+                and (not request.remote_addr == '127.0.0.1' and not request.remote_addr == 'localhost'
+                     and not request.remote_addr == '::1'):
             return authenticate()
         if auth:
             app.logger.info("Request from user: " + auth.username)
