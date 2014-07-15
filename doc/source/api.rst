@@ -213,8 +213,8 @@ Also there are some arguments available to modify graph aspect or data. Availabl
 * **yTag**: Name for the y axis
 * **title**: Title for the graph
 * **description**: Description for the graph
-* **from_time**: Beginning date for the date range to filter data. Format required: 'YYYYMMDD'
-* **to_time**: End date for the date range to filter data. Format required: 'YYYYMMDD'
+* **from**: Beginning date for the date range to filter data. Format required: 'YYYYMMDD'
+* **to**: End date for the date range to filter data. Format required: 'YYYYMMDD'
 
 You can see below examples for barchart and piechart:
 
@@ -225,11 +225,11 @@ You can see below examples for barchart and piechart:
     	<script>
     		var options = {"chartType": "bar", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#barChartDiv"};
     		wesCountry.charts.chart(options);
-    	</script>      
+    	</script>
     </div>
     <div id="pieChartDiv" style="margin-top:10px;">
     	<script>
     		var options = {"chartType": "pie", "serieColours": ["#FA5882", "#2BBBD8", "#FCD271"], "series": [{"name": "Spain", "values": [284620.0]}, {"name": "France", "values": [98840.0]}, {"name": "Italy", "values": [535620.0]}], "valueOnItem": {"show": false}, "xAxis": {"title": "Years", "values": ["2007"]}, "yAxis": {"title": "Values"}, "container": "#pieChartDiv"};
     		wesCountry.charts.chart(options);
-    	</script>      
+    	</script>
     </div>
