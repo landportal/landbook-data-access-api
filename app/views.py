@@ -2384,7 +2384,6 @@ def table():
 
 
 @app.route('/graphs/map')
-@cache.cached(key_prefix=make_cache_key)
 def map():
     """
     Visualization of map
