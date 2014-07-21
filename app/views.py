@@ -2985,7 +2985,9 @@ def get_visualization_map_json(request):
     for country in countries:
         observations = filter_observations_by_date_range([observation for observation in country.observations \
                                                       if observation.indicator_id == indicator.id], from_time, to_time)
-        organization = observations[0].dataset.datasource.organization
+
+        if len(observations) > 0:
+            organization = observations[0].dataset.datasource.organization
         countries_values.append({
             'code': country.iso3,
             'value': observations[-1].value.value if len(observations) > 0 else 'No value available'
