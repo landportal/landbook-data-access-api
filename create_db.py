@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # landportal-data-access-api
 # Copyright (c)2014, WESO, Web Semantics Oviedo.
 # Written by Herminio García.
