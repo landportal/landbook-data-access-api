@@ -2457,7 +2457,7 @@ def statitics():
                 print "No information for ip: ", key
             except KeyError:
                 print "No information for ip: ", key
-            else:
+            except:
                 print "No information for ip: ", key
         dict = {
             'countries': series,
