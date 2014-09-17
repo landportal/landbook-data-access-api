@@ -2429,7 +2429,7 @@ def help():
 
 
 @requires_auth
-@app.route('/statitics')
+@app.route('/statistics')
 def statitics():
     """
     Statitics URI, json returned
