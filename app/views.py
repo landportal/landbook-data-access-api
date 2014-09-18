@@ -2916,8 +2916,8 @@ def group_observations_by_years(observations):
             if hasattr(observation.ref_time, 'year'):
                 observations_dict[observation.ref_time.year] = [observation]
             else:
-                # need a better calculation
-                observations_dict[str(observation.ref_time.start_time.year) + " - " + str(observation.ref_time.end_time.year)] \
+                # need a better calculation, like putting the intervals, now end year is showed
+                observations_dict[observation.ref_time.end_time.year] \
                     = [observation]
     returned_observations = []
     for key in observations_dict.keys():
