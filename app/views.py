@@ -2913,7 +2913,11 @@ def group_observations_by_years(observations):
             else:
                 observations_dict[observation.ref_time.year].append(observation)
         else:
-            observations_dict[observation.ref_time.year] = [observation]
+            if hasattr(observation.ref_time, 'year'):
+                observations_dict[observation.ref_time.year] = [observation]
+            else:
+                # need a better calculation
+                observations_dict[observation.ref_time.start_time.year] = [observation]
     returned_observations = []
     for key in observations_dict.keys():
         value = Value()
