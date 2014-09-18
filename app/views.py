@@ -2917,7 +2917,8 @@ def group_observations_by_years(observations):
                 observations_dict[observation.ref_time.year] = [observation]
             else:
                 # need a better calculation
-                observations_dict[observation.ref_time.start_time.year] = [observation]
+                observations_dict[observation.ref_time.start_time.year + " - " + observation.ref_time.end_time.year] \
+                    = [observation]
     returned_observations = []
     for key in observations_dict.keys():
         value = Value()
