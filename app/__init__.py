@@ -35,15 +35,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///foo.db'
 app.config['TRACK_USAGE_USE_FREEGEOIP'] = False
 app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'exclude'
-#cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 cache = Cache(app, config={'CACHE_TYPE': 'memcached', 'CACHE_MEMCACHED_SERVERS': ['localhost:11211']})
 app.config['DEBUG'] = True
 db = SQLAlchemy(app)
 sql_database_storage = SQLStorage(app.config['SQLALCHEMY_DATABASE_URI'], table_name='api_usage')
-#sql_database_storage = SQLStorage('sqlite:///analytics.db', table_name='api_usage')
 t = TrackUsage(app, sql_database_storage)
 
 from app import views
